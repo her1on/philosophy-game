@@ -291,19 +291,6 @@ body {
 
 /* ════════════════════ КАРТА: территории · маршрут · компас · метки ═════════ */
 .territory { pointer-events:none; }
-#route-halo { fill:none; stroke:rgba(250,242,214,.55); stroke-width:6; stroke-linecap:round; }
-#route-path {
-  fill:none; stroke:#9a5a22; stroke-width:2.6;
-  stroke-dasharray:2 9; stroke-linecap:round; opacity:.9;
-  animation: routeFlow 1.1s linear infinite;
-}
-@keyframes routeFlow { to { stroke-dashoffset:-22; } }
-
-.compass { transform-box:fill-box; transform-origin:center; animation: compassIn 1s ease both; opacity:.85; }
-@keyframes compassIn {
-  from { opacity:0; transform:rotate(-45deg) scale(.55); }
-  to   { opacity:.85; transform:rotate(0) scale(1); }
-}
 
 .map-marker { cursor:pointer; transform-box:fill-box; transform-origin:center; animation: markerPop .55s cubic-bezier(.2,1.4,.4,1) both; }
 .map-marker .seal { transition:filter .2s; }
@@ -419,8 +406,6 @@ body {
           </linearGradient>
         </defs>
         <g id="territory-group" class="territory"></g>
-        <path id="route-halo"></path>
-        <path id="route-path"></path>
         <g id="markers-group" style="pointer-events:all"></g>
       </svg>
       <div class="map-caption" id="map-caption">Нажмите на маркер лагеря, чтобы исследовать направления</div>
@@ -685,16 +670,7 @@ function renderMarkers() {
   g.innerHTML = '';
 
   // территории заданы самим рисунком — тонировку не накладываем
-  const A = CAMPS[0], B = CAMPS[1];
   terr.innerHTML = '';
-
-  // маршрут между лагерями — по тропинке вниз, через мост и вверх к городу
-  const route = `M ${A.mx} ${A.my}
-    C 132 300, 205 388, 300 410
-    C 350 422, 382 430, 412 430
-    C 478 430, 552 402, ${B.mx} ${B.my}`;
-  document.getElementById('route-path').setAttribute('d', route);
-  document.getElementById('route-halo').setAttribute('d', route);
 
   CAMPS.forEach((camp, ci) => {
     const n = camp.directions.length;
