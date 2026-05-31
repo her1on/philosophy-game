@@ -517,7 +517,7 @@ body {
       <div class="article-section-label">Философское направление</div>
       <div class="article-desc" id="article-desc"></div>
       <div id="phil-block">
-        <div class="article-section-label">Лица направленія</div>
+        <div class="article-section-label">Лица направления</div>
         <div class="phil-gallery" id="phil-gallery"></div>
       </div>
       <blockquote class="article-quote">
@@ -1169,10 +1169,10 @@ function enterEncounter(dir, camp) {
 
 /* ── Вопрос ── */
 const Q_LABELS = {
-  choice:    'Вопросъ философскаго направленія',
+  choice:    'Вопрос философского направления',
   who:       'Чьи это слова?',
-  gap:       'Заполните пропускъ',
-  truefalse: 'Вѣрно или нѣтъ?'
+  gap:       'Заполните пропуск',
+  truefalse: 'Верно или нет?'
 };
 const LETTERS = ['А','Б','В','Г','Д'];
 let _qIdx = 0;
@@ -1187,13 +1187,13 @@ function enterQuiz(dir, camp) {
 
 function renderQuestion() {
   const dir = _dir, list = dir.quiz, q = list[_qIdx];
-  const opts = q.opts || (q.type === 'truefalse' ? ['Вѣрно','Невѣрно'] : []);
+  const opts = q.opts || (q.type === 'truefalse' ? ['Верно','Неверно'] : []);
 
   document.getElementById('quiz-mini').innerHTML = `
     <div class="qm-initial">${dir.name[0]}</div>
     <div>
       <div class="qm-name">${dir.name}</div>
-      <div class="qm-hint">Вопросъ ${_qIdx + 1} изъ ${list.length}</div>
+      <div class="qm-hint">Вопрос ${_qIdx + 1} из ${list.length}</div>
     </div>`;
 
   document.getElementById('q-label').textContent = Q_LABELS[q.type] || Q_LABELS.choice;
@@ -1230,7 +1230,7 @@ function handleAnswer(idx) {
   const correct = idx === q.ans;
   document.getElementById('result-area').innerHTML = `
     <div class="answer-result ${correct ? '' : 'miss'}">
-      <div class="ar-stamp">${correct ? '✓ ВѢРНО' : '✗ МИМО'}</div>
+      <div class="ar-stamp">${correct ? '✓ ВЕРНО' : '✗ МИМО'}</div>
       ${correct ? 'Репортёрская книжка пополнена.' : 'Ничего страшного — разбор выше расставит всё по местам.'}
       ${last ? `<div class="ar-quote">${_dir.successQuote} <span class="ar-cite">${_dir.successCite}</span></div>` : ''}
       <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
