@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ФИЛОСОФСКИЙ ВЕСТНИК — Новейшая философия</title>
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { height:100%; }
+button { cursor:pointer; font-family:inherit; }
+
+body {
+  min-height:100%;
+  background-color: #e8dfc0;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(0,0,0,.018) 28px, rgba(0,0,0,.018) 29px),
+    repeating-linear-gradient(90deg, transparent, transparent 28px, rgba(0,0,0,.012) 28px, rgba(0,0,0,.012) 29px);
+  color: #1a1208;
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.screen { min-height:100vh; }
+.screen.hidden { display:none !important; }
+
+/* ── Карта ── */
+#screen-map { padding-bottom:40px; }
+
+.newspaper-header {
+  text-align:center; padding:22px 32px 14px;
+  border-bottom:3px double #5a3a10;
+}
+.paper-pretitle { font-size:.65em; letter-spacing:6px; color:#7a4a18; text-transform:uppercase; margin-bottom:6px; }
+.paper-title { font-size:2.8em; color:#1a1208; letter-spacing:3px; line-height:1; font-weight:bold; margin-bottom:6px; }
+.paper-subtitle {
+  font-size:.7em; letter-spacing:4px; color:#5a3a10;
+  border-top:1px solid #9a6a30; border-bottom:1px solid #9a6a30;
+  padding:4px 0; margin:0 auto; max-width:500px;
+}
+.paper-date { font-size:.62em; color:#8a6a40; margin-top:8px; letter-spacing:2px; }
+
+.section-rule {
+  display:flex; align-items:center; gap:12px;
+  padding:14px 32px 0; max-width:960px; margin:0 auto;
+}
+.section-rule::before, .section-rule::after { content:''; flex:1; height:1px; background:#9a7040; }
+.section-label { font-size:.6em; letter-spacing:4px; color:#7a5020; white-space:nowrap; text-transform:uppercase; }
+
+.map-wrapper { max-width:920px; margin:14px auto 0; padding:0 24px; }
+.map-container {
+  position:relative;
+  border:2px solid #9a7040;
+  box-shadow:inset 0 0 40px rgba(100,60,10,.12), 3px 3px 0 rgba(100,60,10,.15);
+  background:#d9cb9e; overflow:hidden;
+}
+.map-container svg { display:block; width:100%; height:auto; }
+
+.map-marker { cursor:pointer; }
+.map-marker:hover .marker-circle { filter:brightness(1.15); }
+.marker-circle { transition:transform .2s; transform-origin:center; transform-box:fill-box; }
+.map-tooltip { pointer-events:none; opacity:0; transition:opacity .2s; }
+.map-marker:hover .map-tooltip { opacity:1; }
+
+.map-caption {
+  padding:7px 14px; border-top:1px solid #9a7040;
+  font-size:.68em; color:#6a4820; font-style:italic; text-align:center;
+  background:rgba(200,170,100,.18);
+}
+
+.journal-wrap { max-width:920px; margin:18px auto 0; padding:0 24px; }
+.journal-box { border:1.5px solid #9a7040; background:rgba(255,252,240,.7); padding:18px 22px; }
+.journal-tag { font-size:.58em; letter-spacing:4px; color:#8a5520; text-transform:uppercase; margin-bottom:6px; }
+.journal-title { font-size:1.35em; color:#1a1208; margin-bottom:8px; }
+.journal-hint { font-size:.78em; color:#6a4a20; margin-bottom:14px; line-height:1.55; }
+.journal-list { list-style:none; }
+.journal-item {
+  display:flex; align-items:center; gap:10px;
+  padding:8px 0; border-bottom:1px dashed rgba(150,100,40,.25);
+  font-size:.82em; color:#2a1a08;
+}
+.journal-item:last-child { border-bottom:none; }
+.journal-camp-header {
+  padding:10px 0 4px; font-size:.62em; letter-spacing:3px;
+  color:#7a5020; text-transform:uppercase; border-top:1px solid rgba(150,100,40,.3);
+}
+.journal-camp-header:first-child { border-top:none; padding-top:0; }
+.journal-item-name { flex:1; }
+.ji-badge { font-size:.68em; letter-spacing:1px; padding:2px 9px; border-radius:2px; }
+.ji-done  { background:#2a5a20; color:#c0f0a0; }
+.ji-avail { color:#8a5010; border:1px solid #9a7040; }
+.ji-num { width:22px; height:22px; border-radius:50%; background:#c8a84b; color:#fff; display:flex; align-items:center; justify-content:center; font-size:.7em; font-weight:bold; flex-shrink:0; }
+.ji-num.done { background:#3a7030; }
+
+/* ── Лагерь ── */
+#screen-camp { padding-bottom:50px; }
+
+.top-nav {
+  display:flex; align-items:center; gap:14px;
+  padding:14px 28px; border-bottom:1px solid #9a7040;
+}
+.btn-back {
+  background:none; border:1px solid #9a7040; color:#5a3a10;
+  padding:7px 16px; font-size:.75em; letter-spacing:1px; transition:all .2s;
+}
+.btn-back:hover { background:rgba(150,100,40,.15); }
+.top-breadcrumb { font-size:.68em; color:#8a6030; letter-spacing:1px; }
+
+.camp-header {
+  max-width:920px; margin:22px auto 0; padding:0 24px; text-align:center;
+}
+.camp-section-label { font-size:.6em; letter-spacing:5px; color:#7a5020; text-transform:uppercase; margin-bottom:8px; }
+.camp-title { font-size:1.9em; color:#1a1208; font-weight:bold; margin-bottom:8px; }
+.camp-subtitle-line {
+  font-size:.72em; color:#6a4820; letter-spacing:2px;
+  border-top:1px solid #9a7040; border-bottom:1px solid #9a7040;
+  padding:4px 20px; display:inline-block;
+}
+.camp-progress { font-size:.7em; color:#8a6040; margin-top:10px; letter-spacing:1px; }
+
+.directions-grid {
+  max-width:920px; margin:20px auto 0; padding:0 24px;
+  display:grid; gap:16px;
+}
+.directions-grid.n3 { grid-template-columns:repeat(3,1fr); }
+.directions-grid.n6 { grid-template-columns:repeat(3,1fr); }
+
+@media(max-width:720px) {
+  .directions-grid.n3, .directions-grid.n6 { grid-template-columns:1fr; }
+}
+@media(min-width:721px) and (max-width:900px) {
+  .directions-grid.n6 { grid-template-columns:repeat(2,1fr); }
+}
+
+.dir-card {
+  border:1.5px solid #9a7040; background:rgba(255,252,240,.85);
+  padding:16px 18px; cursor:pointer; transition:all .18s; position:relative;
+}
+.dir-card:hover { background:#e8d9a8; border-color:#6a4820; transform:translateY(-2px); box-shadow:2px 4px 0 rgba(100,60,10,.15); }
+.dir-card.done  { background:rgba(215,238,205,.75); border-color:#5a8040; }
+.dir-card-label { font-size:.58em; letter-spacing:3px; color:#8a5520; text-transform:uppercase; margin-bottom:6px; }
+.dir-card-name  { font-size:1.05em; font-weight:bold; color:#1a1208; margin-bottom:8px; line-height:1.3; }
+.dir-card-phil  { font-size:.72em; color:#5a3a18; line-height:1.5; margin-bottom:12px; }
+.dir-card-badge { font-size:.65em; letter-spacing:1px; padding:3px 10px; border-radius:2px; display:inline-block; }
+.dir-card-badge.done  { background:#2a5a20; color:#c0f0a0; }
+.dir-card-badge.avail { color:#8a5010; border:1px solid #9a7040; }
+.dir-card-check {
+  position:absolute; top:14px; right:14px;
+  width:22px; height:22px; border-radius:50%;
+  background:#3a7030; color:#fff;
+  display:flex; align-items:center; justify-content:center; font-size:.8em;
+}
+
+/* ── Встреча ── */
+#screen-encounter {
+  background:#e8dfc0;
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,rgba(0,0,0,.018) 28px,rgba(0,0,0,.018) 29px);
+  padding-bottom:50px;
+}
+
+.enc-card { max-width:820px; margin:20px auto 0; padding:0 22px; }
+
+.direction-banner {
+  border:2px solid #9a7040;
+  background:linear-gradient(135deg,#c8b060 0%,#d4c080 40%,#c0a850 100%);
+  padding:24px 28px 20px; text-align:center;
+  box-shadow:3px 3px 0 rgba(100,60,10,.2);
+}
+.banner-camp-label { font-size:.6em; letter-spacing:5px; color:rgba(50,30,5,.6); text-transform:uppercase; margin-bottom:8px; }
+.banner-rule       { height:1px; background:rgba(50,30,5,.25); margin:8px 0; }
+.banner-name       { font-size:2em; color:#1a0800; font-weight:bold; letter-spacing:2px; line-height:1.2; margin-bottom:8px; }
+.banner-phil       { font-size:.76em; color:rgba(50,30,5,.72); line-height:1.7; font-style:italic; }
+
+.enc-article {
+  border:2px solid #9a7040; border-top:none;
+  background:rgba(255,252,240,.96); padding:22px 26px 26px;
+}
+.article-section-label { font-size:.58em; letter-spacing:4px; color:#8a5520; text-transform:uppercase; margin-bottom:10px; }
+.article-desc { font-size:.9em; color:#2a1a08; line-height:1.82; margin-bottom:18px; }
+.article-quote {
+  border-left:3px solid #9a7040; padding:10px 16px;
+  margin:18px 0; background:rgba(180,140,60,.06);
+}
+.article-quote p    { font-style:italic; color:#3a2010; font-size:.88em; line-height:1.72; }
+.article-quote cite { display:block; margin-top:6px; font-style:normal; font-size:.75em; color:#7a5020; letter-spacing:1px; }
+.article-tags       { margin-top:16px; display:flex; flex-wrap:wrap; gap:7px; }
+.article-tag        { font-size:.7em; letter-spacing:1px; padding:3px 10px; border:1px solid #9a7040; color:#5a3a18; background:rgba(180,140,60,.08); border-radius:2px; }
+.enc-btns           { display:flex; gap:10px; flex-wrap:wrap; margin-top:22px; }
+
+.btn-primary   { background:#2a4a20; border:none; color:#d8f0c0; padding:11px 24px; font-size:.82em; letter-spacing:1px; transition:background .2s; }
+.btn-primary:hover { background:#3a6030; }
+.btn-secondary { background:none; border:1px solid #9a7040; color:#5a3a10; padding:11px 20px; font-size:.82em; letter-spacing:1px; transition:all .2s; }
+.btn-secondary:hover { background:rgba(150,100,40,.12); }
+.btn-revisit   { background:rgba(60,100,50,.1); border:1px solid #5a8040; color:#3a5a20; padding:11px 20px; font-size:.82em; letter-spacing:1px; }
+
+/* ── Вопрос ── */
+#screen-quiz {
+  background:#e8dfc0;
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,rgba(0,0,0,.018) 28px,rgba(0,0,0,.018) 29px);
+  padding-bottom:50px;
+}
+
+.quiz-card { max-width:820px; margin:22px auto 0; padding:0 22px; }
+
+.quiz-mini {
+  display:flex; align-items:center; gap:14px;
+  padding:12px 18px; background:rgba(200,168,75,.15);
+  border:1px solid #c8a870; margin-bottom:18px;
+}
+.qm-initial {
+  width:48px; height:48px; border-radius:50%; flex-shrink:0;
+  border:2px solid #9a7040;
+  background:linear-gradient(135deg,#c4ae78,#b8a060);
+  display:flex; align-items:center; justify-content:center;
+  font-style:italic; font-size:1.2em; color:rgba(50,30,5,.65); font-weight:bold;
+}
+.qm-name { font-size:.85em; font-weight:bold; color:#1a1208; }
+.qm-hint { font-size:.74em; color:#6a4820; font-style:italic; margin-top:3px; line-height:1.5; }
+
+.question-box { border:2px solid #9a7040; background:rgba(255,252,240,.88); padding:22px 24px; }
+.q-label { font-size:.6em; letter-spacing:4px; color:#8a5520; text-transform:uppercase; margin-bottom:10px; }
+.q-text  { font-size:1.05em; color:#1a1208; line-height:1.65; margin-bottom:20px; }
+
+.options-list { display:flex; flex-direction:column; gap:9px; }
+.opt-btn {
+  display:flex; align-items:flex-start; gap:12px;
+  background:rgba(240,230,200,.6); border:1px solid #c0a060;
+  padding:12px 16px; text-align:left;
+  font-size:.86em; color:#1a1208; line-height:1.4; transition:all .18s;
+}
+.opt-btn:hover:not(:disabled) { background:#e0cfa0; border-color:#8a6030; }
+.opt-btn:disabled { cursor:default; }
+.opt-letter {
+  width:24px; height:24px; border-radius:50%; flex-shrink:0;
+  border:1px solid #9a7040; display:flex; align-items:center; justify-content:center;
+  font-size:.75em; color:#7a5020; font-weight:bold; background:rgba(200,168,75,.15);
+}
+.opt-btn.correct { background:#d0ecc0; border-color:#3a7030; }
+.opt-btn.correct .opt-letter { background:#3a7030; color:#fff; border-color:#3a7030; }
+.opt-btn.wrong   { background:#f0d0c8; border-color:#a04030; }
+.opt-btn.wrong .opt-letter   { background:#a04030; color:#fff; border-color:#a04030; }
+
+.quiz-hint { margin-top:14px; padding:12px 16px; background:rgba(180,120,60,.08); border:1px dashed #9a7040; font-size:.8em; color:#5a3010; font-style:italic; line-height:1.65; }
+.quiz-hint-who { font-style:normal; font-size:.75em; color:#7a5020; letter-spacing:1px; margin-bottom:5px; }
+
+.answer-result { margin-top:14px; padding:16px 18px; border:2px solid #3a7030; background:#e8f5e0; font-size:.84em; color:#1a3010; line-height:1.65; }
+.ar-stamp { font-size:.68em; letter-spacing:3px; color:#3a7030; margin-bottom:6px; text-transform:uppercase; }
+.ar-quote { font-style:italic; color:#2a4a20; margin-top:8px; font-size:.9em; }
+.ar-cite  { font-style:normal; font-size:.85em; color:#5a7040; }
+
+/* ── Финал ── */
+#screen-done {
+  min-height:100vh; display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  padding:40px 24px; text-align:center;
+  background-color:#e8dfc0;
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,rgba(0,0,0,.018) 28px,rgba(0,0,0,.018) 29px);
+}
+.done-rule     { width:200px; height:2px; background:#9a7040; margin:16px auto; }
+.done-label    { font-size:.65em; letter-spacing:5px; color:#7a5020; }
+.done-headline { font-size:2.2em; color:#1a1208; margin:14px 0 10px; line-height:1.2; max-width:600px; }
+.done-sub      { font-size:.85em; color:#5a3a18; line-height:1.7; max-width:480px; margin-bottom:28px; }
+.done-score    { font-size:1.1em; color:#3a5a20; margin-bottom:24px; }
+.done-btn      { background:#2a4a20; border:none; color:#d8f0c0; padding:12px 32px; font-size:.85em; letter-spacing:2px; transition:background .2s; }
+.done-btn:hover { background:#3a6030; }
+
+.mt16 { margin-top:16px; }
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:rgba(150,100,40,.1); }
+::-webkit-scrollbar-thumb { background:rgba(150,100,40,.3); border-radius:3px; }
+
+@media(max-width:640px) {
+  .paper-title { font-size:2em; }
+  .enc-card, .quiz-card, .map-wrapper, .journal-wrap { padding:0 14px; }
+  .banner-name { font-size:1.5em; }
+  .top-nav { padding:12px 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════ КАРТА ═══════════════════════ -->
+<div id="screen-map" class="screen">
+  <div class="newspaper-header">
+    <div class="paper-pretitle">Специальный репортаж</div>
+    <div class="paper-title">ФИЛОСОФСКИЙ ВЕСТНИК</div>
+    <div class="paper-subtitle">НОВЕЙШАЯ ЗАПАДНАЯ ФИЛОСОФИЯ · XIX — XX ВВ.</div>
+    <div class="paper-date">Томск, 1900 — Репортёр исследует лагеря западной мысли</div>
+  </div>
+
+  <div class="section-rule"><span class="section-label">Карта города</span></div>
+
+  <div class="map-wrapper">
+    <div class="map-container">
+      <img src="img/map.jpeg" style="width:100%;display:block;vertical-align:bottom">
+      <svg id="city-map" viewBox="0 0 860 460" xmlns="http://www.w3.org/2000/svg"
+           style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none">
+        <g id="markers-group" style="pointer-events:all"></g>
+      </svg>
+      <div class="map-caption" id="map-caption">Нажмите на маркер лагеря, чтобы исследовать направления</div>
+    </div>
+  </div>
+
+  <div class="journal-wrap">
+    <div class="journal-box mt16">
+      <div class="journal-tag">Журнал путешествия</div>
+      <div class="journal-title" id="journal-title">Пройдено: 0 / 9</div>
+      <div class="journal-hint">Посетите все девять философских направлений. Начните с любого из двух лагерей.</div>
+      <ul class="journal-list" id="journal-list"></ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ ЛАГЕРЬ ═══════════════════════ -->
+<div id="screen-camp" class="screen hidden">
+  <div class="top-nav">
+    <button class="btn-back" onclick="showMap()">← Карта</button>
+    <span class="top-breadcrumb" id="camp-breadcrumb"></span>
+  </div>
+
+  <div class="camp-header">
+    <div class="camp-section-label">Философский лагерь</div>
+    <div class="camp-title" id="camp-title"></div>
+    <div class="camp-subtitle-line" id="camp-subtitle"></div>
+    <div class="camp-progress" id="camp-progress"></div>
+  </div>
+
+  <div class="directions-grid" id="directions-grid"></div>
+</div>
+
+<!-- ═══════════════════════ ВСТРЕЧА ═══════════════════════ -->
+<div id="screen-encounter" class="screen hidden">
+  <div class="top-nav">
+    <button class="btn-back" id="enc-back-btn">← К направлениям</button>
+    <span class="top-breadcrumb" id="enc-breadcrumb"></span>
+  </div>
+
+  <div class="enc-card">
+    <div class="direction-banner">
+      <div class="banner-camp-label" id="banner-camp"></div>
+      <div class="banner-rule"></div>
+      <div class="banner-name" id="banner-name"></div>
+      <div class="banner-rule"></div>
+      <div class="banner-phil" id="banner-phil"></div>
+    </div>
+
+    <div class="enc-article">
+      <div class="article-section-label">Философское направление</div>
+      <div class="article-desc" id="article-desc"></div>
+      <blockquote class="article-quote">
+        <p id="article-quote-text"></p>
+        <cite id="article-quote-cite"></cite>
+      </blockquote>
+      <div class="article-tags" id="article-tags"></div>
+      <div class="enc-btns">
+        <button id="enc-quiz-btn" class="btn-primary">Выслушать вопрос →</button>
+        <button id="enc-camp-btn" class="btn-secondary">← К направлениям</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ ВОПРОС ═══════════════════════ -->
+<div id="screen-quiz" class="screen hidden">
+  <div class="top-nav">
+    <button class="btn-back" id="quiz-back">← Назад</button>
+    <span class="top-breadcrumb" id="quiz-breadcrumb"></span>
+  </div>
+
+  <div class="quiz-card">
+    <div class="quiz-mini" id="quiz-mini"></div>
+    <div class="question-box">
+      <div class="q-label">Вопрос философского направления</div>
+      <div class="q-text" id="q-text"></div>
+      <div class="options-list" id="options-list"></div>
+      <div id="hint-area"></div>
+      <div id="result-area"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ ФИНАЛ ═══════════════════════ -->
+<div id="screen-done" class="screen hidden">
+  <div class="done-label">Специальный репортаж завершён</div>
+  <div class="done-rule"></div>
+  <div class="done-headline">Все направления изучены. Репортёрская книжка заполнена.</div>
+  <div class="done-rule"></div>
+  <div class="done-sub">Вы исследовали все девять направлений Новейшей западной философии и выслушали их ключевые вопросы.</div>
+  <div class="done-score" id="done-score">Направлений изучено: 0 / 9</div>
+  <button class="done-btn" onclick="showMap()">← Вернуться на карту</button>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   ДАННЫЕ
+   Источник: Герман О.Н. «История философии», ТУСУР, 2021. Раздел 8.
+═══════════════════════════════════════════════════════ */
+const CAMPS = [
+  {
+    id: 'anti',
+    name: 'Антисциентистские направления',
+    subtitle: 'воля · бессознательное · существование',
+    mx: 155, my: 150,
+    initial: 'А',
+    directions: [
+      {
+        id: 'life',
+        name: 'Философия жизни',
+        philosophers: 'А. Шопенгауэр  ·  Ф. Ницше  ·  А. Бергсон  ·  Г. Зиммель  ·  В. Дильтей',
+        desc: '«Жизнь» — изменчивая, становящаяся деятельность, творческое созидание и самовыражение в культуре. Наука и разум бессильны её понять. Шопенгауэр: слепая воля управляет миром; бессознательное — источник всего сущего, разум лишь производен от него. Ницше: «Бог умер»; принцип сущего — воля к власти; идеал — сверхчеловек, который ставит высшие цели невзирая на средства; его противоположность — «последний человек», живущий в забвении своей сущности.',
+        quote: '«Только воля к власти как организующий принцип всего живого даёт возможность творить. Это не произвол, а долг жизни — мочь.»',
+        quoteCite: '— Ф. Ницше',
+        tags: ['Воля к жизни', 'Воля к власти', 'Сверхчеловек', 'Последний человек', 'Бессознательное', 'Иррационализм'],
+        hint: 'Разум — производное от бессознательного. Принцип сущего у Ницше — воля к власти. Сверхчеловек противопоставлен «последнему человеку».',
+        quiz: { q: 'Что Ницше называл «организующим принципом всего живого»?', opts: ['Волю к жизни', 'Коллективное бессознательное', 'Волю к власти', 'Феноменологическую редукцию'], ans: 2 },
+        successQuote: '«Только воля к власти даёт возможность творить. Это не произвол — это долг жизни.»',
+        successCite: '— Ф. Ницше'
+      },
+      {
+        id: 'psycho',
+        name: 'Психоанализ',
+        philosophers: 'З. Фрейд  ·  К.Г. Юнг  ·  Э. Фромм',
+        desc: 'Фрейд разработал модель психики: «ОНО», «Я», «СВЕРХ-Я». В психике работают защитные механизмы: вытеснение, замещение, компенсация, сублимация. Два главных метода: свободные ассоциации (пациент говорит всё, что приходит в голову) и толкование сновидений (явное содержание — переживания дня; скрытое — истинные желания). Юнг ввёл понятие коллективного бессознательного и архетипов — врождённых, доопытных, универсальных образов глубинной душевной жизни.',
+        quote: '«Ни одна мысль не является случайной — любая может оказаться значимой для выявления причины заболевания.»',
+        quoteCite: '— З. Фрейд',
+        tags: ['ОНО / Я / СВЕРХ-Я', 'Защитные механизмы', 'Сублимация', 'Свободные ассоциации', 'Коллективное бессознательное', 'Архетипы'],
+        hint: 'ОНО — Я — СВЕРХ-Я. Методы Фрейда: свободные ассоциации и толкование сновидений. Юнг: коллективное бессознательное и архетипы.',
+        quiz: { q: 'Из каких трёх частей состоит модель психики по Фрейду?', opts: ['Разум, Душа, Тело', 'ОНО, Я, СВЕРХ-Я', 'Инстинкт, Сознание, Культура', 'Воля, Разум, Чувство'], ans: 1 },
+        successQuote: '«Ни одна мысль не является случайной — любая может оказаться значимой для выявления причины.»',
+        successCite: '— З. Фрейд'
+      },
+      {
+        id: 'exist',
+        name: 'Экзистенциализм',
+        philosophers: 'М. Хайдеггер  ·  Ж.-П. Сартр  ·  А. Камю  ·  К. Ясперс',
+        desc: 'Философия существования. Человек заброшен в мир — его бытие есть проблема и задача. Хайдеггер: интенциональность сознания — это «забота», охватывающая «бытие-в-мире», «забегание вперёд» и «бытие при внутримировом сущем». Dasein (вот-бытие) — момент осознания своей заброшенности. Свобода возможна, только когда личность действует по собственным осознанным ценностям. Камю: мир абсурден; самоубийство устраняет абсурд лишь в пределах разума; человек-бунтарь противостоит молчанию мира.',
+        quote: '«Человек заброшен в мир. Момент dasein — вот-бытие — который он осознаёт, выступает как забота, проблема для самоопределения.»',
+        quoteCite: '— М. Хайдеггер',
+        tags: ['Существование', 'Dasein', 'Заброшенность', 'Забота', 'Абсурд', 'Бунтарь', 'Свобода и ответственность'],
+        hint: 'Dasein — вот-бытие, осознание заброшенности. Камю: мир абсурден, ответ — бунт, а не бегство.',
+        quiz: { q: 'Что Хайдеггер называл «dasein»?', opts: ['Смерть сознания', 'Вот-бытие — момент осознания своей заброшенности', 'Волю к власти', 'Коллективный разум'], ans: 1 },
+        successQuote: '«Нужно представить Сизифа счастливым. Его скала — его достояние.»',
+        successCite: '— А. Камю'
+      }
+    ]
+  },
+  {
+    id: 'sci',
+    name: 'Сциентистские направления',
+    subtitle: 'наука · логика · язык · понимание',
+    mx: 668, my: 295,
+    initial: 'С',
+    directions: [
+      {
+        id: 'phenom',
+        name: 'Феноменология',
+        philosophers: 'Э. Гуссерль (1859–1938)',
+        desc: 'Гуссерль понимал философию как строгую науку о феноменах сознания — их необходимо очистить от эмпирического содержания. Инструмент — феноменологическая редукция: освобождение сознания от смысла, навязываемого естественными науками. Результат — чистый феномен сознания, обладающий интенциональностью: направленностью на что-либо. Философия не даёт систему истин, она деятельность, раскрывающая содержание жизненных отношений.',
+        quote: '«Философия — строгая наука о феноменах сознания. Их необходимо очистить от эмпирического содержания посредством феноменологической редукции.»',
+        quoteCite: '— Э. Гуссерль',
+        tags: ['Феноменологическая редукция', 'Интенциональность', 'Чистый феномен', 'Строгая наука', 'Жизненный мир'],
+        hint: 'Феноменологическая редукция — очищение сознания от смысла, навязанного науками. Интенциональность — направленность сознания на предмет.',
+        quiz: { q: 'Что такое феноменологическая редукция?', opts: ['Упрощение теорий', 'Освобождение сознания от смысла, навязываемого науками', 'Анализ языковых игр', 'Отрицание метафизики'], ans: 1 },
+        successQuote: '«Назад, к самим вещам! — таков девиз феноменологии.»',
+        successCite: '— Э. Гуссерль'
+      },
+      {
+        id: 'pragma',
+        name: 'Прагматизм',
+        philosophers: 'Ч.С. Пирс  ·  У. Джеймс  ·  Д. Дьюи  ·  Р. Рорти',
+        desc: 'Прагматизм — метод познания через рассмотрение практических следствий, и теория истины как того, что приводит к успеху. Пирс: невозможно разделить объективный и субъективный факторы; истина — консенсус между людьми, поведение определяется совокупностью мнений и верований, приобретённых через жизненный опыт. Дьюи: мышление позволяет приспосабливаться к среде; философия должна решать реальные проблемы. Прагматизм отрицает осмысленность метафизики.',
+        quote: '«Попытайтесь верифицировать любой закон природы — и вы обнаружите, что чем точнее наблюдения, тем определённее они покажут беспорядочные отклонения от закона.»',
+        quoteCite: '— Ч.С. Пирс',
+        tags: ['Практические следствия', 'Истина как успех', 'Консенсус', 'Верификация', 'Инструментализм', 'Антиметафизика'],
+        hint: 'Истина — то, что приводит к успеху (консенсус людей). Прагматизм отрицает метафизику. Дьюи: мышление — инструмент приспособления.',
+        quiz: { q: 'Как прагматизм определяет истину?', opts: ['Соответствие объективной реальности', 'Логически доказанное суждение', 'То, что приводит к успеху — консенсус', 'Феномен чистого сознания'], ans: 2 },
+        successQuote: '«Истина — это то, что нам лучше всего верить.»',
+        successCite: '— У. Джеймс'
+      },
+      {
+        id: 'posit',
+        name: 'Позитивизм',
+        philosophers: 'О. Конт  ·  М. Шлик  ·  Р. Карнап  ·  К. Поппер  ·  Т. Кун',
+        desc: 'Позитивизм (Конт): роль философии — стать методологией науки. Неопозитивизм — Венский кружок (Шлик, Карнап): философия есть анализ языка; верификация — путь к истине; мир есть языковая конструкция. Постпозитивизм (Поппер): критерий научности — фальсификация; высказывание считается истинным, пока не найдено способа его опровергнуть. Кун: наука развивается скачкообразно — нормальная наука → аномалии → научная революция → новая парадигма.',
+        quote: '«Высказывание необходимо принимать за истинное до тех пор, пока не нашлось способа его опровергнуть.»',
+        quoteCite: '— К. Поппер',
+        tags: ['Верификация', 'Фальсификация', 'Парадигма', 'Нормальная наука', 'Научная революция', 'Венский кружок', 'Критический рационализм'],
+        hint: 'Фальсификация — критерий Поппера. Парадигма — у Куна. Верификация — у Венского кружка (Шлик, Карнап).',
+        quiz: { q: 'Какой критерий научности предложил Поппер?', opts: ['Верификацию', 'Фальсификацию', 'Консенсус', 'Интуицию'], ans: 1 },
+        successQuote: '«Высказывание истинно до тех пор, пока не нашлось способа его опровергнуть.»',
+        successCite: '— К. Поппер'
+      },
+      {
+        id: 'analyt',
+        name: 'Аналитическая философия',
+        philosophers: 'Дж.Э. Мур  ·  Б. Рассел  ·  Л. Витгенштейн',
+        desc: 'Не единая школа, но общее — антиметафизическая направленность, опора на опытное знание, идеалы ясности и точности. Витгенштейн (ранний): логический анализ языка, концепция изоморфизма языка и действительности; философия не должна говорить ничего, кроме предложений естествознания. Витгенштейн (поздний): языковые игры — употребление слов по правилам с «семейными сходствами»; философия разрешает языковую путаницу. Мур: доказательство от здравого смысла — «я вижу две руки, вот они».',
+        quote: '«Употребление слов представляет собой языковые игры, действующие по правилам и имеющие сложную сеть взаимосвязанных подобий — семейных сходств.»',
+        quoteCite: '— Л. Витгенштейн',
+        tags: ['Языковые игры', 'Семейные сходства', 'Изоморфизм языка', 'Здравый смысл', 'Антиметафизика', 'Логический анализ'],
+        hint: 'Языковые игры — употребление слов по правилам с сетью семейных сходств. Мур: здравый смысл доказывает внешний мир.',
+        quiz: { q: 'Что такое «языковые игры» у Витгенштейна?', opts: ['Философские диспуты', 'Употребление слов по правилам с сетью семейных сходств', 'Логические парадоксы', 'Мифологические нарративы'], ans: 1 },
+        successQuote: '«О чём невозможно говорить, о том следует молчать.»',
+        successCite: '— Л. Витгенштейн'
+      },
+      {
+        id: 'herm',
+        name: 'Герменевтика',
+        philosophers: 'Ф. Шлейермахер  ·  В. Дильтей  ·  Х.-Г. Гадамер  ·  Ю. Хабермас',
+        desc: 'Герменевтика — искусство интерпретации текстов и понятий в рамках их контекстов. Ключевое понятие — герменевтический круг: для понимания целого нужно знать части, для понимания частей нужно представление о целом. Шлейермахер: понять позицию автора, овладев его языком и психологией; «теология чувств» — посредством чувств человек устанавливает отношение с Богом. Гадамер: герменевтика — не методология, а философия понимания; смысл рождается в столкновении контекста с текстом.',
+        quote: '«Бытие, которое может быть понято, есть язык.»',
+        quoteCite: '— Х.-Г. Гадамер',
+        tags: ['Герменевтический круг', 'Интерпретация', 'Предпонимание', 'Контекст', 'Понимание', 'Текст открыт'],
+        hint: 'Герменевтический круг: целое ↔ части. Гадамер — философия понимания. Шлейермахер — понять автора изнутри.',
+        quiz: { q: 'В чём суть герменевтического круга?', opts: ['Бесконечная дискуссия', 'Для понимания целого нужны части, для частей — целое', 'Логический парадокс', 'Метод верификации'], ans: 1 },
+        successQuote: '«Бытие, которое может быть понято, есть язык.»',
+        successCite: '— Х.-Г. Гадамер'
+      },
+      {
+        id: 'postmod',
+        name: 'Постмодернизм',
+        philosophers: 'Ж. Деррида  ·  Ж. Делёз  ·  Ж. Бодрийяр  ·  М. Фуко  ·  З. Бауман',
+        desc: 'Постмодернизм — критика метанарративов (монополий на истину) и классических идей. Деррида: деконструкция — поиск в сказанном несказанного, поиск противоречий и новых смыслов; культура — система контекстов, каждый из которых самостоятелен. Фуко: язык, текст, дискурс — метафорическое обозначение универсального принципа культурных знаков. Бауман: черты «текучей современности» — фрагментарность, эпизодичность, глобалистика. Истина всегда зависит от исторического контекста.',
+        quote: '«Язык не может рассматриваться как выражение переживаемого. Деконструкция — поиск в сказанном несказанного, новых смыслов.»',
+        quoteCite: '— Ж. Деррида',
+        tags: ['Деконструкция', 'Метанарратив', 'Плюрализм', 'Текучая современность', 'Дискурс', 'Фрагментарность'],
+        hint: 'Деконструкция — поиск несказанного в сказанном. Метанарратив — монополия на истину. Текучая современность — по Бауману.',
+        quiz: { q: '«Деконструкция» у Деррида — это:', opts: ['Разрушение устаревших теорий', 'Поиск в сказанном несказанного, выявление пространства смысла', 'Феноменологическая редукция', 'Метод верификации'], ans: 1 },
+        successQuote: '«Язык не может рассматриваться как выражение переживаемого.»',
+        successCite: '— Ж. Деррида'
+      }
+    ]
+  }
+];
+
+const ALL_DIRS = CAMPS.flatMap(c => c.directions.map(d => ({ ...d, campId: c.id, campName: c.name })));
+
+/* ── Прогресс ── */
+const STORE = 'philo_v2';
+let prog = {};
+function loadProg()    { try { prog = JSON.parse(localStorage.getItem(STORE)) || {}; } catch(e) { prog = {}; } }
+function saveProg()    { localStorage.setItem(STORE, JSON.stringify(prog)); }
+function setDone(id)   { prog[id] = true; saveProg(); }
+function isDone(id)    { return !!prog[id]; }
+function doneCount()   { return ALL_DIRS.filter(d => isDone(d.id)).length; }
+
+/* ── Навигация ── */
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.toggle('hidden', s.id !== id));
+  window.scrollTo(0, 0);
+}
+
+/* ── Карта ── */
+function renderMarkers() {
+  const g = document.getElementById('markers-group');
+  g.innerHTML = '';
+
+  CAMPS.forEach(camp => {
+    const n = camp.directions.length;
+    const doneN = camp.directions.filter(d => isDone(d.id)).length;
+    const allDone = doneN === n;
+    const col  = allDone ? '#3a7030' : (doneN > 0 ? '#6a5000' : '#8b3a00');
+    const col2 = allDone ? '#c0f0a0' : (doneN > 0 ? '#f0e090' : '#f5e6c0');
+    const { mx: x, my: y, initial } = camp;
+    const r = 22;
+    const ttW = 160, ttX = x - ttW / 2;
+
+    const m = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    m.setAttribute('class', 'map-marker');
+    m.innerHTML = `
+      <circle cx="${x+2}" cy="${y+2}" r="${r}" fill="rgba(0,0,0,.25)"/>
+      <circle cx="${x}" cy="${y}" r="${r}" fill="${col}" stroke="${col2}" stroke-width="2.5" class="marker-circle"/>
+      <text x="${x}" y="${y+6}" text-anchor="middle" font-size="14" fill="${col2}"
+            font-family="Georgia,serif" font-style="italic" font-weight="bold">${allDone ? '✓' : initial}</text>
+      ${!allDone ? `<circle cx="${x}" cy="${y}" r="${r}" fill="none" stroke="${col}" stroke-width="2" opacity=".4">
+        <animate attributeName="r" from="${r}" to="${r+11}" dur="2.5s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" from=".4" to="0" dur="2.5s" repeatCount="indefinite"/>
+      </circle>` : ''}
+      <g class="map-tooltip">
+        <rect x="${ttX}" y="${y-r-44}" width="${ttW}" height="36" rx="3" fill="#2a1208" opacity=".9"/>
+        <text x="${x}" y="${y-r-26}" text-anchor="middle" font-size="10" fill="#f5e6c0" font-family="Georgia,serif">${camp.name}</text>
+        <text x="${x}" y="${y-r-14}" text-anchor="middle" font-size="9"  fill="#c8a860" font-family="Georgia,serif">Пройдено: ${doneN}/${n}</text>
+      </g>`;
+    m.addEventListener('click', () => enterCamp(camp));
+    g.appendChild(m);
+  });
+
+  const total = doneCount();
+  document.getElementById('map-caption').textContent =
+    total === ALL_DIRS.length
+      ? '✓ Все направления изучены. Репортаж завершён!'
+      : `Нажмите на маркер лагеря, чтобы исследовать направления · Пройдено: ${total}/${ALL_DIRS.length}`;
+}
+
+function renderJournal() {
+  document.getElementById('journal-title').textContent = `Пройдено: ${doneCount()} / ${ALL_DIRS.length}`;
+  const list = document.getElementById('journal-list');
+  list.innerHTML = '';
+  let idx = 1;
+  CAMPS.forEach(camp => {
+    const hdr = document.createElement('li');
+    hdr.className = 'journal-camp-header';
+    hdr.textContent = camp.name;
+    list.appendChild(hdr);
+
+    camp.directions.forEach(dir => {
+      const done = isDone(dir.id);
+      const li = document.createElement('li');
+      li.className = 'journal-item';
+      li.innerHTML = `
+        <div class="ji-num ${done?'done':''}">${idx}</div>
+        <div class="journal-item-name"><em>${dir.name}</em></div>
+        <span class="ji-badge ${done?'ji-done':'ji-avail'}">${done?'завершено':'доступно'}</span>`;
+      li.style.cursor = 'pointer';
+      li.addEventListener('click', () => { enterCamp(camp); });
+      list.appendChild(li);
+      idx++;
+    });
+  });
+}
+
+function showMap() { renderMarkers(); renderJournal(); show('screen-map'); }
+
+/* ── Лагерь ── */
+let _camp = null;
+
+function enterCamp(camp) {
+  _camp = camp;
+  const doneN = camp.directions.filter(d => isDone(d.id)).length;
+
+  document.getElementById('camp-breadcrumb').textContent = camp.name;
+  document.getElementById('camp-title').textContent      = camp.name;
+  document.getElementById('camp-subtitle').textContent   = camp.subtitle;
+  document.getElementById('camp-progress').textContent   = `Пройдено: ${doneN} / ${camp.directions.length}`;
+
+  const grid = document.getElementById('directions-grid');
+  grid.className = `directions-grid n${camp.directions.length}`;
+  grid.innerHTML = '';
+
+  camp.directions.forEach(dir => {
+    const done = isDone(dir.id);
+    const card = document.createElement('div');
+    card.className = `dir-card${done ? ' done' : ''}`;
+    card.innerHTML = `
+      ${done ? '<div class="dir-card-check">✓</div>' : ''}
+      <div class="dir-card-label">Направление</div>
+      <div class="dir-card-name">${dir.name}</div>
+      <div class="dir-card-phil">${dir.philosophers}</div>
+      <span class="dir-card-badge ${done?'done':'avail'}">${done?'завершено':'доступно'}</span>`;
+    card.addEventListener('click', () => enterEncounter(dir, camp));
+    grid.appendChild(card);
+  });
+
+  show('screen-camp');
+}
+
+/* ── Встреча ── */
+let _dir = null;
+
+function enterEncounter(dir, camp) {
+  _dir = dir; _camp = camp;
+
+  document.getElementById('enc-breadcrumb').textContent = camp.name + ' · ' + dir.name;
+  document.getElementById('enc-back-btn').onclick = () => enterCamp(camp);
+  document.getElementById('enc-camp-btn').onclick = () => enterCamp(camp);
+
+  document.getElementById('banner-camp').textContent = camp.name.toUpperCase();
+  document.getElementById('banner-name').textContent = dir.name;
+  document.getElementById('banner-phil').textContent = dir.philosophers;
+
+  document.getElementById('article-desc').textContent        = dir.desc;
+  document.getElementById('article-quote-text').textContent  = dir.quote;
+  document.getElementById('article-quote-cite').textContent  = dir.quoteCite;
+  document.getElementById('article-tags').innerHTML =
+    dir.tags.map(t => `<span class="article-tag">${t}</span>`).join('');
+
+  const btn = document.getElementById('enc-quiz-btn');
+  if (isDone(dir.id)) {
+    btn.textContent = 'Повторить вопрос';
+    btn.className = 'btn-revisit';
+  } else {
+    btn.textContent = 'Выслушать вопрос →';
+    btn.className = 'btn-primary';
+  }
+  btn.onclick = () => enterQuiz(dir, camp);
+
+  show('screen-encounter');
+}
+
+/* ── Вопрос ── */
+function enterQuiz(dir, camp) {
+  _dir = dir; _camp = camp;
+
+  document.getElementById('quiz-breadcrumb').textContent = camp.name + ' · ' + dir.name;
+  document.getElementById('quiz-back').onclick = () => enterEncounter(dir, camp);
+
+  document.getElementById('quiz-mini').innerHTML = `
+    <div class="qm-initial">${dir.name[0]}</div>
+    <div>
+      <div class="qm-name">${dir.name}</div>
+      <div class="qm-hint">${dir.hint}</div>
+    </div>`;
+
+  document.getElementById('q-text').textContent = dir.quiz.q;
+
+  const letters = ['А','Б','В','Г'];
+  document.getElementById('options-list').innerHTML = dir.quiz.opts.map((opt, i) => `
+    <button class="opt-btn" onclick="handleAnswer(${i})">
+      <span class="opt-letter">${letters[i]}</span>
+      <span>${opt}</span>
+    </button>`).join('');
+
+  document.getElementById('hint-area').innerHTML   = '';
+  document.getElementById('result-area').innerHTML = '';
+
+  show('screen-quiz');
+}
+
+function handleAnswer(idx) {
+  const dir  = _dir;
+  const btns = document.querySelectorAll('.opt-btn');
+  btns.forEach(b => b.disabled = true);
+
+  if (idx === dir.quiz.ans) {
+    btns[idx].classList.add('correct');
+    document.getElementById('result-area').innerHTML = `
+      <div class="answer-result">
+        <div class="ar-stamp">✓ ВѢРНО</div>
+        Отличный ответ, репортёрская книжка пополнена.
+        <div class="ar-quote">${dir.successQuote} <span class="ar-cite">${dir.successCite}</span></div>
+        <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn-primary" onclick="completeEncounter()">Записать в блокнот →</button>
+          <button class="btn-secondary" onclick="showMap()">← На карту</button>
+        </div>
+      </div>`;
+  } else {
+    btns[idx].classList.add('wrong');
+    document.getElementById('hint-area').innerHTML = `
+      <div class="quiz-hint">
+        <div class="quiz-hint-who">ПОДСКАЗКА ОТЪ НАПРАВЛЕНІЯ</div>
+        ${dir.hint}
+      </div>`;
+    setTimeout(() => {
+      btns.forEach(b => { b.disabled = false; b.classList.remove('wrong','correct'); });
+    }, 1800);
+  }
+}
+
+function completeEncounter() {
+  setDone(_dir.id);
+  const total = doneCount();
+  if (total === ALL_DIRS.length) {
+    document.getElementById('done-score').textContent = `Направлений изучено: ${total} / ${ALL_DIRS.length}`;
+    show('screen-done');
+  } else {
+    enterCamp(_camp);
+  }
+}
+
+/* ── Запуск ── */
+loadProg();
+showMap();
+</script>
+</body>
+</html>

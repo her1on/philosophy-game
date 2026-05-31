@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Антисциентистские направления — Philosophia</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:#040010;overflow:hidden;font-family:Georgia,serif;color:#e8e0ff;width:100vw;height:100vh}
+#scene-bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;will-change:transform;transform:scale(1.04)}
+#embers{position:fixed;inset:0;pointer-events:none;z-index:5}
+.torch-fx{position:fixed;pointer-events:none;z-index:6;transform:translate(-50%,-100%)}
+.torch-glow-anim{position:absolute;top:50%;left:50%;width:180px;height:180px;transform:translate(-50%,-5%);
+  background:radial-gradient(circle,rgba(150,60,255,.32) 0%,transparent 68%);border-radius:50%;animation:glow-p 1.7s ease-in-out infinite}
+.flame-outer{position:relative;width:22px;height:40px;margin:0 auto;
+  background:radial-gradient(ellipse at 50% 68%,#fff0ff 0%,#d070ff 26%,#8020c0 60%,transparent 90%);
+  border-radius:50% 50% 38% 38%/62% 62% 45% 45%;filter:blur(1.8px);animation:flick .48s ease-in-out infinite;transform-origin:50% 100%}
+.flame-inner{position:absolute;bottom:5px;left:50%;width:11px;height:22px;transform:translateX(-50%);
+  background:radial-gradient(ellipse at 50% 65%,#ffffff 0%,#f0d0ff 28%,#c060ff 62%,transparent 90%);
+  border-radius:50% 50% 35% 35%/60% 60% 45% 45%;filter:blur(.5px);animation:flick .36s ease-in-out infinite reverse;transform-origin:50% 100%}
+@keyframes flick{0%,100%{transform:scaleX(1) scaleY(1) rotate(-2deg);opacity:.9}22%{transform:scaleX(.76) scaleY(1.18) rotate(5deg);opacity:.7}48%{transform:scaleX(1.14) scaleY(.86) rotate(-1deg);opacity:.97}72%{transform:scaleX(.82) scaleY(1.12) rotate(6deg);opacity:.74}}
+@keyframes glow-p{0%,100%{opacity:1;transform:translate(-50%,-5%) scale(1)}50%{opacity:.58;transform:translate(-50%,-5%) scale(1.18)}}
+.hotspot{position:fixed;cursor:pointer;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;z-index:20;transition:filter .22s,transform .22s}
+.hotspot:hover{filter:drop-shadow(0 0 16px rgba(200,120,255,.8));transform:translateX(-50%) translateY(-5px)}
+.hotspot svg{display:block}
+.char-label{margin-top:7px;font-size:.63em;letter-spacing:2.5px;color:rgba(200,160,255,.55);white-space:nowrap;transition:color .2s}
+.hotspot:hover .char-label{color:rgba(210,170,255,.95)}
+.hotspot.found{filter:drop-shadow(0 0 8px rgba(120,255,180,.5))}
+.hotspot.found .char-label{color:rgba(120,255,180,.65)}
+#hud{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 28px 20px;background:linear-gradient(to bottom,rgba(4,0,16,.92) 60%,transparent);pointer-events:none}
+#back-btn{pointer-events:all;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);color:rgba(220,200,255,.75);padding:8px 16px;cursor:pointer;font-family:Georgia,serif;font-size:.8em;letter-spacing:1px;border-radius:4px;transition:background .2s}
+#back-btn:hover{background:rgba(255,255,255,.13)}
+#loc-title{font-size:.82em;letter-spacing:5px;color:#b070ff;text-shadow:0 0 20px rgba(150,70,255,.4)}
+#prog-wrap{display:flex;align-items:center;gap:10px}
+.pdot{width:8px;height:8px;border-radius:50%;border:1.5px solid rgba(255,255,255,.2);background:transparent;transition:background .4s,border-color .4s}
+.pdot.on{background:#c060ff;border-color:#c060ff}
+#prog-text{font-size:.72em;color:rgba(180,120,255,.55);font-family:sans-serif}
+#hint{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);font-size:.66em;letter-spacing:3px;color:rgba(200,160,255,.28);pointer-events:none;z-index:30;transition:opacity .3s}
+#dlg{position:fixed;bottom:0;left:0;right:0;z-index:200;padding:22px 40px 28px;background:linear-gradient(to top,rgba(4,0,16,.99) 78%,transparent);border-top:1px solid rgba(150,80,255,.1);transform:translateY(110%);transition:transform .36s cubic-bezier(.25,.8,.25,1)}
+#dlg.open{transform:translateY(0)}
+.dlg-inner{max-width:920px;margin:0 auto;display:flex;gap:20px;align-items:flex-start}
+.dlg-icon{width:54px;height:54px;border-radius:50%;flex-shrink:0;background:rgba(150,60,255,.18);border:1px solid rgba(150,60,255,.38);display:flex;align-items:center;justify-content:center;font-size:1.35em;color:#c090ff}
+.dlg-body{flex:1}
+.dlg-speaker{font-size:.73em;letter-spacing:3px;color:#b070ff;margin-bottom:6px;text-transform:uppercase}
+.dlg-quote{font-style:italic;font-size:1.05em;color:#ede5d0;line-height:1.5;margin-bottom:9px}
+.dlg-desc{font-size:.81em;color:rgba(200,190,230,.64);line-height:1.72}
+#dlg-close{background:none;border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.38);width:28px;height:28px;cursor:pointer;border-radius:4px;font-size:.85em;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+#dlg-close:hover{background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)}
+#complete{position:fixed;inset:0;z-index:500;background:rgba(4,0,16,.94);display:none;flex-direction:column;align-items:center;justify-content:center}
+#complete.show{display:flex}
+.cmp-stars{font-size:2em;letter-spacing:10px;margin-bottom:20px}
+.cmp-title{font-size:1.7em;color:#b060ff;letter-spacing:5px;margin-bottom:10px;text-shadow:0 0 30px rgba(160,70,255,.5)}
+.cmp-sub{font-size:.82em;color:rgba(200,160,255,.55);letter-spacing:2px;margin-bottom:32px}
+.cmp-btn{background:rgba(150,60,255,.14);border:1px solid rgba(150,60,255,.4);color:#b060ff;padding:12px 34px;cursor:pointer;font-family:Georgia,serif;font-size:.88em;letter-spacing:2px;border-radius:4px;transition:background .2s}
+.cmp-btn:hover{background:rgba(150,60,255,.26)}
+</style>
+</head>
+<body>
+
+<svg id="scene-bg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="sky-a" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#020008"/><stop offset="50%" stop-color="#0a0420"/><stop offset="100%" stop-color="#160a38"/>
+  </linearGradient>
+  <linearGradient id="floor-a" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#14082c"/><stop offset="100%" stop-color="#060214"/>
+  </linearGradient>
+  <linearGradient id="niche-depth" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#0a0520"/><stop offset="100%" stop-color="#160a30"/>
+  </linearGradient>
+  <radialGradient id="gl" cx="50%" cy="55%" r="55%">
+    <stop offset="0%" stop-color="#d06018" stop-opacity=".6"/><stop offset="100%" stop-color="#d06018" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="gc" cx="50%" cy="55%" r="55%">
+    <stop offset="0%" stop-color="#4030b0" stop-opacity=".65"/><stop offset="100%" stop-color="#4030b0" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="gr" cx="50%" cy="55%" r="55%">
+    <stop offset="0%" stop-color="#9030b0" stop-opacity=".6"/><stop offset="100%" stop-color="#9030b0" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="tl" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="#9040d0" stop-opacity=".5"/><stop offset="100%" stop-color="#9040d0" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="tr" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="#9040d0" stop-opacity=".42"/><stop offset="100%" stop-color="#9040d0" stop-opacity="0"/>
+  </radialGradient>
+</defs>
+
+<!-- SKY -->
+<rect width="1600" height="900" fill="url(#sky-a)"/>
+
+<!-- CEILING VAULTING RIBS -->
+<path d="M0,0 Q800,120 1600,0" stroke="#1c0e40" stroke-width="3" fill="none" opacity=".55"/>
+<path d="M0,0 Q350,260 800,100"  stroke="#180c38" stroke-width="2" fill="none" opacity=".38"/>
+<path d="M1600,0 Q1250,260 800,100" stroke="#180c38" stroke-width="2" fill="none" opacity=".38"/>
+<path d="M800,0 L800,100" stroke="#180c38" stroke-width="2" fill="none" opacity=".3"/>
+<path d="M350,0 Q560,180 800,100" stroke="#140a30" stroke-width="1.5" fill="none" opacity=".25"/>
+<path d="M1250,0 Q1040,180 800,100" stroke="#140a30" stroke-width="1.5" fill="none" opacity=".25"/>
+<!-- Ceiling boss (center keystone) -->
+<circle cx="800" cy="100" r="18" fill="#180e38"/>
+<circle cx="800" cy="100" r="12" fill="#220e48" opacity=".8"/>
+<circle cx="800" cy="100" r="6"  fill="#300860" opacity=".7"/>
+
+<!-- Ceiling dust -->
+<circle cx="140" cy="55" r="1"   fill="white" opacity=".18"/>
+<circle cx="350" cy="30" r="1.2" fill="white" opacity=".15"/>
+<circle cx="580" cy="48" r=".9"  fill="white" opacity=".13"/>
+<circle cx="760" cy="22" r="1.1" fill="white" opacity=".17"/>
+<circle cx="970" cy="40" r="1"   fill="white" opacity=".15"/>
+<circle cx="1200" cy="28" r="1.2" fill="white" opacity=".13"/>
+<circle cx="1430" cy="52" r=".9" fill="white" opacity=".17"/>
+
+<!-- BACK WALL (stone) -->
+<rect x="0" y="0" width="1600" height="660" fill="#0c0820" opacity=".8"/>
+
+<!-- Stone block courses (horizontal mortar lines) -->
+<line x1="0" y1="78"  x2="1600" y2="78"  stroke="#1a1040" stroke-width="1.5" opacity=".32"/>
+<line x1="0" y1="156" x2="1600" y2="156" stroke="#1a1040" stroke-width="1.5" opacity=".29"/>
+<line x1="0" y1="234" x2="1600" y2="234" stroke="#1a1040" stroke-width="1.5" opacity=".26"/>
+<line x1="0" y1="312" x2="1600" y2="312" stroke="#1a1040" stroke-width="1.5" opacity=".23"/>
+<line x1="0" y1="390" x2="1600" y2="390" stroke="#1a1040" stroke-width="1.5" opacity=".2"/>
+<line x1="0" y1="468" x2="1600" y2="468" stroke="#1a1040" stroke-width="1.5" opacity=".18"/>
+<line x1="0" y1="546" x2="1600" y2="546" stroke="#1a1040" stroke-width="1.5" opacity=".16"/>
+<line x1="0" y1="624" x2="1600" y2="624" stroke="#1a1040" stroke-width="1.5" opacity=".14"/>
+<!-- Vertical block joints (left section x=0-195) -->
+<line x1="95"  y1="0" x2="95"  y2="78"  stroke="#1a1040" stroke-width="1" opacity=".2"/>
+<line x1="95"  y1="156" x2="95"  y2="234" stroke="#1a1040" stroke-width="1" opacity=".2"/>
+<line x1="95"  y1="312" x2="95"  y2="390" stroke="#1a1040" stroke-width="1" opacity=".2"/>
+<line x1="48"  y1="78" x2="48"  y2="156" stroke="#1a1040" stroke-width="1" opacity=".18"/>
+<line x1="144" y1="78" x2="144" y2="156" stroke="#1a1040" stroke-width="1" opacity=".18"/>
+<!-- Vertical joints (right section x=1405-1600) -->
+<line x1="1505" y1="0"   x2="1505" y2="78"  stroke="#1a1040" stroke-width="1" opacity=".2"/>
+<line x1="1456" y1="78"  x2="1456" y2="156" stroke="#1a1040" stroke-width="1" opacity=".18"/>
+<line x1="1555" y1="78"  x2="1555" y2="156" stroke="#1a1040" stroke-width="1" opacity=".18"/>
+<!-- Vertical joints (between niches) -->
+<line x1="558" y1="0" x2="558" y2="78"  stroke="#1a1040" stroke-width="1" opacity=".18"/>
+<line x1="512" y1="78" x2="512" y2="156" stroke="#1a1040" stroke-width="1" opacity=".16"/>
+<line x1="604" y1="78" x2="604" y2="156" stroke="#1a1040" stroke-width="1" opacity=".16"/>
+<line x1="1043" y1="0" x2="1043" y2="78" stroke="#1a1040" stroke-width="1" opacity=".18"/>
+<line x1="998"  y1="78" x2="998"  y2="156" stroke="#1a1040" stroke-width="1" opacity=".16"/>
+<line x1="1088" y1="78" x2="1088" y2="156" stroke="#1a1040" stroke-width="1" opacity=".16"/>
+
+<!-- PILASTERS between niches (decorative vertical strips) -->
+<!-- Left pilaster (between left niche and wall) -->
+<rect x="150" y="100" width="44" height="560" fill="#0f0928" opacity=".7"/>
+<line x1="155" y1="100" x2="155" y2="660" stroke="#1e1248" stroke-width="1" opacity=".5"/>
+<line x1="190" y1="100" x2="190" y2="660" stroke="#1e1248" stroke-width="1" opacity=".5"/>
+<!-- Pilaster capital -->
+<rect x="142" y="94" width="60" height="16" rx="2" fill="#18103e"/>
+<rect x="146" y="88" width="52" height="10" rx="2" fill="#1e1448"/>
+
+<!-- Center-left pilaster (between left and center niche) -->
+<rect x="510" y="100" width="44" height="560" fill="#0f0928" opacity=".7"/>
+<line x1="515" y1="100" x2="515" y2="660" stroke="#1e1248" stroke-width="1" opacity=".5"/>
+<line x1="550" y1="100" x2="550" y2="660" stroke="#1e1248" stroke-width="1" opacity=".5"/>
+<rect x="502" y="94" width="60" height="16" rx="2" fill="#18103e"/>
+<rect x="506" y="88" width="52" height="10" rx="2" fill="#1e1448"/>
+
+<!-- Center-right pilaster (between center and right niche) -->
+<rect x="1046" y="100" width="44" height="560" fill="#0f0928" opacity=".7"/>
+<line x1="1051" y1="100" x2="1051" y2="660" stroke="#1e1248" stroke-width="1" opacity=".5"/>
+<line x1="1086" y1="100" x2="1086" y2="660" stroke="#1e1248" stroke-width="1" opacity=".5"/>
+<rect x="1038" y="94" width="60" height="16" rx="2" fill="#18103e"/>
+<rect x="1042" y="88" width="52" height="10" rx="2" fill="#1e1448"/>
+
+<!-- Right pilaster -->
+<rect x="1406" y="100" width="44" height="560" fill="#0f0928" opacity=".7"/>
+<line x1="1411" y1="100" x2="1411" y2="660" stroke="#1e1248" stroke-width="1" opacity=".5"/>
+<line x1="1446" y1="100" x2="1446" y2="660" stroke="#1e1248" stroke-width="1" opacity=".5"/>
+<rect x="1398" y="94" width="60" height="16" rx="2" fill="#18103e"/>
+<rect x="1402" y="88" width="52" height="10" rx="2" fill="#1e1448"/>
+
+<!-- ════ THREE GOTHIC NICHES ════ -->
+
+<!-- LEFT NICHE (Философия жизни — amber) -->
+<!-- Arch layers (outermost to innermost) -->
+<path d="M192,660 L192,308 A158,158 0 0,0 508,308 L508,660 Z" fill="#0e0828"/>
+<path d="M204,660 L204,316 A146,146 0 0,0 496,316 L496,660 Z" fill="#12092e"/>
+<path d="M216,660 L216,324 A134,134 0 0,0 484,324 L484,660 Z" fill="#160a32"/>
+<!-- Niche interior (deepest layer) -->
+<path d="M228,660 L228,332 A122,122 0 0,0 472,332 L472,660 Z" fill="url(#niche-depth)"/>
+<!-- Amber glow -->
+<ellipse cx="350" cy="500" rx="130" ry="175" fill="url(#gl)"/>
+<!-- Keystone -->
+<polygon points="336,142 364,142 370,172 330,172" fill="#1e1040"/>
+<polygon points="340,148 360,148 365,168 335,168" fill="#281848" opacity=".8"/>
+<!-- Arch border top line (decorative) -->
+<path d="M228,332 A122,122 0 0,0 472,332" stroke="#38205a" stroke-width="3" fill="none"/>
+<path d="M216,324 A134,134 0 0,0 484,324" stroke="#2e1850" stroke-width="2" fill="none" opacity=".7"/>
+<path d="M204,316 A146,146 0 0,0 496,316" stroke="#241444" stroke-width="1.5" fill="none" opacity=".5"/>
+<!-- Column capitals at arch spring -->
+<rect x="182" y="296" width="38" height="20" rx="3" fill="#1a1040"/>
+<rect x="480" y="296" width="38" height="20" rx="3" fill="#1a1040"/>
+<rect x="186" y="288" width="30" height="12" rx="2" fill="#22144a"/>
+<rect x="484" y="288" width="30" height="12" rx="2" fill="#22144a"/>
+<!-- Life-force FLAME symbol (centered in upper niche) -->
+<ellipse cx="350" cy="250" rx="44" ry="70" fill="#b04010" opacity=".15"/>
+<ellipse cx="350" cy="258" rx="28" ry="50" fill="#cc5518" opacity=".38"/>
+<ellipse cx="350" cy="270" rx="16" ry="32" fill="#e87828" opacity=".62"/>
+<ellipse cx="350" cy="285" rx="9"  ry="18" fill="#f5a840" opacity=".82"/>
+<ellipse cx="350" cy="296" rx="5"  ry="10" fill="#ffe090" opacity=".92"/>
+<ellipse cx="350" cy="303" rx="2.5" ry="5" fill="#ffffff" opacity=".95"/>
+<!-- Candle base in niche -->
+<rect x="338" y="395" width="24" height="60" rx="4" fill="#2a1c40"/>
+<rect x="334" y="390" width="32" height="10" rx="3" fill="#382450"/>
+<!-- Niche floor plinth -->
+<rect x="228" y="638" width="244" height="22" rx="2" fill="#160e30"/>
+<rect x="234" y="632" width="232" height="10" rx="2" fill="#1c1238"/>
+
+<!-- CENTER NICHE (Психоанализ — deep indigo) -->
+<path d="M606,660 L606,282 A194,194 0 0,0 994,282 L994,660 Z" fill="#0c0832"/>
+<path d="M618,660 L618,292 A182,182 0 0,0 982,292 L982,660 Z" fill="#100a36"/>
+<path d="M630,660 L630,302 A170,170 0 0,0 970,302 L970,660 Z" fill="#140c3a"/>
+<path d="M642,660 L642,312 A158,158 0 0,0 958,312 L958,660 Z" fill="url(#niche-depth)"/>
+<ellipse cx="800" cy="490" rx="170" ry="195" fill="url(#gc)"/>
+<!-- Keystone -->
+<polygon points="786,82 814,82 820,116 780,116" fill="#1a0e44"/>
+<polygon points="790,88 810,88 815,112 785,112" fill="#22124e" opacity=".8"/>
+<!-- Arch borders -->
+<path d="M642,312 A158,158 0 0,0 958,312" stroke="#342266" stroke-width="3" fill="none"/>
+<path d="M630,302 A170,170 0 0,0 970,302" stroke="#281a5a" stroke-width="2" fill="none" opacity=".7"/>
+<path d="M618,292 A182,182 0 0,0 982,292" stroke="#20124c" stroke-width="1.5" fill="none" opacity=".5"/>
+<!-- Capitals -->
+<rect x="596" y="270" width="38" height="20" rx="3" fill="#1a1044"/>
+<rect x="966" y="270" width="38" height="20" rx="3" fill="#1a1044"/>
+<rect x="600" y="262" width="30" height="12" rx="2" fill="#22144e"/>
+<rect x="970" y="262" width="30" height="12" rx="2" fill="#22144e"/>
+<!-- UNCONSCIOUS EYE symbol -->
+<!-- Outer glow -->
+<ellipse cx="800" cy="230" rx="76" ry="46" fill="#1818a0" opacity=".25"/>
+<ellipse cx="800" cy="230" rx="56" ry="33" fill="#2828c0" opacity=".38"/>
+<!-- Eyelid shape -->
+<path d="M724,230 Q800,180 876,230 Q800,280 724,230 Z" fill="#10103a"/>
+<!-- Iris -->
+<circle cx="800" cy="230" r="26" fill="#2020b8" opacity=".7"/>
+<circle cx="800" cy="230" r="20" fill="#0a0830"/>
+<circle cx="800" cy="230" r="14" fill="#2a2ac0" opacity=".6"/>
+<circle cx="800" cy="230" r="8"  fill="#5050e0" opacity=".85"/>
+<circle cx="800" cy="230" r="4"  fill="#9090ff" opacity=".9"/>
+<circle cx="800" cy="230" r="2"  fill="#ffffff"/>
+<!-- Iris texture rings -->
+<circle cx="800" cy="230" r="18" fill="none" stroke="#3838a0" stroke-width="1" opacity=".45"/>
+<circle cx="800" cy="230" r="11" fill="none" stroke="#5050c0" stroke-width="1" opacity=".4"/>
+<!-- Highlight -->
+<circle cx="808" cy="222" r="3.5" fill="white" opacity=".35"/>
+<!-- Eyelid border -->
+<path d="M724,230 Q800,180 876,230" stroke="#2a1a60" stroke-width="2" fill="none"/>
+<path d="M724,230 Q800,280 876,230" stroke="#1a1050" stroke-width="1.5" fill="none"/>
+<!-- Eyelashes top -->
+<line x1="740" y1="218" x2="734" y2="208" stroke="#18104a" stroke-width="1.5" opacity=".5"/>
+<line x1="758" y1="208" x2="754" y2="196" stroke="#18104a" stroke-width="1.5" opacity=".5"/>
+<line x1="778" y1="200" x2="776" y2="188" stroke="#18104a" stroke-width="1.5" opacity=".5"/>
+<line x1="800" y1="198" x2="800" y2="186" stroke="#18104a" stroke-width="1.5" opacity=".5"/>
+<line x1="822" y1="200" x2="824" y2="188" stroke="#18104a" stroke-width="1.5" opacity=".5"/>
+<line x1="842" y1="208" x2="846" y2="196" stroke="#18104a" stroke-width="1.5" opacity=".5"/>
+<line x1="860" y1="218" x2="866" y2="208" stroke="#18104a" stroke-width="1.5" opacity=".5"/>
+<!-- Niche plinth -->
+<rect x="642" y="638" width="316" height="22" rx="2" fill="#12103a"/>
+<rect x="648" y="632" width="304" height="10" rx="2" fill="#181440"/>
+
+<!-- RIGHT NICHE (Экзистенциализм — violet) -->
+<path d="M1092,660 L1092,308 A158,158 0 0,0 1408,308 L1408,660 Z" fill="#0e0838"/>
+<path d="M1104,660 L1104,316 A146,146 0 0,0 1396,316 L1396,660 Z" fill="#12083e"/>
+<path d="M1116,660 L1116,324 A134,134 0 0,0 1384,324 L1384,660 Z" fill="#160844"/>
+<path d="M1128,660 L1128,332 A122,122 0 0,0 1372,332 L1372,660 Z" fill="url(#niche-depth)"/>
+<ellipse cx="1250" cy="500" rx="130" ry="175" fill="url(#gr)"/>
+<!-- Keystone -->
+<polygon points="1236,142 1264,142 1270,172 1230,172" fill="#200848"/>
+<polygon points="1240,148 1260,148 1265,168 1235,168" fill="#2a0e52" opacity=".8"/>
+<!-- Arch borders -->
+<path d="M1128,332 A122,122 0 0,0 1372,332" stroke="#34166e" stroke-width="3" fill="none"/>
+<path d="M1116,324 A134,134 0 0,0 1384,324" stroke="#281060" stroke-width="2" fill="none" opacity=".7"/>
+<path d="M1104,316 A146,146 0 0,0 1396,316" stroke="#200c52" stroke-width="1.5" fill="none" opacity=".5"/>
+<!-- Capitals -->
+<rect x="1082" y="296" width="38" height="20" rx="3" fill="#1c0c48"/>
+<rect x="1280" y="296" width="38" height="20" rx="3" fill="#1c0c48"/>
+<rect x="1086" y="288" width="30" height="12" rx="2" fill="#240e52"/>
+<rect x="1284" y="288" width="30" height="12" rx="2" fill="#240e52"/>
+<!-- VOID / DOORWAY symbol -->
+<!-- Outer frame -->
+<rect x="1202" y="182" width="96" height="150" rx="48 48 0 0" fill="#08041e"/>
+<!-- Inner portal glow -->
+<rect x="1218" y="198" width="64" height="128" rx="32 32 0 0" fill="#1a0850" opacity=".6"/>
+<!-- Violet light from beyond -->
+<ellipse cx="1250" cy="272" rx="28" ry="58" fill="#7020a0" opacity=".25"/>
+<ellipse cx="1250" cy="295" rx="16" ry="34" fill="#9030c0" opacity=".3"/>
+<ellipse cx="1250" cy="315" rx="8"  ry="18" fill="#b040d0" opacity=".35"/>
+<!-- Portal frame details -->
+<rect x="1202" y="182" width="96" height="150" rx="48 48 0 0" fill="none" stroke="#301060" stroke-width="3"/>
+<rect x="1218" y="198" width="64" height="128" rx="32 32 0 0" fill="none" stroke="#401880" stroke-width="1.5" opacity=".7"/>
+<!-- Door steps -->
+<rect x="1218" y="332" width="64" height="8" rx="2" fill="#1e0858"/>
+<rect x="1212" y="340" width="76" height="6" rx="2" fill="#180650"/>
+<!-- Niche plinth -->
+<rect x="1128" y="638" width="244" height="22" rx="2" fill="#140838"/>
+<rect x="1134" y="632" width="232" height="10" rx="2" fill="#1a0e42"/>
+
+<!-- TORCH GLOWS -->
+<circle cx="100"  cy="430" r="160" fill="url(#tl)"/>
+<circle cx="1500" cy="430" r="150" fill="url(#tr)"/>
+
+<!-- LEFT FOREGROUND PILLAR (more detailed) -->
+<rect x="-48" y="50" width="142" height="660" fill="#0e0a22"/>
+<!-- Fluting grooves -->
+<line x1="-20" y1="50" x2="-20" y2="710" stroke="#16122e" stroke-width="1.5" opacity=".5"/>
+<line x1="0"   y1="50" x2="0"   y2="710" stroke="#181430" stroke-width="2"   opacity=".5"/>
+<line x1="22"  y1="50" x2="22"  y2="710" stroke="#16122e" stroke-width="1.5" opacity=".5"/>
+<line x1="44"  y1="50" x2="44"  y2="710" stroke="#181430" stroke-width="2"   opacity=".5"/>
+<line x1="66"  y1="50" x2="66"  y2="710" stroke="#16122e" stroke-width="1.5" opacity=".5"/>
+<line x1="88"  y1="50" x2="88"  y2="710" stroke="#181430" stroke-width="2"   opacity=".5"/>
+<!-- Capital top -->
+<ellipse cx="23" cy="50"  rx="76" ry="24" fill="#1a1432"/>
+<ellipse cx="23" cy="710" rx="76" ry="24" fill="#1a1432"/>
+<rect x="-55" y="44" width="156" height="18" rx="3" fill="#1e1838"/>
+<rect x="-48" y="36" width="142" height="12" rx="2" fill="#241e42"/>
+<!-- Candelabra -->
+<rect x="84" y="408" width="14" height="52" fill="#2c1c50"/>
+<rect x="80" y="406" width="22" height="6"  rx="2" fill="#3c2860"/>
+<ellipse cx="91" cy="406" rx="11" ry="4" fill="#3c2860"/>
+
+<!-- RIGHT FOREGROUND PILLAR -->
+<rect x="1506" y="50" width="142" height="660" fill="#0e0a22"/>
+<line x1="1514" y1="50" x2="1514" y2="710" stroke="#16122e" stroke-width="1.5" opacity=".5"/>
+<line x1="1534" y1="50" x2="1534" y2="710" stroke="#181430" stroke-width="2"   opacity=".5"/>
+<line x1="1556" y1="50" x2="1556" y2="710" stroke="#16122e" stroke-width="1.5" opacity=".5"/>
+<line x1="1578" y1="50" x2="1578" y2="710" stroke="#181430" stroke-width="2"   opacity=".5"/>
+<line x1="1600" y1="50" x2="1600" y2="710" stroke="#16122e" stroke-width="1.5" opacity=".5"/>
+<ellipse cx="1577" cy="50"  rx="76" ry="24" fill="#1a1432"/>
+<ellipse cx="1577" cy="710" rx="76" ry="24" fill="#1a1432"/>
+<rect x="1499" y="44" width="156" height="18" rx="3" fill="#1e1838"/>
+<rect x="1506" y="36" width="142" height="12" rx="2" fill="#241e42"/>
+<rect x="1502" y="408" width="14" height="52" fill="#2c1c50"/>
+<rect x="1498" y="406" width="22" height="6"  rx="2" fill="#3c2860"/>
+<ellipse cx="1509" cy="406" rx="11" ry="4" fill="#3c2860"/>
+
+<!-- STONE FLOOR with individual slabs -->
+<rect x="0" y="660" width="1600" height="240" fill="url(#floor-a)"/>
+<!-- Slab horizontal lines -->
+<line x1="0" y1="700" x2="1600" y2="700" stroke="#201240" stroke-width="1.8" opacity=".55"/>
+<line x1="0" y1="742" x2="1600" y2="742" stroke="#201240" stroke-width="1.4" opacity=".45"/>
+<line x1="0" y1="786" x2="1600" y2="786" stroke="#201240" stroke-width="1.2" opacity=".35"/>
+<line x1="0" y1="830" x2="1600" y2="830" stroke="#201240" stroke-width="1"   opacity=".25"/>
+<!-- Slab vertical lines -->
+<line x1="200"  y1="660" x2="165"  y2="900" stroke="#201240" stroke-width="1" opacity=".35"/>
+<line x1="400"  y1="660" x2="342"  y2="900" stroke="#201240" stroke-width="1" opacity=".35"/>
+<line x1="600"  y1="660" x2="524"  y2="900" stroke="#201240" stroke-width="1" opacity=".35"/>
+<line x1="800"  y1="660" x2="800"  y2="900" stroke="#201240" stroke-width="1" opacity=".35"/>
+<line x1="1000" y1="660" x2="1076" y2="900" stroke="#201240" stroke-width="1" opacity=".35"/>
+<line x1="1200" y1="660" x2="1258" y2="900" stroke="#201240" stroke-width="1" opacity=".35"/>
+<line x1="1400" y1="660" x2="1435" y2="900" stroke="#201240" stroke-width="1" opacity=".35"/>
+<!-- Floor mist -->
+<rect x="0" y="845" width="1600" height="55" fill="#060214" opacity=".65"/>
+<ellipse cx="800" cy="870" rx="900" ry="50" fill="#100830" opacity=".15"/>
+</svg>
+
+<canvas id="embers"></canvas>
+<div class="torch-fx" id="flame-l"><div class="torch-glow-anim"></div><div class="flame-outer"></div><div class="flame-inner"></div></div>
+<div class="torch-fx" id="flame-r"><div class="torch-glow-anim"></div><div class="flame-outer"></div><div class="flame-inner"></div></div>
+
+<div id="hud">
+  <button id="back-btn" onclick="location.href='modern_hub.html'">← НАЗАД</button>
+  <div id="loc-title">АНТИСЦИЕНТИСТСКИЕ НАПРАВЛЕНИЯ</div>
+  <div id="prog-wrap">
+    <div class="pdot" id="d0"></div><div class="pdot" id="d1"></div><div class="pdot" id="d2"></div>
+    <div id="prog-text">0 / 3</div>
+  </div>
+</div>
+<div id="hint">НАЖМИ НА ФИЛОСОФА ДЛЯ ВЗАИМОДЕЙСТВИЯ</div>
+
+<!-- ══ НИЦШЕ ══ -->
+<div class="hotspot" id="h-nietzsche" style="left:22%;bottom:18%" onclick="open_dlg('nietzsche')">
+<svg viewBox="0 0 120 280" width="100" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="60" cy="275" rx="36" ry="7" fill="rgba(0,0,0,.45)"/>
+  <!-- Coat body -->
+  <path d="M16,86 L104,86 Q112,160 110,280 L10,280 Q8,160 16,86 Z" fill="#1a0c2e"/>
+  <!-- Coat lapels -->
+  <path d="M44,86 L60,126 L76,86 L70,86 L60,114 L50,86 Z" fill="#100820"/>
+  <!-- Shirt collar -->
+  <path d="M50,74 L60,83 L70,74 L70,68 L60,77 L50,68 Z" fill="#cfc4a2"/>
+  <!-- Coat texture lines -->
+  <line x1="22" y1="90" x2="18" y2="170" stroke="#140a22" stroke-width="1.5" opacity=".5"/>
+  <line x1="98" y1="90" x2="102" y2="170" stroke="#140a22" stroke-width="1.5" opacity=".5"/>
+  <!-- Neck -->
+  <rect x="48" y="70" width="24" height="18" rx="6" fill="#c09068"/>
+  <!-- Head -->
+  <ellipse cx="60" cy="42" rx="29" ry="33" fill="#c49270"/>
+  <!-- Ears -->
+  <ellipse cx="29" cy="45" rx="7" ry="9" fill="#b48060"/>
+  <ellipse cx="91" cy="45" rx="7" ry="9" fill="#b48060"/>
+  <!-- Hair (dark, swept back) -->
+  <path d="M31,17 Q60,1 89,17 Q94,29 90,40 L80,24 Q60,13 40,24 L30,40 Q26,29 31,17 Z" fill="#1a1010"/>
+  <!-- Sideburns -->
+  <path d="M31,40 Q27,52 30,64" stroke="#1a1010" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M89,40 Q93,52 90,64" stroke="#1a1010" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <!-- Heavy brow ridge -->
+  <path d="M34,27 Q44,21 54,27" stroke="#18100a" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M66,27 Q76,21 86,27" stroke="#18100a" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <!-- Eyes (intense, deep-set) -->
+  <ellipse cx="44" cy="35" rx="6.5" ry="5.5" fill="#18100a"/>
+  <ellipse cx="76" cy="35" rx="6.5" ry="5.5" fill="#18100a"/>
+  <circle  cx="46" cy="34" r="2" fill="white" opacity=".55"/>
+  <circle  cx="78" cy="34" r="2" fill="white" opacity=".55"/>
+  <!-- Nose bridge -->
+  <path d="M58,44 Q56,54 58,59 Q62,62 66,59 Q68,54 66,44" fill="#b88862" opacity=".45"/>
+  <!-- THE MASSIVE UPSWEPT MUSTACHE -->
+  <path d="M24,56 Q41,40 60,56 Q79,40 96,56" stroke="#18100a" stroke-width="9" fill="none" stroke-linecap="round"/>
+  <!-- Tips flare upward dramatically -->
+  <path d="M24,56 Q17,47 14,35" stroke="#18100a" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M96,56 Q103,47 106,35" stroke="#18100a" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <!-- Right arm raised — holding hammer -->
+  <path d="M100,100 Q116,72 110,50" stroke="#c49270" stroke-width="14" stroke-linecap="round" fill="none"/>
+  <!-- Hammer head -->
+  <rect x="101" y="38" width="24" height="13" rx="4" fill="#4a3020"/>
+  <!-- Hammer handle -->
+  <rect x="109" y="26" width="9" height="30" rx="3" fill="#3a2010"/>
+  <!-- Left arm -->
+  <path d="M20,100 Q5,132 9,158" stroke="#c49270" stroke-width="14" stroke-linecap="round" fill="none"/>
+</svg>
+<div class="char-label">НИЦШЕ</div>
+</div>
+
+<!-- ══ ФРЕЙД ══ -->
+<div class="hotspot" id="h-freud" style="left:50%;bottom:18%" onclick="open_dlg('freud')">
+<svg viewBox="0 0 120 280" width="100" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="60" cy="275" rx="36" ry="7" fill="rgba(0,0,0,.45)"/>
+  <!-- Formal dark suit -->
+  <path d="M14,84 L106,84 Q114,158 112,280 L8,280 Q6,158 14,84 Z" fill="#1c1e30"/>
+  <!-- Waistcoat -->
+  <path d="M44,84 L60,138 L76,84 Z" fill="#161828"/>
+  <!-- Tie -->
+  <rect x="57" y="88" width="6" height="38" rx="2" fill="#2a1018"/>
+  <!-- Shirt lapels -->
+  <path d="M40,84 L54,104 L44,84" fill="#141620"/>
+  <path d="M80,84 L66,104 L76,84" fill="#141620"/>
+  <!-- White collar -->
+  <path d="M50,72 L60,82 L70,72 L70,66 L60,76 L50,66 Z" fill="#d8d2b2"/>
+  <!-- Neck -->
+  <rect x="49" y="66" width="22" height="20" rx="6" fill="#c8a882"/>
+  <!-- Head -->
+  <ellipse cx="60" cy="42" rx="27" ry="31" fill="#c8a882"/>
+  <!-- Ears -->
+  <ellipse cx="31" cy="44" rx="7" ry="8.5" fill="#b89072"/>
+  <ellipse cx="89" cy="44" rx="7" ry="8.5" fill="#b89072"/>
+  <!-- Receding hair (slightly bald on top, neat at sides) -->
+  <path d="M36,18 Q60,5 84,18 Q88,28 84,34 L72,22 Q60,15 48,22 L36,34 Q32,28 36,18 Z" fill="#28201a"/>
+  <!-- Thick circular wire-frame glasses -->
+  <circle cx="44" cy="34" r="12" fill="none" stroke="#3a3018" stroke-width="2.8"/>
+  <circle cx="76" cy="34" r="12" fill="none" stroke="#3a3018" stroke-width="2.8"/>
+  <!-- Lenses (subtle) -->
+  <circle cx="44" cy="34" r="10" fill="#1a1a08" opacity=".18"/>
+  <circle cx="76" cy="34" r="10" fill="#1a1a08" opacity=".18"/>
+  <!-- Bridge and temples -->
+  <line x1="56" y1="34" x2="64" y2="34" stroke="#3a3018" stroke-width="2.2"/>
+  <line x1="18" y1="34" x2="32" y2="34" stroke="#3a3018" stroke-width="2.2"/>
+  <line x1="88" y1="34" x2="102" y2="34" stroke="#3a3018" stroke-width="2.2"/>
+  <!-- Eyes inside glasses -->
+  <circle cx="44" cy="34" r="4" fill="#1a1008"/>
+  <circle cx="76" cy="34" r="4" fill="#1a1008"/>
+  <circle cx="45.5" cy="33" r="1.5" fill="white" opacity=".55"/>
+  <circle cx="77.5" cy="33" r="1.5" fill="white" opacity=".55"/>
+  <!-- Eyebrows above frames -->
+  <path d="M32,21 Q44,15 56,21" stroke="#28201a" stroke-width="3" fill="none"/>
+  <path d="M64,21 Q76,15 88,21" stroke="#28201a" stroke-width="3" fill="none"/>
+  <!-- GREY-BROWN BEARD (key fix — not white) -->
+  <path d="M27,57 Q30,70 35,80 Q42,94 54,96 Q60,98 66,96 Q78,94 85,80 Q90,70 93,57 Q78,50 60,52 Q42,50 27,57 Z" fill="#8c7a70"/>
+  <!-- Beard shading/texture -->
+  <path d="M38,59 Q40,75 38,88" stroke="#6e6058" stroke-width="2" fill="none" opacity=".5"/>
+  <path d="M60,52 Q60,70 60,94" stroke="#6e6058" stroke-width="2" fill="none" opacity=".5"/>
+  <path d="M82,59 Q80,75 82,88" stroke="#6e6058" stroke-width="2" fill="none" opacity=".5"/>
+  <!-- Forked split at chin -->
+  <path d="M50,84 Q48,96 46,108" stroke="#8c7a70" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M70,84 Q72,96 74,108" stroke="#8c7a70" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <!-- Moustache merging with beard top -->
+  <path d="M36,54 Q48,47 60,54 Q72,47 84,54" stroke="#6e6058" stroke-width="3.5" fill="none"/>
+  <!-- Right arm with pipe -->
+  <path d="M102,98 Q115,124 110,148" stroke="#c8a882" stroke-width="14" stroke-linecap="round" fill="none"/>
+  <!-- Pipe -->
+  <path d="M106,145 Q114,158 122,152" stroke="#3a2010" stroke-width="6.5" stroke-linecap="round" fill="none"/>
+  <ellipse cx="123" cy="150" rx="7" ry="5.5" fill="#3a2010"/>
+  <!-- Left arm -->
+  <path d="M18,98 Q4,126 7,152" stroke="#c8a882" stroke-width="14" stroke-linecap="round" fill="none"/>
+</svg>
+<div class="char-label">ФРЕЙД</div>
+</div>
+
+<!-- ══ САРТР ══ -->
+<div class="hotspot" id="h-sartre" style="left:78%;bottom:18%" onclick="open_dlg('sartre')">
+<svg viewBox="0 0 120 280" width="100" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="60" cy="275" rx="36" ry="7" fill="rgba(0,0,0,.45)"/>
+  <!-- Dark coat -->
+  <path d="M15,86 L105,86 Q112,160 110,280 L10,280 Q8,160 15,86 Z" fill="#18182e"/>
+  <!-- Turtleneck collar -->
+  <rect x="38" y="64" width="44" height="26" rx="10" fill="#202238"/>
+  <!-- Neck inside turtleneck -->
+  <rect x="48" y="64" width="24" height="26" rx="8" fill="#c4a072"/>
+  <!-- Head -->
+  <ellipse cx="60" cy="42" rx="28" ry="32" fill="#c4a072"/>
+  <!-- Ears -->
+  <ellipse cx="30" cy="45" rx="7" ry="8.5" fill="#b09062"/>
+  <ellipse cx="90" cy="45" rx="7" ry="8.5" fill="#b09062"/>
+  <!-- Hair (thin, slightly sparse) -->
+  <path d="M34,16 Q60,5 86,16 Q90,27 86,34 L76,20 Q60,13 44,20 L34,34 Q30,27 34,16 Z" fill="#1c1a14"/>
+  <!-- THICK SQUARE GLASSES — Sartre's defining feature -->
+  <!-- Left frame — very square -->
+  <rect x="24" y="22" width="24" height="18" rx="2.5" fill="none" stroke="#181808" stroke-width="3.5"/>
+  <!-- Right frame -->
+  <rect x="72" y="22" width="24" height="18" rx="2.5" fill="none" stroke="#181808" stroke-width="3.5"/>
+  <!-- Lenses tinted slightly -->
+  <rect x="25" y="23" width="22" height="16" rx="2" fill="#0e0e08" opacity=".25"/>
+  <rect x="73" y="23" width="22" height="16" rx="2" fill="#0e0e08" opacity=".25"/>
+  <!-- Bridge -->
+  <line x1="48" y1="31" x2="72" y2="31" stroke="#181808" stroke-width="3"/>
+  <!-- Temples -->
+  <line x1="14" y1="31" x2="24" y2="31" stroke="#181808" stroke-width="3"/>
+  <line x1="96" y1="31" x2="106" y2="31" stroke="#181808" stroke-width="3"/>
+  <!-- Eyes through lenses -->
+  <circle cx="36" cy="31" r="5" fill="#1a1010"/>
+  <circle cx="84" cy="31" r="5" fill="#1a1010"/>
+  <circle cx="38" cy="30" r="1.8" fill="white" opacity=".5"/>
+  <circle cx="86" cy="30" r="1.8" fill="white" opacity=".5"/>
+  <!-- Eyebrows (heavy, furrowed — Sartre's pensive look) -->
+  <path d="M24,18 Q36,12 48,18" stroke="#1c1a14" stroke-width="3.5" fill="none"/>
+  <path d="M72,18 Q84,12 96,18" stroke="#1c1a14" stroke-width="3.5" fill="none"/>
+  <!-- Nose (broad) -->
+  <path d="M57,44 Q54,55 56,60 Q60,64 64,60 Q66,55 63,44" fill="#b09062" opacity=".4"/>
+  <!-- Mouth (firm, thoughtful) -->
+  <path d="M47,54 Q60,59 73,54" stroke="#906040" stroke-width="2.5" fill="none"/>
+  <!-- Right arm raised with cigarette -->
+  <path d="M101,100 Q116,74 112,54" stroke="#c4a072" stroke-width="14" stroke-linecap="round" fill="none"/>
+  <!-- Cigarette -->
+  <rect x="108" y="46" width="5" height="26" rx="2.5" fill="#e8e0d0"/>
+  <!-- Filter tip -->
+  <rect x="108" y="68" width="5" height="6" rx="2" fill="#c8a070"/>
+  <!-- Burning tip glow -->
+  <ellipse cx="110.5" cy="46" rx="3.5" ry="3" fill="#f04010" opacity=".85"/>
+  <!-- Smoke wisps -->
+  <path d="M110,42 Q107,32 112,22" stroke="#c0b0b0" stroke-width="1.5" fill="none" opacity=".28"/>
+  <path d="M110,40 Q114,30 110,20" stroke="#c0b0b0" stroke-width="1"   fill="none" opacity=".18"/>
+  <!-- Left arm -->
+  <path d="M19,100 Q4,130 7,156" stroke="#c4a072" stroke-width="14" stroke-linecap="round" fill="none"/>
+</svg>
+<div class="char-label">САРТР</div>
+</div>
+
+<div id="dlg">
+  <div class="dlg-inner">
+    <div class="dlg-icon" id="dlg-icon">?</div>
+    <div class="dlg-body">
+      <div class="dlg-speaker" id="dlg-speaker"></div>
+      <div class="dlg-quote"   id="dlg-quote"></div>
+      <div class="dlg-desc"    id="dlg-desc"></div>
+    </div>
+    <button id="dlg-close" onclick="close_dlg()">✕</button>
+  </div>
+</div>
+
+<div id="complete">
+  <div class="cmp-stars">✦ ✦ ✦</div>
+  <div class="cmp-title">МИСТЕРИЯ ЗАВЕРШЕНА</div>
+  <div class="cmp-sub">Антисциентистские направления изучены · 3 из 3</div>
+  <button class="cmp-btn" onclick="location.href='modern_hub.html'">← ВЕРНУТЬСЯ К ВЫБОРУ</button>
+</div>
+
+<script>
+const DATA = {
+  nietzsche:{
+    icon:'N',
+    speaker:'Философия жизни · Шопенгауэр, Ницше, Бергсон',
+    quote:'«Бог мёртв! Бог остаётся мёртвым! И мы его убили!» — Ницше',
+    desc:'Философия жизни ставит во главу угла витальную силу, а не разум. Шопенгауэр видел в основе мироздания слепую "волю к жизни", источник страдания. Ницше переосмыслил её как "волю к власти" и творчеству, провозгласив идеал сверхчеловека — свободного созидателя ценностей. Бергсон противопоставил живой интуиции и "жизненному порыву" механистический рационализм.'
+  },
+  freud:{
+    icon:'Ψ',
+    speaker:'Психоанализ · Фрейд, Юнг, Фромм',
+    quote:'«Там, где было Оно, должно стать Я.» — Фрейд',
+    desc:'Психоанализ открыл бессознательное как главную движущую силу человека. Фрейд разделил психику на Оно (инстинкты и влечения), Я (сознательное "эго") и Сверх-Я (интериоризированная мораль). Карл Юнг ввёл понятие коллективного бессознательного с архетипами — Тенью, Анимой, Самостью. Эрих Фромм соединил психоанализ с критикой общества, показав, как социальные структуры порождают экзистенциальные неврозы.'
+  },
+  sartre:{
+    icon:'E',
+    speaker:'Экзистенциализм · Хайдеггер, Сартр, Камю, Ясперс',
+    quote:'«Существование предшествует сущности.» — Сартр',
+    desc:'Экзистенциализм исследует конкретное человеческое существование перед лицом абсурда, свободы и смерти. Хайдеггер ввёл понятие бытия-в-мире и экзистенциальной тревоги (Angst). Сартр настаивал: никакой заданной "природы человека" нет — мы обречены быть свободными и создавать себя через выбор. Камю противопоставил бессмысленности мира бунт и человеческую солидарность.'
+  }
+};
+
+const TOTAL=3; let found=new Set();
+
+function update_progress(){
+  for(let i=0;i<TOTAL;i++) document.getElementById('d'+i).classList.toggle('on',i<found.size);
+  document.getElementById('prog-text').textContent=found.size+' / '+TOTAL;
+  localStorage.setItem('modern_anti',found.size);
+}
+function open_dlg(id){
+  const d=DATA[id];
+  document.getElementById('dlg-icon').textContent=d.icon;
+  document.getElementById('dlg-speaker').textContent=d.speaker;
+  document.getElementById('dlg-quote').textContent=d.quote;
+  document.getElementById('dlg-desc').textContent=d.desc;
+  document.getElementById('dlg').classList.add('open');
+  document.getElementById('hint').style.opacity='0';
+  if(!found.has(id)){
+    found.add(id);
+    document.getElementById('h-'+id).classList.add('found');
+    update_progress();
+    if(found.size===TOTAL) setTimeout(()=>{ close_dlg(); document.getElementById('complete').classList.add('show'); },1800);
+  }
+}
+function close_dlg(){
+  document.getElementById('dlg').classList.remove('open');
+  if(found.size<TOTAL) document.getElementById('hint').style.opacity='1';
+}
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') close_dlg(); });
+
+function positionFlames(){
+  const svg=document.getElementById('scene-bg');
+  const ctm=svg.getScreenCTM(); if(!ctm) return;
+  const pt=svg.createSVGPoint();
+  pt.x=91; pt.y=404; const l=pt.matrixTransform(ctm);
+  document.getElementById('flame-l').style.cssText+=`;left:${l.x}px;top:${l.y}px`;
+  pt.x=1509; pt.y=404; const r=pt.matrixTransform(ctm);
+  document.getElementById('flame-r').style.cssText+=`;left:${r.x}px;top:${r.y}px`;
+}
+(function(){
+  const bg=document.getElementById('scene-bg');
+  document.addEventListener('mousemove',e=>{
+    const cx=(e.clientX/innerWidth-.5)*2,cy=(e.clientY/innerHeight-.5)*2;
+    bg.style.transform=`scale(1.04) translate(${cx*-14}px,${cy*-7}px)`;
+    positionFlames();
+  });
+})();
+(function(){
+  const canvas=document.getElementById('embers'),ctx=canvas.getContext('2d');
+  let p=[];
+  function resize(){ canvas.width=innerWidth; canvas.height=innerHeight; }
+  function fp(id){ const el=document.getElementById(id); if(!el) return{x:0,y:0}; const r=el.getBoundingClientRect(); return{x:r.left+r.width*.5,y:r.top+r.height*.35}; }
+  const C=['#d070ff','#9040c0','#f0c0ff','#ffffff','#b050e0'];
+  function sp(x,y){ p.push({x:x+(Math.random()-.5)*18,y:y+Math.random()*8,vx:(Math.random()-.5)*1.4,vy:-(Math.random()*2.2+.8),r:Math.random()*2.2+.8,life:1,decay:Math.random()*.012+.006,c:C[Math.floor(Math.random()*C.length)]}); }
+  function tick(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    if(Math.random()<.75){const q=fp('flame-l');sp(q.x,q.y);}
+    if(Math.random()<.75){const q=fp('flame-r');sp(q.x,q.y);}
+    p=p.filter(q=>q.life>0);
+    p.forEach(q=>{ q.x+=q.vx;q.y+=q.vy;q.vx+=(Math.random()-.5)*.18;q.vy-=.02;q.life-=q.decay;
+      ctx.globalAlpha=q.life*q.life;ctx.fillStyle=q.c;ctx.beginPath();ctx.arc(q.x,q.y,q.r*q.life+.3,0,Math.PI*2);ctx.fill(); });
+    ctx.globalAlpha=1; requestAnimationFrame(tick);
+  }
+  resize(); window.addEventListener('resize',()=>{ resize(); positionFlames(); }); tick();
+})();
+requestAnimationFrame(()=>requestAnimationFrame(positionFlames));
+</script>
+</body>
+</html>
