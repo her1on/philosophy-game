@@ -421,17 +421,6 @@ body {
         <g id="territory-group" class="territory"></g>
         <path id="route-halo"></path>
         <path id="route-path"></path>
-        <g transform="translate(66,448)">
-          <g id="compass" class="compass">
-            <circle r="25" fill="rgba(36,22,8,.5)" stroke="#d8b24f" stroke-width="1.4"/>
-            <circle r="19" fill="none" stroke="#d8b24f" stroke-width=".6" opacity=".6"/>
-            <polygon points="0,-20 4.5,0 0,7 -4.5,0" fill="#d8b24f"/>
-            <polygon points="0,20 4.5,0 0,-7 -4.5,0"  fill="#9a6a30"/>
-            <polygon points="-20,0 0,4.5 7,0 0,-4.5"  fill="#b98a44"/>
-            <polygon points="20,0 0,4.5 -7,0 0,-4.5"  fill="#b98a44"/>
-            <text y="-12" text-anchor="middle" font-size="8.5" fill="#f0dcb4" font-family="Georgia,serif" font-weight="bold">N</text>
-          </g>
-        </g>
         <g id="markers-group" style="pointer-events:all"></g>
       </svg>
       <div class="map-caption" id="map-caption">Нажмите на маркер лагеря, чтобы исследовать направления</div>
@@ -699,8 +688,11 @@ function renderMarkers() {
   const A = CAMPS[0], B = CAMPS[1];
   terr.innerHTML = '';
 
-  // маршрут между лагерями — дуга вниз через мост
-  const route = `M ${A.mx} ${A.my} C 240 380, 470 430, ${B.mx} ${B.my}`;
+  // маршрут между лагерями — по тропинке вниз, через мост и вверх к городу
+  const route = `M ${A.mx} ${A.my}
+    C 132 300, 205 388, 300 410
+    C 350 422, 382 430, 412 430
+    C 478 430, 552 402, ${B.mx} ${B.my}`;
   document.getElementById('route-path').setAttribute('d', route);
   document.getElementById('route-halo').setAttribute('d', route);
 
