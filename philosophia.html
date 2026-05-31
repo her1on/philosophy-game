@@ -273,6 +273,112 @@ body {
   .banner-name { font-size:1.5em; }
   .top-nav { padding:12px 16px; }
 }
+
+/* ════════════════════ ПЕРЕХОДЫ МЕЖДУ ЭКРАНАМИ ════════════════════ */
+.screen { animation: screenIn .5s cubic-bezier(.22,.61,.36,1) both; }
+@keyframes screenIn {
+  from { opacity:0; transform:translateY(16px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* разворот баннера направления */
+.direction-banner { animation: unfurl .6s cubic-bezier(.2,.8,.2,1) both; transform-origin:top center; }
+@keyframes unfurl {
+  from { opacity:0; transform:scaleY(.45) translateY(-12px); }
+  to   { opacity:1; transform:scaleY(1) translateY(0); }
+}
+.enc-article { animation: screenIn .5s .14s both; }
+
+/* ════════════════════ КАРТА: территории · маршрут · компас · метки ═════════ */
+.territory { pointer-events:none; }
+#route-path {
+  fill:none; stroke:#a9762e; stroke-width:2.4;
+  stroke-dasharray:2 9; stroke-linecap:round; opacity:.8;
+  animation: routeFlow 1.1s linear infinite;
+}
+@keyframes routeFlow { to { stroke-dashoffset:-22; } }
+
+.compass { transform-box:fill-box; transform-origin:center; animation: compassIn 1s ease both; opacity:.85; }
+@keyframes compassIn {
+  from { opacity:0; transform:rotate(-45deg) scale(.55); }
+  to   { opacity:.85; transform:rotate(0) scale(1); }
+}
+
+.map-marker { cursor:pointer; transform-box:fill-box; transform-origin:center; animation: markerPop .55s cubic-bezier(.2,1.4,.4,1) both; }
+.map-marker .seal { transition:filter .2s; }
+.map-marker:hover .seal { filter:brightness(1.13); }
+@keyframes markerPop {
+  from { opacity:0; transform:translateY(-12px) scale(.7); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
+}
+
+/* виньетки углов карты */
+.map-container::before, .map-container::after {
+  content:''; position:absolute; top:7px; width:24px; height:24px; z-index:3;
+  border:2px solid #9a7040; pointer-events:none;
+}
+.map-container::before { left:7px;  border-right:none; border-bottom:none; }
+.map-container::after  { right:7px; border-left:none;  border-bottom:none; }
+
+/* ════════════════════ КАСКАД КАРТОЧЕК НАПРАВЛЕНИЙ ════════════════════ */
+.dir-card {
+  opacity:0; transform:translateY(18px);
+  transition: opacity .5s ease,
+              transform .45s cubic-bezier(.2,.7,.2,1),
+              background-color .2s, border-color .2s, box-shadow .2s;
+}
+.dir-card.in       { opacity:1; transform:translateY(0); }
+.dir-card.in:hover { transform:translateY(-2px); }
+
+/* ════════════════════ ЛАГЕРЯ: КОНТРАСТНЫЕ ХАРАКТЕРЫ ════════════════════ */
+/* — Антисциентистский: тёмный, драматичный (по ту сторону разума) — */
+#screen-camp.theme-anti {
+  background-color:#181109;
+  background-image:
+    radial-gradient(130% 90% at 50% -15%, rgba(160,45,20,.22), transparent 60%),
+    repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(255,255,255,.022) 28px, rgba(255,255,255,.022) 29px);
+  color:#e8dcc4;
+}
+#screen-camp.theme-anti .top-nav        { border-bottom-color:#5a3420; }
+#screen-camp.theme-anti .btn-back       { border-color:#7a4830; color:#d9b89a; }
+#screen-camp.theme-anti .btn-back:hover { background:rgba(180,80,40,.16); }
+#screen-camp.theme-anti .top-breadcrumb { color:#b8845a; }
+#screen-camp.theme-anti .camp-section-label { color:#cc6a38; }
+#screen-camp.theme-anti .camp-title     { color:#f2e0c4; text-shadow:0 2px 18px rgba(190,55,22,.4); }
+#screen-camp.theme-anti .camp-subtitle-line { color:#cbb08c; border-color:#7a4830; }
+#screen-camp.theme-anti .camp-progress  { color:#a9805a; }
+#screen-camp.theme-anti .dir-card       { background:linear-gradient(160deg,#2a1c12,#1d1209); border-color:#6a3c22; }
+#screen-camp.theme-anti .dir-card:hover { background:linear-gradient(160deg,#3a2616,#281a0f); border-color:#bf5a2e; box-shadow:0 8px 26px rgba(150,40,15,.35); }
+#screen-camp.theme-anti .dir-card.done  { border-color:#5a8040; background:linear-gradient(160deg,#23311a,#18230f); }
+#screen-camp.theme-anti .dir-card-label { color:#cc6a38; }
+#screen-camp.theme-anti .dir-card-name  { color:#f2e2cb; }
+#screen-camp.theme-anti .dir-card-phil  { color:#bfa07e; }
+#screen-camp.theme-anti .dir-card-badge.avail { color:#dca878; border-color:#7a4830; }
+
+/* — Сциентистский: светлый, упорядоченный, чертёжный (во имя науки) — */
+#screen-camp.theme-sci {
+  background-color:#e9eef0;
+  background-image:
+    radial-gradient(130% 90% at 50% -15%, rgba(40,90,130,.12), transparent 60%),
+    repeating-linear-gradient(0deg,  transparent, transparent 25px, rgba(40,80,120,.07) 25px, rgba(40,80,120,.07) 26px),
+    repeating-linear-gradient(90deg, transparent, transparent 25px, rgba(40,80,120,.07) 25px, rgba(40,80,120,.07) 26px);
+  color:#16242e;
+}
+#screen-camp.theme-sci .top-nav        { border-bottom-color:#9bb4c4; }
+#screen-camp.theme-sci .btn-back       { border-color:#5a7e96; color:#244b63; }
+#screen-camp.theme-sci .btn-back:hover { background:rgba(40,90,130,.1); }
+#screen-camp.theme-sci .top-breadcrumb { color:#3a6a88; }
+#screen-camp.theme-sci .camp-section-label  { color:#2f6f94; }
+#screen-camp.theme-sci .camp-title     { color:#16323f; }
+#screen-camp.theme-sci .camp-subtitle-line  { color:#3a5a6a; border-color:#9bb4c4; }
+#screen-camp.theme-sci .camp-progress  { color:#4a7088; }
+#screen-camp.theme-sci .dir-card       { background:rgba(255,255,255,.92); border-color:#7ba0b8; color:#16242e; }
+#screen-camp.theme-sci .dir-card:hover { background:#eaf3f8; border-color:#2f6f94; box-shadow:0 6px 20px rgba(40,90,130,.2); }
+#screen-camp.theme-sci .dir-card.done  { border-color:#5a8040; background:rgba(225,240,225,.88); }
+#screen-camp.theme-sci .dir-card-label { color:#2f6f94; }
+#screen-camp.theme-sci .dir-card-name  { color:#16323f; }
+#screen-camp.theme-sci .dir-card-phil  { color:#41606f; }
+#screen-camp.theme-sci .dir-card-badge.avail { color:#2f6f94; border-color:#7ba0b8; }
 </style>
 </head>
 <body>
@@ -293,6 +399,29 @@ body {
       <img src="img/map.jpeg" style="width:100%;display:block;vertical-align:bottom">
       <svg id="city-map" viewBox="0 0 860 460" xmlns="http://www.w3.org/2000/svg"
            style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none">
+        <defs>
+          <radialGradient id="terr-anti" cx="50%" cy="50%" r="60%">
+            <stop offset="0%"   stop-color="#962812" stop-opacity=".34"/>
+            <stop offset="55%"  stop-color="#962812" stop-opacity=".12"/>
+            <stop offset="100%" stop-color="#962812" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="terr-sci" cx="50%" cy="50%" r="60%">
+            <stop offset="0%"   stop-color="#244b63" stop-opacity=".30"/>
+            <stop offset="55%"  stop-color="#244b63" stop-opacity=".12"/>
+            <stop offset="100%" stop-color="#244b63" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <g id="territory-group" class="territory"></g>
+        <path id="route-path"></path>
+        <g id="compass" class="compass" transform="translate(72,392)">
+          <circle r="27" fill="rgba(36,22,8,.55)" stroke="#d8b24f" stroke-width="1.5"/>
+          <circle r="21" fill="none" stroke="#d8b24f" stroke-width=".6" opacity=".6"/>
+          <polygon points="0,-22 5,0 0,8 -5,0" fill="#d8b24f"/>
+          <polygon points="0,22 5,0 0,-8 -5,0"  fill="#9a6a30"/>
+          <polygon points="-22,0 0,5 8,0 0,-5"  fill="#b98a44"/>
+          <polygon points="22,0 0,5 -8,0 0,-5"  fill="#b98a44"/>
+          <text y="-14" text-anchor="middle" font-size="9" fill="#241308" font-family="Georgia,serif" font-weight="bold">N</text>
+        </g>
         <g id="markers-group" style="pointer-events:all"></g>
       </svg>
       <div class="map-caption" id="map-caption">Нажмите на маркер лагеря, чтобы исследовать направления</div>
@@ -397,6 +526,7 @@ const CAMPS = [
   {
     id: 'anti',
     name: 'Антисциентистские направления',
+    short: 'Антисциентисты',
     subtitle: 'воля · бессознательное · существование',
     mx: 155, my: 150,
     initial: 'А',
@@ -445,6 +575,7 @@ const CAMPS = [
   {
     id: 'sci',
     name: 'Сциентистские направления',
+    short: 'Сциентисты',
     subtitle: 'наука · логика · язык · понимание',
     mx: 668, my: 295,
     initial: 'С',
@@ -550,35 +681,56 @@ function show(id) {
 
 /* ── Карта ── */
 function renderMarkers() {
-  const g = document.getElementById('markers-group');
+  const g    = document.getElementById('markers-group');
+  const terr = document.getElementById('territory-group');
   g.innerHTML = '';
 
-  CAMPS.forEach(camp => {
+  // подсвеченные «территории» двух лагерей
+  const A = CAMPS[0], B = CAMPS[1];
+  terr.innerHTML = `
+    <ellipse cx="${A.mx+15}" cy="${A.my}" rx="205" ry="165" fill="url(#terr-anti)"/>
+    <ellipse cx="${B.mx-8}"  cy="${B.my-5}" rx="225" ry="180" fill="url(#terr-sci)"/>`;
+
+  // пунктирный маршрут между лагерями (дуга поверху)
+  document.getElementById('route-path').setAttribute('d',
+    `M ${A.mx} ${A.my} Q ${(A.mx+B.mx)/2} ${Math.min(A.my,B.my)-75} ${B.mx} ${B.my}`);
+
+  CAMPS.forEach((camp, ci) => {
     const n = camp.directions.length;
     const doneN = camp.directions.filter(d => isDone(d.id)).length;
     const allDone = doneN === n;
-    const col  = allDone ? '#3a7030' : (doneN > 0 ? '#6a5000' : '#8b3a00');
-    const col2 = allDone ? '#c0f0a0' : (doneN > 0 ? '#f0e090' : '#f5e6c0');
-    const { mx: x, my: y, initial } = camp;
-    const r = 22;
-    const ttW = 160, ttX = x - ttW / 2;
+    const accent   = camp.id === 'anti' ? '#8b2e1a' : '#244b63';
+    const accentLt = camp.id === 'anti' ? '#e0a878' : '#9fc4dc';
+    const seal = allDone ? '#2f6a26' : accent;
+    const ring = allDone ? '#bfe8a8' : '#d8b24f';
+    const x = camp.mx, y = camp.my, r = 25;
+
+    // лента-подпись под печатью
+    const rW = 156, rL = x - rW / 2, rT = y + r + 10, rH = 26;
+    const ribbon = `M ${rL+14} ${rT}
+      L ${rL+rW-14} ${rT} L ${rL+rW} ${rT+rH/2} L ${rL+rW-14} ${rT+rH}
+      L ${rL+14} ${rT+rH} L ${rL} ${rT+rH/2} Z`;
 
     const m = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     m.setAttribute('class', 'map-marker');
+    m.style.animationDelay = (ci * 0.18) + 's';
     m.innerHTML = `
-      <circle cx="${x+2}" cy="${y+2}" r="${r}" fill="rgba(0,0,0,.25)"/>
-      <circle cx="${x}" cy="${y}" r="${r}" fill="${col}" stroke="${col2}" stroke-width="2.5" class="marker-circle"/>
-      <text x="${x}" y="${y+6}" text-anchor="middle" font-size="14" fill="${col2}"
-            font-family="Georgia,serif" font-style="italic" font-weight="bold">${allDone ? '✓' : initial}</text>
-      ${!allDone ? `<circle cx="${x}" cy="${y}" r="${r}" fill="none" stroke="${col}" stroke-width="2" opacity=".4">
-        <animate attributeName="r" from="${r}" to="${r+11}" dur="2.5s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" from=".4" to="0" dur="2.5s" repeatCount="indefinite"/>
+      <ellipse cx="${x}" cy="${y+r-2}" rx="${r*0.9}" ry="7" fill="rgba(0,0,0,.28)"/>
+      ${!allDone ? `<circle cx="${x}" cy="${y}" r="${r}" fill="none" stroke="${accent}" stroke-width="2" opacity=".5">
+        <animate attributeName="r" from="${r}" to="${r+13}" dur="2.4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" from=".5" to="0" dur="2.4s" repeatCount="indefinite"/>
       </circle>` : ''}
-      <g class="map-tooltip">
-        <rect x="${ttX}" y="${y-r-44}" width="${ttW}" height="36" rx="3" fill="#2a1208" opacity=".9"/>
-        <text x="${x}" y="${y-r-26}" text-anchor="middle" font-size="10" fill="#f5e6c0" font-family="Georgia,serif">${camp.name}</text>
-        <text x="${x}" y="${y-r-14}" text-anchor="middle" font-size="9"  fill="#c8a860" font-family="Georgia,serif">Пройдено: ${doneN}/${n}</text>
-      </g>`;
+      <circle class="seal" cx="${x}" cy="${y}" r="${r}" fill="${seal}" stroke="${ring}" stroke-width="3"/>
+      <circle cx="${x}" cy="${y}" r="${r-5}" fill="none" stroke="${ring}" stroke-width="1" opacity=".55"/>
+      <text x="${x}" y="${y+7}" text-anchor="middle" font-size="20" fill="${ring}"
+            font-family="Georgia,serif" font-style="italic" font-weight="bold">${allDone ? '✓' : camp.initial}</text>
+      <path d="${ribbon}" fill="#241308" stroke="${ring}" stroke-width="1.5"/>
+      <text x="${x}" y="${rT+17}" text-anchor="middle" font-size="11.5" letter-spacing=".5"
+            fill="#f0dcb4" font-family="Georgia,serif">${camp.short}</text>
+      <text x="${x}" y="${rT+rH+15}" text-anchor="middle" font-size="10"
+            fill="#2a1808" stroke="rgba(245,238,210,.85)" stroke-width="2.6"
+            paint-order="stroke" stroke-linejoin="round"
+            font-family="Georgia,serif" font-style="italic">пройдено ${doneN}/${n}</text>`;
     m.addEventListener('click', () => enterCamp(camp));
     g.appendChild(m);
   });
@@ -587,7 +739,7 @@ function renderMarkers() {
   document.getElementById('map-caption').textContent =
     total === ALL_DIRS.length
       ? '✓ Все направления изучены. Репортаж завершён!'
-      : `Нажмите на маркер лагеря, чтобы исследовать направления · Пройдено: ${total}/${ALL_DIRS.length}`;
+      : 'Выберите лагерь на карте, чтобы исследовать его направления';
 }
 
 function renderJournal() {
@@ -626,6 +778,12 @@ function enterCamp(camp) {
   _camp = camp;
   const doneN = camp.directions.filter(d => isDone(d.id)).length;
 
+  document.getElementById('screen-camp').className = 'screen theme-' + camp.id;
+  const label = document.querySelector('#screen-camp .camp-section-label');
+  if (label) label.textContent = camp.id === 'anti'
+    ? 'Лагерь I · по ту сторону разума'
+    : 'Лагерь II · во имя науки';
+
   document.getElementById('camp-breadcrumb').textContent = camp.name;
   document.getElementById('camp-title').textContent      = camp.name;
   document.getElementById('camp-subtitle').textContent   = camp.subtitle;
@@ -635,10 +793,11 @@ function enterCamp(camp) {
   grid.className = `directions-grid n${camp.directions.length}`;
   grid.innerHTML = '';
 
-  camp.directions.forEach(dir => {
+  camp.directions.forEach((dir, i) => {
     const done = isDone(dir.id);
     const card = document.createElement('div');
     card.className = `dir-card${done ? ' done' : ''}`;
+    card.style.transitionDelay = (i * 0.07) + 's';
     card.innerHTML = `
       ${done ? '<div class="dir-card-check">✓</div>' : ''}
       <div class="dir-card-label">Направление</div>
@@ -650,6 +809,13 @@ function enterCamp(camp) {
   });
 
   show('screen-camp');
+
+  // каскадное появление карточек, затем сброс задержки (чтобы hover был мгновенным)
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    grid.querySelectorAll('.dir-card').forEach(c => c.classList.add('in'));
+  }));
+  setTimeout(() => grid.querySelectorAll('.dir-card')
+    .forEach(c => c.style.transitionDelay = ''), 700 + camp.directions.length * 70);
 }
 
 /* ── Встреча ── */
