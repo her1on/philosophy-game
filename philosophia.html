@@ -398,7 +398,7 @@ body {
   <div class="map-wrapper">
     <div class="map-container">
       <img src="img/map.jpeg" style="width:100%;display:block;vertical-align:bottom">
-      <svg id="city-map" viewBox="0 0 860 460" xmlns="http://www.w3.org/2000/svg"
+      <svg id="city-map" viewBox="0 0 896 512" xmlns="http://www.w3.org/2000/svg"
            style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none">
         <defs>
           <radialGradient id="terr-anti" cx="50%" cy="50%" r="60%">
@@ -421,7 +421,7 @@ body {
         <g id="territory-group" class="territory"></g>
         <path id="route-halo"></path>
         <path id="route-path"></path>
-        <g transform="translate(800,398)">
+        <g transform="translate(66,448)">
           <g id="compass" class="compass">
             <circle r="25" fill="rgba(36,22,8,.5)" stroke="#d8b24f" stroke-width="1.4"/>
             <circle r="19" fill="none" stroke="#d8b24f" stroke-width=".6" opacity=".6"/>
@@ -538,7 +538,7 @@ const CAMPS = [
     name: 'Антисциентистские направления',
     short: 'Антисциентисты',
     subtitle: 'воля · бессознательное · существование',
-    mx: 155, my: 150,
+    mx: 152, my: 205,
     initial: 'А',
     directions: [
       {
@@ -587,7 +587,7 @@ const CAMPS = [
     name: 'Сциентистские направления',
     short: 'Сциентисты',
     subtitle: 'наука · логика · язык · понимание',
-    mx: 668, my: 295,
+    mx: 615, my: 350,
     initial: 'С',
     directions: [
       {
@@ -695,15 +695,12 @@ function renderMarkers() {
   const terr = document.getElementById('territory-group');
   g.innerHTML = '';
 
-  // тонирование территорий: тёплая (лево) / холодная (право)
+  // территории заданы самим рисунком — тонировку не накладываем
   const A = CAMPS[0], B = CAMPS[1];
-  terr.innerHTML = `
-    <rect x="0" y="0" width="860" height="460" fill="url(#split-grade)"/>
-    <ellipse cx="${A.mx+15}" cy="${A.my}" rx="215" ry="175" fill="url(#terr-anti)"/>
-    <ellipse cx="${B.mx-8}"  cy="${B.my-5}" rx="235" ry="190" fill="url(#terr-sci)"/>`;
+  terr.innerHTML = '';
 
-  // маршрут между лагерями — дуга через центральную площадь
-  const route = `M ${A.mx} ${A.my} C 285 305, 470 380, ${B.mx} ${B.my}`;
+  // маршрут между лагерями — дуга вниз через мост
+  const route = `M ${A.mx} ${A.my} C 240 380, 470 430, ${B.mx} ${B.my}`;
   document.getElementById('route-path').setAttribute('d', route);
   document.getElementById('route-halo').setAttribute('d', route);
 
