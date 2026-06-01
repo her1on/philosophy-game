@@ -1320,6 +1320,7 @@ const NPC_FRAC = {
 const EXP = {
   running:false, raf:0, ctx:null, canvas:null, img:null, imgReady:false,
   W:1536, H:1024, cw:0, ch:0, zoom:1, camX:0, camY:0,
+  view:0.22,   // доля ширины карты в кадре: меньше = крупнее (ближе камера)
   keys:{}, joy:{active:false, dx:0, dy:0},
   player:{ x:0, y:0, r:13 }, npcs:[], near:null, started:false
 };
@@ -1397,7 +1398,7 @@ function updateExplore() {
 
 function drawExplore() {
   const ctx = EXP.ctx, cw = EXP.cw, ch = EXP.ch;
-  const viewW = EXP.W * 0.34, zoom = cw / viewW, viewH = ch / zoom;
+  const viewW = EXP.W * EXP.view, zoom = cw / viewW, viewH = ch / zoom;
   let camX = EXP.player.x - viewW / 2, camY = EXP.player.y - viewH / 2;
   camX = Math.max(0, Math.min(Math.max(0, EXP.W - viewW), camX));
   camY = Math.max(0, Math.min(Math.max(0, EXP.H - viewH), camY));
