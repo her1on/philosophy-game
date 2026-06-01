@@ -1328,22 +1328,25 @@ const EXP = {
   coll:null, collW:0, collH:0, collScale:0.5, collOK:false
 };
 
-/* карта проходимости: читаем цвета пикселей карты (вода/крыши = синее = стоп) */
+/* карта проходимости: готовая маска explore_mask.png (чёрное = стена) */
 function buildCollision() {
-  try {
-    const w = Math.round(EXP.W * EXP.collScale), h = Math.round(EXP.H * EXP.collScale);
-    const oc = document.createElement('canvas'); oc.width = w; oc.height = h;
-    const octx = oc.getContext('2d'); octx.drawImage(EXP.img, 0, 0, w, h);
-    EXP.coll = octx.getImageData(0, 0, w, h).data;
-    EXP.collW = w; EXP.collH = h; EXP.collOK = true;
-  } catch (e) { EXP.collOK = false; }  // напр. file:// — тогда без коллизий
+  const m = new Image();
+  m.onload = () => {
+    try {
+      const w = m.naturalWidth, h = m.naturalHeight;
+      const oc = document.createElement('canvas'); oc.width = w; oc.height = h;
+      const octx = oc.getContext('2d'); octx.drawImage(m, 0, 0);
+      EXP.coll = octx.getImageData(0, 0, w, h).data;
+      EXP.collW = w; EXP.collH = h; EXP.collOK = true;
+    } catch (e) { EXP.collOK = false; }   // напр. file:// — тогда без коллизий
+  };
+  m.src = 'img/explore_mask.png';
 }
 function isBlocked(wx, wy) {
   if (!EXP.collOK) return false;
-  const cx = Math.floor(wx * EXP.collScale), cy = Math.floor(wy * EXP.collScale);
+  const cx = Math.floor(wx * EXP.collW / EXP.W), cy = Math.floor(wy * EXP.collH / EXP.H);
   if (cx < 0 || cy < 0 || cx >= EXP.collW || cy >= EXP.collH) return true;
-  const i = (cy * EXP.collW + cx) * 4, r = EXP.coll[i], g = EXP.coll[i + 1], b = EXP.coll[i + 2];
-  return (b > r + 14 && b > g + 8 && b > 70);   // синее доминирует → вода/дом
+  return EXP.coll[(cy * EXP.collW + cx) * 4] < 128;   // тёмный пиксель маски = стена
 }
 
 function startExplore() {
