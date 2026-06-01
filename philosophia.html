@@ -1322,10 +1322,29 @@ const NPC_FRAC = {
 const EXP = {
   running:false, raf:0, ctx:null, canvas:null, img:null, imgReady:false,
   W:1536, H:1024, cw:0, ch:0, zoom:1, camX:0, camY:0,
-  view:0.22,   // доля ширины карты в кадре: меньше = крупнее (ближе камера)
+  view:0.24,   // доля ширины карты в кадре: меньше = крупнее (ближе камера)
   keys:{}, joy:{active:false, dx:0, dy:0},
-  player:{ x:0, y:0, r:13 }, npcs:[], near:null, started:false
+  player:{ x:0, y:0, r:13 }, npcs:[], near:null, started:false,
+  coll:null, collW:0, collH:0, collScale:0.5, collOK:false
 };
+
+/* карта проходимости: читаем цвета пикселей карты (вода/крыши = синее = стоп) */
+function buildCollision() {
+  try {
+    const w = Math.round(EXP.W * EXP.collScale), h = Math.round(EXP.H * EXP.collScale);
+    const oc = document.createElement('canvas'); oc.width = w; oc.height = h;
+    const octx = oc.getContext('2d'); octx.drawImage(EXP.img, 0, 0, w, h);
+    EXP.coll = octx.getImageData(0, 0, w, h).data;
+    EXP.collW = w; EXP.collH = h; EXP.collOK = true;
+  } catch (e) { EXP.collOK = false; }  // напр. file:// — тогда без коллизий
+}
+function isBlocked(wx, wy) {
+  if (!EXP.collOK) return false;
+  const cx = Math.floor(wx * EXP.collScale), cy = Math.floor(wy * EXP.collScale);
+  if (cx < 0 || cy < 0 || cx >= EXP.collW || cy >= EXP.collH) return true;
+  const i = (cy * EXP.collW + cx) * 4, r = EXP.coll[i], g = EXP.coll[i + 1], b = EXP.coll[i + 2];
+  return (b > r + 14 && b > g + 8 && b > 70);   // синее доминирует → вода/дом
+}
 
 function startExplore() {
   show('screen-explore');
@@ -1333,7 +1352,7 @@ function startExplore() {
   EXP.ctx = EXP.canvas.getContext('2d');
   if (!EXP.img) {
     EXP.img = new Image();
-    EXP.img.onload = () => { EXP.imgReady = true; EXP.W = EXP.img.naturalWidth; EXP.H = EXP.img.naturalHeight; placePlayer(); resizeExplore(); };
+    EXP.img.onload = () => { EXP.imgReady = true; EXP.W = EXP.img.naturalWidth; EXP.H = EXP.img.naturalHeight; buildCollision(); placePlayer(); resizeExplore(); };
     EXP.img.src = 'img/explore_map.png';
   }
   EXP.npcs = ALL_DIRS.map(d => {
@@ -1380,8 +1399,10 @@ function updateExplore() {
   const len = Math.hypot(dx, dy);
   if (len > 0) {
     const sp = Math.max(2.5, EXP.W * 0.0024);
-    EXP.player.x += (dx / len) * sp;
-    EXP.player.y += (dy / len) * sp;
+    const vx = (dx / len) * sp, vy = (dy / len) * sp;
+    const foot = EXP.player.r * 0.5;   // «ноги» — точка под аватаром
+    if (!isBlocked(EXP.player.x + vx, EXP.player.y + foot)) EXP.player.x += vx;
+    if (!isBlocked(EXP.player.x, EXP.player.y + vy + foot)) EXP.player.y += vy;
   }
   const r = EXP.player.r;
   EXP.player.x = Math.max(r, Math.min(EXP.W - r, EXP.player.x));
@@ -1437,6 +1458,24 @@ function drawExplore() {
   ctx.fillStyle = '#241308'; ctx.font = 'bold 12px Georgia';
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   ctx.fillText('Я', px, py + 1);
+
+  // ── миникарта (обзор: где ты и где философы) ──
+  const mmW = Math.min(160, cw * 0.26), mmH = mmW * (EXP.H / EXP.W);
+  const mmX = cw - mmW - 12, mmY = 12;
+  ctx.imageSmoothingEnabled = true;
+  ctx.globalAlpha = 0.85;
+  if (EXP.imgReady) ctx.drawImage(EXP.img, 0, 0, EXP.W, EXP.H, mmX, mmY, mmW, mmH);
+  ctx.globalAlpha = 1;
+  ctx.imageSmoothingEnabled = false;
+  ctx.lineWidth = 2; ctx.strokeStyle = '#d8b24f'; ctx.strokeRect(mmX, mmY, mmW, mmH);
+  for (const n of EXP.npcs) {
+    ctx.beginPath(); ctx.arc(mmX + n.fx * mmW, mmY + n.fy * mmH, 3, 0, 7);
+    ctx.fillStyle = isDone(n.dir.id) ? '#7ce06a' : (n.dir.campId === 'anti' ? '#e08a5a' : '#7fb0d8');
+    ctx.fill();
+  }
+  ctx.beginPath(); ctx.arc(mmX + (EXP.player.x / EXP.W) * mmW, mmY + (EXP.player.y / EXP.H) * mmH, 4, 0, 7);
+  ctx.fillStyle = '#fff2c0'; ctx.fill();
+  ctx.lineWidth = 1.5; ctx.strokeStyle = '#3a2410'; ctx.stroke();
 }
 
 function exploreAction() {
