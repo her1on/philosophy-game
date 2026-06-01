@@ -1403,7 +1403,7 @@ function updateExplore() {
   EXP.player.y = Math.max(r, Math.min(EXP.H - r, EXP.player.y));
 
   EXP.near = null;
-  let best = Math.max(60, EXP.W * 0.055);
+  let best = Math.max(70, EXP.W * 0.075);   // радиус «подойти» (с запасом для крупных зданий)
   for (const n of EXP.npcs) {
     const d = Math.hypot(n.fx * EXP.W - EXP.player.x, n.fy * EXP.H - EXP.player.y);
     if (d < best) { best = d; EXP.near = n; }
