@@ -1403,9 +1403,8 @@ function updateExplore() {
   if (len > 0) {
     const sp = Math.max(2.5, EXP.W * 0.0024);
     const vx = (dx / len) * sp, vy = (dy / len) * sp;
-    const foot = EXP.player.r * 0.5;   // «ноги» — точка под аватаром
-    if (!isBlocked(EXP.player.x + vx, EXP.player.y + foot)) EXP.player.x += vx;
-    if (!isBlocked(EXP.player.x, EXP.player.y + vy + foot)) EXP.player.y += vy;
+    if (!isBlocked(EXP.player.x + vx, EXP.player.y)) EXP.player.x += vx;
+    if (!isBlocked(EXP.player.x, EXP.player.y + vy)) EXP.player.y += vy;
   }
   const r = EXP.player.r;
   EXP.player.x = Math.max(r, Math.min(EXP.W - r, EXP.player.x));
