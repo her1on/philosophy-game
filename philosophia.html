@@ -1276,7 +1276,7 @@ const EXP = {
   W:1536, H:1024, cw:0, ch:0, zoom:1, camX:0, camY:0,
   scale:1,     // экранных пикселей на пиксель карты (1 = стоковый масштаб; меньше = дальше)
   keys:{}, joy:{active:false, dx:0, dy:0},
-  player:{ x:0, y:0, r:13 }, npcs:[], near:null, started:false,
+  player:{ x:0, y:0, r:13, dir:'down', moving:false }, sprite:null, npcs:[], near:null, started:false,
   coll:null, collW:0, collH:0, collScale:0.5, collOK:false
 };
 
@@ -1318,6 +1318,7 @@ function startExplore() {
     return { dir:d, camp: CAMPS.find(c => c.id === d.campId), fx:f[0], fy:f[1],
              accent: d.campId === 'anti' ? '#8b2e1a' : '#244b63', portrait };
   });
+  if (!EXP.sprite) { EXP.sprite = new Image(); EXP.sprite.src = 'img/sprites/player.png'; }
   resizeExplore();
   EXP.running = true;
   cancelAnimationFrame(EXP.raf);
@@ -1388,7 +1389,10 @@ function updateExplore() {
   if (k['ArrowDown']  || k['KeyS']) dy += 1;
   if (EXP.joy.active) { dx += EXP.joy.dx; dy += EXP.joy.dy; }
   const len = Math.hypot(dx, dy);
+  EXP.player.moving = len > 0;
   if (len > 0) {
+    if (Math.abs(dx) > Math.abs(dy)) EXP.player.dir = dx < 0 ? 'left' : 'right';
+    else                             EXP.player.dir = dy < 0 ? 'up' : 'down';
     const sp = Math.max(2.5, EXP.W * 0.0024);
     const vx = (dx / len) * sp, vy = (dy / len) * sp;
     if (!isBlocked(EXP.player.x + vx, EXP.player.y)) EXP.player.x += vx;
@@ -1430,12 +1434,16 @@ function drawExplore() {
   }
 
   const [px, py] = toS(EXP.player.x, EXP.player.y);
-  ctx.beginPath(); ctx.arc(px, py, 12, 0, 7);
-  ctx.fillStyle = '#c8a84b'; ctx.fill();
-  ctx.lineWidth = 3; ctx.strokeStyle = '#3a2410'; ctx.stroke();
-  ctx.fillStyle = '#241308'; ctx.font = 'bold 12px Georgia';
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.fillText('Я', px, py + 1);
+  if (EXP.sprite && EXP.sprite.complete && EXP.sprite.naturalWidth) {
+    const ROW = { up:8, left:9, down:10, right:11 }, S = 64, sc = zoom;
+    const row = ROW[EXP.player.dir] || 10;
+    const col = EXP.player.moving ? (1 + Math.floor(performance.now() / 110) % 8) : 0;
+    ctx.drawImage(EXP.sprite, col * S, row * S, S, S, px - 32 * sc, py - 58 * sc, S * sc, S * sc);
+  } else {
+    ctx.beginPath(); ctx.arc(px, py, 12, 0, 7);
+    ctx.fillStyle = '#c8a84b'; ctx.fill();
+    ctx.lineWidth = 3; ctx.strokeStyle = '#3a2410'; ctx.stroke();
+  }
 
   // ── миникарта (обзор: где ты и где философы) ──
   const mmW = Math.min(160, cw * 0.26), mmH = mmW * (EXP.H / EXP.W);

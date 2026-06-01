@@ -1,0 +1,4 @@
+Спрайт игрока (player.png) собран из Liberated Pixel Cup (LPC).
+Тело + ряса, источник: github.com/jrconway3/Universal-LPC-spritesheet
+Лицензия: CC-BY-SA 3.0 / GPL 3.0 — авторы LPC (Stephen Challener и др.).
+Раскладка: кадры 64x64, ходьба — строки 8(вверх)/9(влево)/10(вниз)/11(вправо).
