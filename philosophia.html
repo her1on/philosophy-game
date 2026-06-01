@@ -1314,10 +1314,10 @@ function completeEncounter() {
 ═══════════════════════════════════════════════════════════════════════ */
 const NPC_FRAC = {
   // антисциентисты — поляны/тропы в лесу (слева)
-  life:   [0.34, 0.38], psycho: [0.18, 0.27], exist:  [0.22, 0.66],
+  life:   [0.27, 0.33], psycho: [0.12, 0.20], exist:  [0.16, 0.72],
   // сциентисты — площади и улицы города (справа)
-  phenom: [0.70, 0.22], pragma: [0.88, 0.18], posit:  [0.69, 0.46],
-  analyt: [0.90, 0.42], herm:   [0.70, 0.66], postmod:[0.86, 0.72]
+  phenom: [0.60, 0.18], pragma: [0.85, 0.18], posit:  [0.70, 0.44],
+  analyt: [0.90, 0.46], herm:   [0.62, 0.70], postmod:[0.85, 0.72]
 };
 const EXP = {
   running:false, raf:0, ctx:null, canvas:null, img:null, imgReady:false,
@@ -1370,7 +1370,7 @@ function startExplore() {
   loopExplore();
 }
 
-function placePlayer() { EXP.player.x = EXP.W * 0.40; EXP.player.y = EXP.H * 0.55; }
+function placePlayer() { EXP.player.x = EXP.W * 0.42; EXP.player.y = EXP.H * 0.52; }
 
 function exitExplore() { EXP.running = false; cancelAnimationFrame(EXP.raf); showMap(); }
 
