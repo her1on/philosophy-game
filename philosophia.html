@@ -215,6 +215,18 @@ body {
 @media(max-width:640px) {
   .phil-card { width:calc(50% - 7px); }
 }
+
+/* ── Оверлей «Направления» ── */
+.dir-overlay { position:fixed; inset:0; z-index:50; display:flex; align-items:center; justify-content:center; padding:20px; background:rgba(20,12,4,.78); }
+.dir-overlay.hidden { display:none; }
+.dir-overlay-box { background:#e8dfc0; border:2px solid #9a7040; width:100%; max-width:520px; max-height:82vh; overflow:auto; padding:18px 20px; box-shadow:4px 4px 0 rgba(0,0,0,.3); }
+.dir-overlay-head { display:flex; justify-content:space-between; align-items:center; gap:12px; border-bottom:2px solid #9a7040; padding-bottom:10px; margin-bottom:6px; font-size:.92em; color:#3a2410; }
+.dir-ov-camp { font-size:.6em; letter-spacing:3px; text-transform:uppercase; color:#7a5020; margin:16px 0 7px; }
+.dir-ov-item { display:flex; flex-direction:column; gap:3px; width:100%; text-align:left; cursor:pointer; background:rgba(255,252,240,.7); border:1px solid #c0a060; padding:9px 12px; margin-bottom:6px; transition:background .15s, border-color .15s; font-family:inherit; }
+.dir-ov-item:hover { background:#e8d9a8; border-color:#6a4820; }
+.dir-ov-item.done { background:rgba(215,238,205,.6); border-color:#5a8040; }
+.dir-ov-name { font-weight:bold; color:#1a1208; font-size:.92em; }
+.dir-ov-phil { font-size:.72em; color:#6a4a20; line-height:1.4; }
 .article-tag        { font-size:.7em; letter-spacing:1px; padding:3px 10px; border:1px solid #9a7040; color:#5a3a18; background:rgba(180,140,60,.08); border-radius:2px; }
 .enc-btns           { display:flex; gap:10px; flex-wrap:wrap; margin-top:22px; }
 
@@ -464,82 +476,11 @@ body {
 </head>
 <body>
 
-<!-- ═══════════════════════ КАРТА ═══════════════════════ -->
-<div id="screen-map" class="screen">
-  <div class="newspaper-header">
-    <div class="paper-pretitle">Специальный репортаж</div>
-    <div class="paper-title">ФИЛОСОФСКИЙ ВЕСТНИК</div>
-    <div class="paper-subtitle">НОВЕЙШАЯ ЗАПАДНАЯ ФИЛОСОФИЯ · XIX — XX ВВ.</div>
-    <div class="paper-date">Томск, 1900 — Репортёр исследует лагеря западной мысли</div>
-  </div>
-
-  <div class="section-rule"><span class="section-label">Карта города</span></div>
-
-  <div class="map-wrapper">
-    <div class="map-container">
-      <img src="img/map.jpeg" style="width:100%;display:block;vertical-align:bottom">
-      <svg id="city-map" viewBox="0 0 896 512" xmlns="http://www.w3.org/2000/svg"
-           style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none">
-        <defs>
-          <radialGradient id="terr-anti" cx="50%" cy="50%" r="60%">
-            <stop offset="0%"   stop-color="#962812" stop-opacity=".34"/>
-            <stop offset="55%"  stop-color="#962812" stop-opacity=".12"/>
-            <stop offset="100%" stop-color="#962812" stop-opacity="0"/>
-          </radialGradient>
-          <radialGradient id="terr-sci" cx="50%" cy="50%" r="60%">
-            <stop offset="0%"   stop-color="#244b63" stop-opacity=".30"/>
-            <stop offset="55%"  stop-color="#244b63" stop-opacity=".12"/>
-            <stop offset="100%" stop-color="#244b63" stop-opacity="0"/>
-          </radialGradient>
-          <linearGradient id="split-grade" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%"   stop-color="#9a2e12" stop-opacity=".42"/>
-            <stop offset="36%"  stop-color="#9a2e12" stop-opacity="0"/>
-            <stop offset="64%"  stop-color="#1f4a66" stop-opacity="0"/>
-            <stop offset="100%" stop-color="#1f4a66" stop-opacity=".42"/>
-          </linearGradient>
-        </defs>
-        <g id="territory-group" class="territory"></g>
-        <g id="markers-group" style="pointer-events:all"></g>
-      </svg>
-      <div class="map-caption" id="map-caption">Нажмите на маркер лагеря, чтобы исследовать направления</div>
-    </div>
-  </div>
-
-  <div style="text-align:center;">
-    <button class="explore-enter-btn" onclick="startExplore()">🚶 Режим прогулки (бета)</button>
-  </div>
-
-  <div class="journal-wrap">
-    <div class="journal-box mt16">
-      <div class="journal-tag">Журнал путешествия</div>
-      <div class="journal-title" id="journal-title">Пройдено: 0 / 9</div>
-      <div class="journal-hint">Посетите все девять философских направлений. Начните с любого из двух лагерей.</div>
-      <ul class="journal-list" id="journal-list"></ul>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════════ ЛАГЕРЬ ═══════════════════════ -->
-<div id="screen-camp" class="screen hidden">
-  <div class="top-nav">
-    <button class="btn-back" onclick="showMap()">← Карта</button>
-    <span class="top-breadcrumb" id="camp-breadcrumb"></span>
-  </div>
-
-  <div class="camp-header">
-    <div class="camp-section-label">Философский лагерь</div>
-    <div class="camp-title" id="camp-title"></div>
-    <div class="camp-subtitle-line" id="camp-subtitle"></div>
-    <div class="camp-progress" id="camp-progress"></div>
-  </div>
-
-  <div class="directions-grid" id="directions-grid"></div>
-</div>
 
 <!-- ═══════════════════════ ВСТРЕЧА ═══════════════════════ -->
 <div id="screen-encounter" class="screen hidden">
   <div class="top-nav">
-    <button class="btn-back" id="enc-back-btn">← К направлениям</button>
+    <button class="btn-back" id="enc-back-btn">← Назад</button>
     <span class="top-breadcrumb" id="enc-breadcrumb"></span>
   </div>
 
@@ -566,7 +507,7 @@ body {
       <div class="article-tags" id="article-tags"></div>
       <div class="enc-btns">
         <button id="enc-quiz-btn" class="btn-primary">Выслушать вопрос →</button>
-        <button id="enc-camp-btn" class="btn-secondary">← К направлениям</button>
+        <button id="enc-camp-btn" class="btn-secondary">← Назад</button>
       </div>
     </div>
   </div>
@@ -599,20 +540,30 @@ body {
   <div class="done-rule"></div>
   <div class="done-sub">Вы исследовали все девять направлений Новейшей западной философии и выслушали их ключевые вопросы.</div>
   <div class="done-score" id="done-score">Направлений изучено: 0 / 9</div>
-  <button class="done-btn" onclick="showMap()">← Вернуться на карту</button>
+  <button class="done-btn" onclick="startExplore()">← Вернуться к прогулке</button>
 </div>
 
 <!-- ═══════════════════════ ПРОГУЛКА (ХОДИЛКА) ═══════════════════════ -->
 <div id="screen-explore" class="screen hidden">
   <div class="top-nav">
-    <button class="btn-back" onclick="exitExplore()">← Карта</button>
-    <span class="top-breadcrumb">Режим прогулки · WASD / стрелки — идти, E — подойти</span>
+    <button class="btn-back" onclick="exitExplore()">← В меню</button>
+    <button class="btn-back" onclick="toggleDirList(true)">📋 Направления</button>
+    <span class="top-breadcrumb">WASD / стрелки — идти, E — подойти к философу</span>
   </div>
   <div class="explore-wrap">
     <canvas id="explore-canvas" style="image-rendering:pixelated"></canvas>
     <div class="joystick" id="joystick"><div id="joystick-knob"></div></div>
     <button class="action-btn" id="action-btn">E</button>
     <div id="explore-hud"></div>
+  </div>
+  <div id="dir-overlay" class="dir-overlay hidden">
+    <div class="dir-overlay-box">
+      <div class="dir-overlay-head">
+        <span>Направления — пройдено <b id="dir-ov-count">0 / 9</b></span>
+        <button class="btn-secondary" onclick="toggleDirList(false)">Закрыть ✕</button>
+      </div>
+      <div id="dir-ov-list"></div>
+    </div>
   </div>
 </div>
 
@@ -1170,10 +1121,11 @@ let _dir = null;
 
 function enterEncounter(dir, camp) {
   _dir = dir; _camp = camp;
+  EXP.running = false; cancelAnimationFrame(EXP.raf);   // пауза ходилки на время встречи
 
   document.getElementById('enc-breadcrumb').textContent = camp.name + ' · ' + dir.name;
-  document.getElementById('enc-back-btn').onclick = () => enterCamp(camp);
-  document.getElementById('enc-camp-btn').onclick = () => enterCamp(camp);
+  document.getElementById('enc-back-btn').onclick = () => startExplore();
+  document.getElementById('enc-camp-btn').onclick = () => startExplore();
 
   document.getElementById('banner-camp').textContent = camp.name.toUpperCase();
   document.getElementById('banner-name').textContent = dir.name;
@@ -1285,7 +1237,7 @@ function handleAnswer(idx) {
       ${last ? `<div class="ar-quote">${_dir.successQuote} <span class="ar-cite">${_dir.successCite}</span></div>` : ''}
       <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
         <button class="btn-primary" onclick="${last ? 'completeEncounter()' : 'nextQuestion()'}">${last ? 'Записать в блокнот →' : 'Дальше →'}</button>
-        <button class="btn-secondary" onclick="showMap()">← На карту</button>
+        <button class="btn-secondary" onclick="startExplore()">← К прогулке</button>
       </div>
     </div>`;
 }
@@ -1303,7 +1255,7 @@ function completeEncounter() {
     document.getElementById('done-score').textContent = `Направлений изучено: ${total} / ${ALL_DIRS.length}`;
     show('screen-done');
   } else {
-    enterCamp(_camp);
+    startExplore();
   }
 }
 
@@ -1363,7 +1315,6 @@ function startExplore() {
     return { dir:d, camp: CAMPS.find(c => c.id === d.campId), fx:f[0], fy:f[1],
              accent: d.campId === 'anti' ? '#8b2e1a' : '#244b63' };
   });
-  placePlayer();
   resizeExplore();
   EXP.running = true;
   cancelAnimationFrame(EXP.raf);
@@ -1372,7 +1323,41 @@ function startExplore() {
 
 function placePlayer() { EXP.player.x = EXP.W * 0.48; EXP.player.y = EXP.H * 0.54; }
 
-function exitExplore() { EXP.running = false; cancelAnimationFrame(EXP.raf); showMap(); }
+function exitExplore() { EXP.running = false; cancelAnimationFrame(EXP.raf); location.href = 'index.html'; }
+
+/* оверлей со списком направлений (быстрый переход + прогресс) */
+function toggleDirList(open) {
+  const ov = document.getElementById('dir-overlay');
+  if (open) {
+    renderDirList();
+    ov.classList.remove('hidden');
+    EXP.running = false; cancelAnimationFrame(EXP.raf);   // пауза ходилки
+  } else {
+    ov.classList.add('hidden');
+    if (!document.getElementById('screen-explore').classList.contains('hidden')) {
+      EXP.running = true; cancelAnimationFrame(EXP.raf); loopExplore();
+    }
+  }
+}
+function renderDirList() {
+  document.getElementById('dir-ov-count').textContent = doneCount() + ' / ' + ALL_DIRS.length;
+  const list = document.getElementById('dir-ov-list');
+  list.innerHTML = '';
+  CAMPS.forEach(camp => {
+    const h = document.createElement('div');
+    h.className = 'dir-ov-camp'; h.textContent = camp.name;
+    list.appendChild(h);
+    camp.directions.forEach(dir => {
+      const done = isDone(dir.id);
+      const it = document.createElement('button');
+      it.className = 'dir-ov-item' + (done ? ' done' : '');
+      it.innerHTML = `<span class="dir-ov-name">${done ? '✓' : '○'} ${dir.name}</span>` +
+                     `<span class="dir-ov-phil">${dir.philosophers}</span>`;
+      it.onclick = () => { toggleDirList(false); enterEncounter(dir, camp); };
+      list.appendChild(it);
+    });
+  });
+}
 
 function resizeExplore() {
   if (!EXP.canvas) return;
@@ -1519,7 +1504,7 @@ window.addEventListener('resize', () => { if (EXP.running) resizeExplore(); });
 
 /* ── Запуск ── */
 loadProg();
-showMap();
+startExplore();
 </script>
 </body>
 </html>
