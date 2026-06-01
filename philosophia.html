@@ -1322,7 +1322,7 @@ const NPC_FRAC = {
 const EXP = {
   running:false, raf:0, ctx:null, canvas:null, img:null, imgReady:false,
   W:1536, H:1024, cw:0, ch:0, zoom:1, camX:0, camY:0,
-  view:0.24,   // доля ширины карты в кадре: меньше = крупнее (ближе камера)
+  scale:1,     // экранных пикселей на пиксель карты (1 = стоковый масштаб; меньше = дальше)
   keys:{}, joy:{active:false, dx:0, dy:0},
   player:{ x:0, y:0, r:13 }, npcs:[], near:null, started:false,
   coll:null, collW:0, collH:0, collScale:0.5, collOK:false
@@ -1391,10 +1391,10 @@ function loopExplore() {
 
 function updateExplore() {
   const k = EXP.keys; let dx = 0, dy = 0;
-  if (k['arrowleft']  || k['a'] || k['ф']) dx -= 1;
-  if (k['arrowright'] || k['d'] || k['в']) dx += 1;
-  if (k['arrowup']    || k['w'] || k['ц']) dy -= 1;
-  if (k['arrowdown']  || k['s'] || k['ы']) dy += 1;
+  if (k['ArrowLeft']  || k['KeyA']) dx -= 1;
+  if (k['ArrowRight'] || k['KeyD']) dx += 1;
+  if (k['ArrowUp']    || k['KeyW']) dy -= 1;
+  if (k['ArrowDown']  || k['KeyS']) dy += 1;
   if (EXP.joy.active) { dx += EXP.joy.dx; dy += EXP.joy.dy; }
   const len = Math.hypot(dx, dy);
   if (len > 0) {
@@ -1421,7 +1421,7 @@ function updateExplore() {
 
 function drawExplore() {
   const ctx = EXP.ctx, cw = EXP.cw, ch = EXP.ch;
-  const viewW = EXP.W * EXP.view, zoom = cw / viewW, viewH = ch / zoom;
+  const zoom = EXP.scale, viewW = cw / zoom, viewH = ch / zoom;
   let camX = EXP.player.x - viewW / 2, camY = EXP.player.y - viewH / 2;
   camX = Math.max(0, Math.min(Math.max(0, EXP.W - viewW), camX));
   camY = Math.max(0, Math.min(Math.max(0, EXP.H - viewH), camY));
@@ -1485,12 +1485,11 @@ function exploreAction() {
 }
 
 window.addEventListener('keydown', e => {
-  const key = e.key.toLowerCase();
-  EXP.keys[key] = true;
-  if (EXP.running && (key === 'e' || key === 'е' || key === 'enter')) { e.preventDefault(); exploreAction(); }
-  if (EXP.running && ['arrowup','arrowdown','arrowleft','arrowright'].includes(key)) e.preventDefault();
+  EXP.keys[e.code] = true;
+  if (EXP.running && (e.code === 'KeyE' || e.code === 'Enter' || e.code === 'NumpadEnter')) { e.preventDefault(); exploreAction(); }
+  if (EXP.running && e.code.indexOf('Arrow') === 0) e.preventDefault();
 });
-window.addEventListener('keyup', e => { EXP.keys[e.key.toLowerCase()] = false; });
+window.addEventListener('keyup', e => { EXP.keys[e.code] = false; });
 window.addEventListener('resize', () => { if (EXP.running) resizeExplore(); });
 
 (function setupTouch() {
