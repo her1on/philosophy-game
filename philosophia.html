@@ -321,6 +321,41 @@ body {
 .done-btn:hover { background:#3a6030; }
 
 .mt16 { margin-top:16px; }
+
+/* ── Режим прогулки (ходилка) ── */
+.explore-enter-btn {
+  background:#2a4a20; border:none; color:#d8f0c0; padding:11px 22px;
+  font-size:.82em; letter-spacing:1px; border-radius:2px; margin-top:14px;
+  box-shadow:2px 2px 0 rgba(100,60,10,.2);
+}
+.explore-enter-btn:hover { background:#3a6030; }
+.explore-wrap { position:relative; max-width:920px; margin:14px auto 0; padding:0 16px; }
+#explore-canvas {
+  width:100%; display:block; border:2px solid #9a7040; background:#d9cb9e;
+  box-shadow:inset 0 0 40px rgba(100,60,10,.12), 3px 3px 0 rgba(100,60,10,.15);
+  touch-action:none;
+}
+#explore-hud {
+  text-align:center; font-size:.8em; color:#5a3a18; font-style:italic;
+  margin-top:9px; min-height:1.4em; letter-spacing:.5px;
+}
+.joystick {
+  position:absolute; left:30px; bottom:24px; width:108px; height:108px;
+  border-radius:50%; background:rgba(40,24,10,.22); border:2px solid rgba(210,180,80,.6);
+  touch-action:none; display:none; z-index:5;
+}
+#joystick-knob {
+  position:absolute; left:30px; top:30px; width:46px; height:46px; border-radius:50%;
+  background:rgba(210,180,80,.85); border:2px solid #5a3a10;
+}
+.action-btn {
+  position:absolute; right:30px; bottom:30px; width:72px; height:72px; border-radius:50%;
+  background:#2a4a20; color:#d8f0c0; border:3px solid #d8b24f;
+  font-size:1.5em; font-weight:bold; display:none; z-index:5;
+}
+@media (hover:none) and (pointer:coarse) {
+  .joystick, .action-btn { display:block; }
+}
 ::-webkit-scrollbar { width:5px; }
 ::-webkit-scrollbar-track { background:rgba(150,100,40,.1); }
 ::-webkit-scrollbar-thumb { background:rgba(150,100,40,.3); border-radius:3px; }
@@ -470,6 +505,10 @@ body {
     </div>
   </div>
 
+  <div style="text-align:center;">
+    <button class="explore-enter-btn" onclick="startExplore()">🚶 Режим прогулки (бета)</button>
+  </div>
+
   <div class="journal-wrap">
     <div class="journal-box mt16">
       <div class="journal-tag">Журнал путешествия</div>
@@ -561,6 +600,20 @@ body {
   <div class="done-sub">Вы исследовали все девять направлений Новейшей западной философии и выслушали их ключевые вопросы.</div>
   <div class="done-score" id="done-score">Направлений изучено: 0 / 9</div>
   <button class="done-btn" onclick="showMap()">← Вернуться на карту</button>
+</div>
+
+<!-- ═══════════════════════ ПРОГУЛКА (ХОДИЛКА) ═══════════════════════ -->
+<div id="screen-explore" class="screen hidden">
+  <div class="top-nav">
+    <button class="btn-back" onclick="exitExplore()">← Карта</button>
+    <span class="top-breadcrumb">Режим прогулки · WASD / стрелки — идти, E — подойти</span>
+  </div>
+  <div class="explore-wrap">
+    <canvas id="explore-canvas" style="image-rendering:pixelated"></canvas>
+    <div class="joystick" id="joystick"><div id="joystick-knob"></div></div>
+    <button class="action-btn" id="action-btn">E</button>
+    <div id="explore-hud"></div>
+  </div>
 </div>
 
 <script>
@@ -1253,6 +1306,173 @@ function completeEncounter() {
     enterCamp(_camp);
   }
 }
+
+/* ═══════════════════════ РЕЖИМ ПРОГУЛКИ (ХОДИЛКА) ═══════════════════════
+   Прототип: аватар ходит по пиксельной карте img/explore_map.png,
+   подходит к философу → открывается существующий экран встречи/квиза.
+   Координаты философов заданы в долях карты (0..1) — подгоним под арт.
+═══════════════════════════════════════════════════════════════════════ */
+const NPC_FRAC = {
+  life:   [0.15, 0.35], psycho: [0.22, 0.58], exist:  [0.12, 0.78],
+  phenom: [0.62, 0.25], pragma: [0.80, 0.30], posit:  [0.68, 0.50],
+  analyt: [0.86, 0.55], herm:   [0.62, 0.72], postmod:[0.82, 0.78]
+};
+const EXP = {
+  running:false, raf:0, ctx:null, canvas:null, img:null, imgReady:false,
+  W:1536, H:1024, cw:0, ch:0, zoom:1, camX:0, camY:0,
+  keys:{}, joy:{active:false, dx:0, dy:0},
+  player:{ x:0, y:0, r:13 }, npcs:[], near:null, started:false
+};
+
+function startExplore() {
+  show('screen-explore');
+  EXP.canvas = document.getElementById('explore-canvas');
+  EXP.ctx = EXP.canvas.getContext('2d');
+  if (!EXP.img) {
+    EXP.img = new Image();
+    EXP.img.onload = () => { EXP.imgReady = true; EXP.W = EXP.img.naturalWidth; EXP.H = EXP.img.naturalHeight; placePlayer(); resizeExplore(); };
+    EXP.img.src = 'img/explore_map.png';
+  }
+  EXP.npcs = ALL_DIRS.map(d => {
+    const f = NPC_FRAC[d.id] || [0.5, 0.5];
+    return { dir:d, camp: CAMPS.find(c => c.id === d.campId), fx:f[0], fy:f[1],
+             accent: d.campId === 'anti' ? '#8b2e1a' : '#244b63' };
+  });
+  placePlayer();
+  resizeExplore();
+  EXP.running = true;
+  cancelAnimationFrame(EXP.raf);
+  loopExplore();
+}
+
+function placePlayer() { EXP.player.x = EXP.W * 0.45; EXP.player.y = EXP.H * 0.55; }
+
+function exitExplore() { EXP.running = false; cancelAnimationFrame(EXP.raf); showMap(); }
+
+function resizeExplore() {
+  if (!EXP.canvas) return;
+  const w = EXP.canvas.clientWidth || 880;
+  const h = Math.round(Math.min(w * 0.62, 480));
+  const dpr = window.devicePixelRatio || 1;
+  EXP.canvas.width = w * dpr; EXP.canvas.height = h * dpr;
+  EXP.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  EXP.ctx.imageSmoothingEnabled = false;
+  EXP.cw = w; EXP.ch = h;
+}
+
+function loopExplore() {
+  if (!EXP.running) return;
+  updateExplore();
+  drawExplore();
+  EXP.raf = requestAnimationFrame(loopExplore);
+}
+
+function updateExplore() {
+  const k = EXP.keys; let dx = 0, dy = 0;
+  if (k['arrowleft']  || k['a'] || k['ф']) dx -= 1;
+  if (k['arrowright'] || k['d'] || k['в']) dx += 1;
+  if (k['arrowup']    || k['w'] || k['ц']) dy -= 1;
+  if (k['arrowdown']  || k['s'] || k['ы']) dy += 1;
+  if (EXP.joy.active) { dx += EXP.joy.dx; dy += EXP.joy.dy; }
+  const len = Math.hypot(dx, dy);
+  if (len > 0) {
+    const sp = Math.max(2.5, EXP.W * 0.0024);
+    EXP.player.x += (dx / len) * sp;
+    EXP.player.y += (dy / len) * sp;
+  }
+  const r = EXP.player.r;
+  EXP.player.x = Math.max(r, Math.min(EXP.W - r, EXP.player.x));
+  EXP.player.y = Math.max(r, Math.min(EXP.H - r, EXP.player.y));
+
+  EXP.near = null;
+  let best = Math.max(45, EXP.W * 0.04);
+  for (const n of EXP.npcs) {
+    const d = Math.hypot(n.fx * EXP.W - EXP.player.x, n.fy * EXP.H - EXP.player.y);
+    if (d < best) { best = d; EXP.near = n; }
+  }
+  const hud = document.getElementById('explore-hud');
+  if (EXP.near) hud.innerHTML = `<b>${EXP.near.dir.name}</b> — нажми <b>E</b>${isDone(EXP.near.dir.id) ? ' (пройдено)' : ''}`;
+  else hud.textContent = 'Иди к философу. WASD / стрелки — движение, E — подойти.';
+}
+
+function drawExplore() {
+  const ctx = EXP.ctx, cw = EXP.cw, ch = EXP.ch;
+  const viewW = EXP.W * 0.34, zoom = cw / viewW, viewH = ch / zoom;
+  let camX = EXP.player.x - viewW / 2, camY = EXP.player.y - viewH / 2;
+  camX = Math.max(0, Math.min(Math.max(0, EXP.W - viewW), camX));
+  camY = Math.max(0, Math.min(Math.max(0, EXP.H - viewH), camY));
+
+  ctx.clearRect(0, 0, cw, ch);
+  ctx.fillStyle = '#1a1410'; ctx.fillRect(0, 0, cw, ch);
+  if (EXP.imgReady) ctx.drawImage(EXP.img, camX, camY, viewW, viewH, 0, 0, cw, ch);
+  else { ctx.fillStyle = '#c9b78a'; ctx.font = '14px Georgia'; ctx.textAlign = 'center';
+         ctx.fillText('Карта img/explore_map.png не найдена — добавь её', cw / 2, ch / 2); }
+
+  const toS = (wx, wy) => [(wx - camX) * zoom, (wy - camY) * zoom];
+
+  for (const n of EXP.npcs) {
+    const [sx, sy] = toS(n.fx * EXP.W, n.fy * EXP.H);
+    const done = isDone(n.dir.id), rad = 14;
+    ctx.beginPath(); ctx.arc(sx, sy, rad, 0, 7);
+    ctx.fillStyle = done ? '#2f6a26' : n.accent; ctx.fill();
+    ctx.lineWidth = 2.5; ctx.strokeStyle = (EXP.near === n) ? '#fff2c0' : '#d8b24f'; ctx.stroke();
+    ctx.fillStyle = '#f0dcb4'; ctx.font = 'bold 14px Georgia';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(done ? '✓' : n.dir.name[0], sx, sy + 1);
+    if (EXP.near === n) {
+      ctx.font = '12px Georgia';
+      const tw = ctx.measureText(n.dir.name).width + 14;
+      ctx.fillStyle = 'rgba(36,19,8,.88)'; ctx.fillRect(sx - tw / 2, sy - rad - 24, tw, 19);
+      ctx.fillStyle = '#f0dcb4'; ctx.fillText(n.dir.name, sx, sy - rad - 14);
+    }
+  }
+
+  const [px, py] = toS(EXP.player.x, EXP.player.y);
+  ctx.beginPath(); ctx.arc(px, py, 12, 0, 7);
+  ctx.fillStyle = '#c8a84b'; ctx.fill();
+  ctx.lineWidth = 3; ctx.strokeStyle = '#3a2410'; ctx.stroke();
+  ctx.fillStyle = '#241308'; ctx.font = 'bold 12px Georgia';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('Я', px, py + 1);
+}
+
+function exploreAction() {
+  if (!EXP.running || !EXP.near) return;
+  EXP.running = false; cancelAnimationFrame(EXP.raf);
+  enterEncounter(EXP.near.dir, EXP.near.camp);
+}
+
+window.addEventListener('keydown', e => {
+  const key = e.key.toLowerCase();
+  EXP.keys[key] = true;
+  if (EXP.running && (key === 'e' || key === 'е' || key === 'enter')) { e.preventDefault(); exploreAction(); }
+  if (EXP.running && ['arrowup','arrowdown','arrowleft','arrowright'].includes(key)) e.preventDefault();
+});
+window.addEventListener('keyup', e => { EXP.keys[e.key.toLowerCase()] = false; });
+window.addEventListener('resize', () => { if (EXP.running) resizeExplore(); });
+
+(function setupTouch() {
+  const j = document.getElementById('joystick'), knob = document.getElementById('joystick-knob');
+  if (!j) return;
+  let cx = 0, cy = 0; const R = 44;
+  const pt = e => e.changedTouches ? e.changedTouches[0] : e;
+  const start = e => { const r = j.getBoundingClientRect(); cx = r.left + r.width / 2; cy = r.top + r.height / 2; EXP.joy.active = true; move(e); };
+  const move = e => {
+    if (!EXP.joy.active) return; const t = pt(e);
+    let dx = t.clientX - cx, dy = t.clientY - cy; const len = Math.hypot(dx, dy) || 1;
+    const cl = Math.min(len, R);
+    EXP.joy.dx = (dx / len) * (cl / R); EXP.joy.dy = (dy / len) * (cl / R);
+    knob.style.transform = `translate(${(dx / len) * cl}px, ${(dy / len) * cl}px)`;
+    e.preventDefault();
+  };
+  const end = () => { EXP.joy.active = false; EXP.joy.dx = EXP.joy.dy = 0; knob.style.transform = ''; };
+  j.addEventListener('touchstart', start, { passive:false });
+  j.addEventListener('touchmove', move, { passive:false });
+  j.addEventListener('touchend', end);
+  const ab = document.getElementById('action-btn');
+  if (ab) { ab.addEventListener('click', exploreAction);
+            ab.addEventListener('touchstart', e => { e.preventDefault(); exploreAction(); }, { passive:false }); }
+})();
 
 /* ── Запуск ── */
 loadProg();
