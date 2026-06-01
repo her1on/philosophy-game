@@ -1318,7 +1318,6 @@ function startExplore() {
     return { dir:d, camp: CAMPS.find(c => c.id === d.campId), fx:f[0], fy:f[1],
              accent: d.campId === 'anti' ? '#8b2e1a' : '#244b63', portrait };
   });
-  if (!EXP.glow) { EXP.glow = new Image(); EXP.glow.src = 'img/explore_glow.png'; }
   resizeExplore();
   EXP.running = true;
   cancelAnimationFrame(EXP.raf);
@@ -1423,27 +1422,11 @@ function drawExplore() {
   else { ctx.fillStyle = '#c9b78a'; ctx.font = '14px Georgia'; ctx.textAlign = 'center';
          ctx.fillText('Карта img/explore_map.png не найдена — добавь её', cw / 2, ch / 2); }
 
-  // свечение направлений по контурам (мягкий пульс)
-  if (EXP.glow && EXP.glow.complete && EXP.glow.naturalWidth) {
-    ctx.imageSmoothingEnabled = true;
-    ctx.globalAlpha = 0.4 + 0.45 * (0.5 + 0.5 * Math.sin(performance.now() / 650));
-    ctx.drawImage(EXP.glow, camX, camY, viewW, viewH, 0, 0, cw, ch);
-    ctx.globalAlpha = 1;
-    ctx.imageSmoothingEnabled = false;
-  }
-
   const toS = (wx, wy) => [(wx - camX) * zoom, (wy - camY) * zoom];
 
   for (const n of EXP.npcs) {
-    const [sx, sy] = toS(n.fx * EXP.W, n.fy * EXP.H);
-    if (isDone(n.dir.id)) {
-      ctx.beginPath(); ctx.arc(sx, sy, 12, 0, 7);
-      ctx.fillStyle = 'rgba(47,106,38,.92)'; ctx.fill();
-      ctx.lineWidth = 2; ctx.strokeStyle = '#bfe8a8'; ctx.stroke();
-      ctx.fillStyle = '#eaffd9'; ctx.font = 'bold 14px Georgia';
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('✓', sx, sy + 1);
-    }
-    if (EXP.near === n) drawNpcCard(n, sx, sy);
+    const [gx, gy] = toS(n.fx * EXP.W, n.fy * EXP.H);
+    drawMarker(n, gx, gy);
   }
 
   const [px, py] = toS(EXP.player.x, EXP.player.y);
@@ -1473,22 +1456,51 @@ function drawExplore() {
   ctx.lineWidth = 1.5; ctx.strokeStyle = '#3a2410'; ctx.stroke();
 }
 
-function drawNpcCard(n, sx, sy) {
-  const ctx = EXP.ctx, r = 28, cy = sy - 54;
+/* парящий маркер-пин над местом (портрет философа), мягко покачивается */
+function drawMarker(n, gx, gy) {
+  const ctx = EXP.ctx;
+  const near = (EXP.near === n), done = isDone(n.dir.id);
+  const bob = Math.sin(performance.now() / 480 + n.fx * 9) * 3;
+  const headR = near ? 23 : 18;
+  const headY = gy - 38 - headR + bob;
+  const ring = done ? '#7ce06a' : (near ? '#fff2c0' : '#d8b24f');
   ctx.save();
-  ctx.beginPath(); ctx.arc(sx, cy, r, 0, 7); ctx.fillStyle = '#241308'; ctx.fill();
+  // тень на земле
+  ctx.fillStyle = 'rgba(0,0,0,.28)';
+  ctx.beginPath(); ctx.ellipse(gx, gy, 9, 4, 0, 0, 7); ctx.fill();
+  // ножка-пин
+  ctx.fillStyle = ring;
+  ctx.beginPath();
+  ctx.moveTo(gx, gy - 3);
+  ctx.lineTo(gx - 5, headY + headR - 3);
+  ctx.lineTo(gx + 5, headY + headR - 3);
+  ctx.closePath(); ctx.fill();
+  // голова + портрет
+  ctx.beginPath(); ctx.arc(gx, headY, headR, 0, 7); ctx.fillStyle = '#241308'; ctx.fill();
   if (n.portrait && n.portrait.complete && n.portrait.naturalWidth) {
-    ctx.save(); ctx.beginPath(); ctx.arc(sx, cy, r - 2, 0, 7); ctx.clip();
-    drawCover(n.portrait, sx - (r - 2), cy - (r - 2), (r - 2) * 2, (r - 2) * 2);
+    ctx.save(); ctx.beginPath(); ctx.arc(gx, headY, headR - 3, 0, 7); ctx.clip();
+    drawCover(n.portrait, gx - (headR - 3), headY - (headR - 3), (headR - 3) * 2, (headR - 3) * 2);
     ctx.restore();
   }
-  ctx.lineWidth = 3; ctx.strokeStyle = '#f0dcb4'; ctx.beginPath(); ctx.arc(sx, cy, r, 0, 7); ctx.stroke();
-  ctx.font = 'bold 13px Georgia'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  const tw = ctx.measureText(n.dir.name).width + 16;
-  ctx.fillStyle = 'rgba(36,19,8,.92)'; ctx.fillRect(sx - tw / 2, cy + r + 4, tw, 20);
-  ctx.fillStyle = '#f0dcb4'; ctx.fillText(n.dir.name, sx, cy + r + 14);
-  ctx.font = '10px Georgia'; ctx.fillStyle = '#c8a860';
-  ctx.fillText(isDone(n.dir.id) ? 'E — повторить' : 'E — подойти', sx, cy + r + 32);
+  ctx.lineWidth = 3; ctx.strokeStyle = ring;
+  ctx.beginPath(); ctx.arc(gx, headY, headR, 0, 7); ctx.stroke();
+  // бейдж-галочка для пройденных
+  if (done) {
+    const bx = gx + headR * 0.72, by = headY - headR * 0.72;
+    ctx.beginPath(); ctx.arc(bx, by, 8, 0, 7); ctx.fillStyle = '#2f6a26'; ctx.fill();
+    ctx.lineWidth = 1.5; ctx.strokeStyle = '#eaffd9'; ctx.stroke();
+    ctx.fillStyle = '#eaffd9'; ctx.font = 'bold 11px Georgia';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('✓', bx, by + 1);
+  }
+  // подпись на подходе
+  if (near) {
+    ctx.font = 'bold 13px Georgia'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    const tw = ctx.measureText(n.dir.name).width + 16, ly = headY - headR - 13;
+    ctx.fillStyle = 'rgba(36,19,8,.92)'; ctx.fillRect(gx - tw / 2, ly - 9, tw, 18);
+    ctx.fillStyle = '#f0dcb4'; ctx.fillText(n.dir.name, gx, ly);
+    ctx.font = '10px Georgia'; ctx.fillStyle = '#c8a860';
+    ctx.fillText(done ? 'E — повторить' : 'E — войти', gx, ly + 16);
+  }
   ctx.restore();
 }
 function drawCover(img, dx, dy, dw, dh) {
