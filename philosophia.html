@@ -113,18 +113,39 @@ body {
 .dir-ov-name { font-weight:bold; color:#1a1208; font-size:.92em; }
 .dir-ov-phil { font-size:.72em; color:#6a4a20; line-height:1.4; }
 
-/* ── Дилемма-оверлей ── */
-#dilemma-overlay { position:fixed; inset:0; z-index:60; display:flex; align-items:flex-end; justify-content:center; padding:0 16px 24px; background:rgba(0,0,0,.52); }
+/* ── Дилемма-оверлей (визуальная новелла) ── */
+#dilemma-overlay { position:fixed; inset:0; z-index:60; display:flex; align-items:flex-end; justify-content:center; padding:0 16px 24px; background:rgba(0,0,0,0); transition:background .45s ease; }
+#dilemma-overlay.shown { background:rgba(0,0,0,.58); }
 #dilemma-overlay.hidden { display:none; }
-#dilemma-box { display:flex; gap:14px; align-items:flex-start; background:#0e0b06; border:2px solid #c8a84b; padding:16px 18px; width:100%; max-width:780px; box-shadow:0 0 48px rgba(0,0,0,.7); }
-#dilemma-portrait { width:70px; height:70px; border-radius:3px; border:1.5px solid #c8a84b; object-fit:cover; flex-shrink:0; }
+#dilemma-box {
+  display:flex; gap:14px; align-items:flex-start;
+  background:#0e0b06; border:2px solid #c8a84b; padding:16px 18px;
+  width:100%; max-width:780px; box-shadow:0 0 48px rgba(0,0,0,.7);
+  cursor:pointer;                       /* клик по боксу — доскипать печать */
+  transform:translateY(36px); opacity:0;
+}
+#dilemma-overlay.shown #dilemma-box { animation: dlSlideUp .42s cubic-bezier(.2,.8,.25,1) forwards; }
+@keyframes dlSlideUp { to { transform:translateY(0); opacity:1; } }
+#dilemma-portrait { width:70px; height:70px; border-radius:3px; border:1.5px solid #c8a84b; object-fit:cover; flex-shrink:0; box-shadow:0 0 0 0 rgba(200,168,75,.5); }
+#dilemma-overlay.shown #dilemma-portrait { animation: dlPortraitGlow 2.6s ease-in-out infinite; }
+@keyframes dlPortraitGlow {
+  0%,100% { box-shadow:0 0 0 0 rgba(200,168,75,.0); }
+  50%     { box-shadow:0 0 14px 1px rgba(200,168,75,.35); }
+}
 #dilemma-content { flex:1; min-width:0; }
 #dilemma-speaker { font-size:.62em; letter-spacing:3px; color:#c8a84b; text-transform:uppercase; margin-bottom:7px; }
-#dilemma-text { color:#e8dfc0; font-size:.92em; line-height:1.65; margin-bottom:13px; }
+#dilemma-text { color:#e8dfc0; font-size:.92em; line-height:1.65; margin-bottom:13px; min-height:1.65em; transition:opacity .22s ease; }
+#dilemma-text.fading { opacity:0; }
+#dilemma-text.typing::after {
+  content:'▍'; color:#c8a84b; margin-left:1px;
+  animation: dlCaret .8s step-end infinite;
+}
+@keyframes dlCaret { 50% { opacity:0; } }
 #dilemma-choices { display:flex; gap:9px; flex-wrap:wrap; }
-.dl-choice { background:transparent; border:1.5px solid #c8a84b; color:#c8a84b; padding:7px 13px; font-size:.82em; font-family:inherit; cursor:pointer; transition:background .15s,color .15s; }
+.dl-choice { background:transparent; border:1.5px solid #c8a84b; color:#c8a84b; padding:7px 13px; font-size:.82em; font-family:inherit; cursor:pointer; transition:background .15s,color .15s; opacity:0; transform:translateY(6px); animation: dlChoiceIn .3s ease forwards; }
 .dl-choice:hover { background:#c8a84b; color:#0e0b06; }
-#dilemma-continue { background:#c8a84b; color:#0e0b06; border:none; padding:8px 18px; font-size:.87em; font-weight:bold; font-family:inherit; cursor:pointer; }
+@keyframes dlChoiceIn { to { opacity:1; transform:translateY(0); } }
+#dilemma-continue { background:#c8a84b; color:#0e0b06; border:none; padding:8px 18px; font-size:.87em; font-weight:bold; font-family:inherit; cursor:pointer; opacity:0; transform:translateY(6px); animation: dlChoiceIn .3s ease forwards; }
 #dilemma-continue.hidden { display:none; }
 @media(max-width:640px) {
   #dilemma-overlay { padding:0 10px 16px; }
@@ -1837,37 +1858,84 @@ function drawCover(img, dx, dy, dw, dh) {
 
 let _dlDir = null, _dlCamp = null;
 
+/* Печатает текст посимвольно; onDone — когда печать завершена.
+   Возвращает функцию-скип, мгновенно дописывающую остаток. */
+let _typeTimer = null, _typeSkip = null;
+function typeText(el, text, onDone) {
+  clearInterval(_typeTimer);
+  el.classList.add('typing');
+  el.textContent = '';
+  let i = 0;
+  const finish = () => {
+    clearInterval(_typeTimer); _typeTimer = null; _typeSkip = null;
+    el.textContent = text;
+    el.classList.remove('typing');
+    if (onDone) onDone();
+  };
+  _typeSkip = finish;
+  _typeTimer = setInterval(() => {
+    i += 1;
+    el.textContent = text.slice(0, i);
+    if (i >= text.length) finish();
+  }, 16);
+}
+
+function renderDilemmaChoices() {
+  const box = document.getElementById('dilemma-choices');
+  box.innerHTML = '';
+  _dlDir.dilemma.opts.forEach((opt, i) => {
+    const b = document.createElement('button');
+    b.className = 'dl-choice';
+    b.style.animationDelay = (i * 0.09) + 's';
+    b.textContent = opt;
+    b.onclick = () => handleDilemmaChoice(i);
+    box.appendChild(b);
+  });
+}
+
 function enterDilemma(dir, camp) {
   _dlDir = dir; _dlCamp = camp;
   const d = dir.dilemma;
   const portrait = document.getElementById('dilemma-portrait');
   portrait.src = dir.cards && dir.cards[0] ? `img/portraits/${dir.cards[0].id}.jpg` : '';
   document.getElementById('dilemma-speaker').textContent = dir.name;
-  document.getElementById('dilemma-text').textContent = d.situation;
-  const box = document.getElementById('dilemma-choices');
-  box.innerHTML = '';
-  d.opts.forEach((opt, i) => {
-    const b = document.createElement('button');
-    b.className = 'dl-choice';
-    b.textContent = opt;
-    b.onclick = () => handleDilemmaChoice(i);
-    box.appendChild(b);
-  });
+  document.getElementById('dilemma-choices').innerHTML = '';
   document.getElementById('dilemma-continue').classList.add('hidden');
-  document.getElementById('dilemma-overlay').classList.remove('hidden');
+
+  const text = document.getElementById('dilemma-text');
+  text.textContent = '';
+  const ov = document.getElementById('dilemma-overlay');
+  ov.classList.remove('hidden');
+  requestAnimationFrame(() => ov.classList.add('shown'));   // плавное затемнение + slide-up
+
+  // печать начинается после выезда бокса
+  setTimeout(() => typeText(text, d.situation, renderDilemmaChoices), 320);
 }
 
 function handleDilemmaChoice(idx) {
-  const d = _dlDir.dilemma;
+  const text = document.getElementById('dilemma-text');
   document.getElementById('dilemma-choices').innerHTML = '';
-  document.getElementById('dilemma-text').textContent = d.reactions[idx];
-  document.getElementById('dilemma-continue').classList.remove('hidden');
+  text.classList.add('fading');
+  setTimeout(() => {
+    text.classList.remove('fading');
+    typeText(text, _dlDir.dilemma.reactions[idx], () => {
+      document.getElementById('dilemma-continue').classList.remove('hidden');
+    });
+  }, 220);
 }
 
 function continueDilemma() {
-  document.getElementById('dilemma-overlay').classList.add('hidden');
+  const ov = document.getElementById('dilemma-overlay');
+  ov.classList.remove('shown');
+  ov.classList.add('hidden');
   enterEncounter(_dlDir, _dlCamp);
 }
+
+// клик по боксу — мгновенно дописать текущую печать
+document.getElementById('dilemma-box').addEventListener('click', e => {
+  if (e.target.closest('.dl-choice') || e.target.closest('#dilemma-continue')) return;
+  if (_typeSkip) _typeSkip();
+});
 
 function exploreAction() {
   if (!EXP.running || !EXP.near) return;
