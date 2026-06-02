@@ -241,6 +241,13 @@ body {
 .dl-choice:hover { background:#c8a84b; color:#0e0b06; }
 #dilemma-continue { background:#c8a84b; color:#0e0b06; border:none; padding:8px 18px; font-size:.87em; font-weight:bold; font-family:inherit; cursor:pointer; }
 #dilemma-continue.hidden { display:none; }
+@media(max-width:640px) {
+  #dilemma-overlay { padding:0 10px 16px; }
+  #dilemma-box { flex-direction:column; gap:10px; padding:13px 14px; }
+  #dilemma-portrait { width:44px; height:44px; }
+  #dilemma-text { font-size:.85em; }
+  .dl-choice { width:100%; text-align:left; }
+}
 
 .article-tag        { font-size:.7em; letter-spacing:1px; padding:3px 10px; border:1px solid #9a7040; color:#5a3a18; background:rgba(180,140,60,.08); border-radius:2px; }
 .enc-btns           { display:flex; gap:10px; flex-wrap:wrap; margin-top:22px; }
