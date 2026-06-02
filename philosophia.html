@@ -227,6 +227,21 @@ body {
 .dir-ov-item.done { background:rgba(215,238,205,.6); border-color:#5a8040; }
 .dir-ov-name { font-weight:bold; color:#1a1208; font-size:.92em; }
 .dir-ov-phil { font-size:.72em; color:#6a4a20; line-height:1.4; }
+
+/* ── Дилемма-оверлей ── */
+#dilemma-overlay { position:fixed; inset:0; z-index:60; display:flex; align-items:flex-end; justify-content:center; padding:0 16px 24px; background:rgba(0,0,0,.52); }
+#dilemma-overlay.hidden { display:none; }
+#dilemma-box { display:flex; gap:14px; align-items:flex-start; background:#0e0b06; border:2px solid #c8a84b; padding:16px 18px; width:100%; max-width:780px; box-shadow:0 0 48px rgba(0,0,0,.7); }
+#dilemma-portrait { width:70px; height:70px; border-radius:3px; border:1.5px solid #c8a84b; object-fit:cover; flex-shrink:0; }
+#dilemma-content { flex:1; min-width:0; }
+#dilemma-speaker { font-size:.62em; letter-spacing:3px; color:#c8a84b; text-transform:uppercase; margin-bottom:7px; }
+#dilemma-text { color:#e8dfc0; font-size:.92em; line-height:1.65; margin-bottom:13px; }
+#dilemma-choices { display:flex; gap:9px; flex-wrap:wrap; }
+.dl-choice { background:transparent; border:1.5px solid #c8a84b; color:#c8a84b; padding:7px 13px; font-size:.82em; font-family:inherit; cursor:pointer; transition:background .15s,color .15s; }
+.dl-choice:hover { background:#c8a84b; color:#0e0b06; }
+#dilemma-continue { background:#c8a84b; color:#0e0b06; border:none; padding:8px 18px; font-size:.87em; font-weight:bold; font-family:inherit; cursor:pointer; }
+#dilemma-continue.hidden { display:none; }
+
 .article-tag        { font-size:.7em; letter-spacing:1px; padding:3px 10px; border:1px solid #9a7040; color:#5a3a18; background:rgba(180,140,60,.08); border-radius:2px; }
 .enc-btns           { display:flex; gap:10px; flex-wrap:wrap; margin-top:22px; }
 
@@ -566,6 +581,18 @@ body {
       <div id="dir-ov-list"></div>
     </div>
   </div>
+
+  <div id="dilemma-overlay" class="hidden">
+    <div id="dilemma-box">
+      <img id="dilemma-portrait" src="" alt="">
+      <div id="dilemma-content">
+        <div id="dilemma-speaker"></div>
+        <div id="dilemma-text"></div>
+        <div id="dilemma-choices"></div>
+        <button id="dilemma-continue" class="hidden" onclick="continueDilemma()">Продолжить →</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -670,7 +697,15 @@ const CAMPS = [
           }
         ],
         successQuote: '«Только воля к власти даёт возможность творить. Это не произвол — это долг жизни.»',
-        successCite: '— Ф. Ницше'
+        successCite: '— Ф. Ницше',
+        dilemma: {
+          situation: 'Тебе предлагают стабильную работу в крупной корпорации — карьера, статус, безопасность. Но это не то, чего ты хотел, и ты это чувствуешь прямо сейчас. Что выберешь?',
+          opts: ['Возьму — надо жить реально', 'Откажу — буду искать своё'],
+          reactions: [
+            'Ницше назвал бы это «волей к слабости» — ты выбрал безопасность вместо роста. «Человек велик настолько, насколько велика его цель». Тихий комфорт не убивает тебя — но и не делает сильнее.',
+            'Amor fati — люби свою судьбу, даже если путь неясен. Именно это Ницше называл волей к власти в её подлинном смысле: не над другими, а над собой. «Что не убивает — делает сильнее». Путь открыт.'
+          ]
+        }
       },
       {
         id: 'psycho',
@@ -795,7 +830,15 @@ const CAMPS = [
           }
         ],
         successQuote: '«Ни одна мысль не является случайной — любая может оказаться значимой для выявления причины.»',
-        successCite: '— З. Фрейд'
+        successCite: '— З. Фрейд',
+        dilemma: {
+          situation: 'Год назад ты начал рисовать — просто для себя. Теперь галерея предлагает выставить работы и продать их. Деньги нужны. Но ты чувствуешь: что-то изменится, если согласишься. Что выберешь?',
+          opts: ['Продать — это признание и деньги', 'Не продавать — это только моё'],
+          reactions: [
+            'Фромм предупреждал об этом переходе. Когда творчество становится товаром, ты переключаешься с режима «быть» в режим «иметь» — и живопись превращается в продукт. Ты будешь рисовать так же свободно, зная цену каждого холста?',
+            'Именно это Фромм называл режимом бытия: ценность в процессе, а не в результате. Живопись остаётся живой, пока ты рисуешь из себя, а не для рынка. «Иметь» требует постоянного подтверждения; «быть» — самодостаточно.'
+          ]
+        }
       },
       {
         id: 'exist',
@@ -910,7 +953,15 @@ const CAMPS = [
           }
         ],
         successQuote: '«Сизифа следует представлять себе счастливым.»',
-        successCite: '— А. Камю'
+        successCite: '— А. Камю',
+        dilemma: {
+          situation: 'Ты три года работал над книгой. Теперь узнал: ни один издатель не возьмёт её. Читателей не будет. Никто не узнает. Продолжишь писать?',
+          opts: ['Да — буду писать, даже если никто не прочтёт', 'Нет — без смысла продолжать'],
+          reactions: [
+            'Камю назвал бы это бунтом против абсурда. Сизиф катит камень, зная, что он скатится — и именно в этом «несмотря ни на что» заключено человеческое достоинство. «Надо представить Сизифа счастливым».',
+            'Камю понял бы тебя — абсурд реален, мир молчит в ответ на наш крик. Но он различал три ответа: смерть, бегство в веру и бунт. Только последний — честный. Сдаться — значит дать миру победить без борьбы.'
+          ]
+        }
       }
     ]
   },
@@ -1007,7 +1058,15 @@ const CAMPS = [
           }
         ],
         successQuote: '«Чистый феномен сознания обладает интенциональностью — направленностью на что-либо.»',
-        successCite: '— Феноменология'
+        successCite: '— Феноменология',
+        dilemma: {
+          situation: 'Перед экзаменом ты узнал правильные ответы от друга, который сдавал раньше — задание то же. Использовать эту информацию или попробовать самому?',
+          opts: ['Использую — это умное применение информации', 'Нет — хочу узнать своё понимание'],
+          reactions: [
+            'Гуссерль призывал к «эпохé» — вынести за скобки всё готовое и привычное, чтобы встретить вещи такими, какие они есть. Используя чужой ответ, ты получишь оценку, но лишишь себя встречи с самим предметом.',
+            '«Назад к самим вещам» — так Гуссерль формулировал задачу философии. Ты выбрал встречу с реальностью, а не с чужим описанием. Понимание, которое придёт — твоё собственное.'
+          ]
+        }
       },
       {
         id: 'pragma',
@@ -1097,7 +1156,15 @@ const CAMPS = [
           }
         ],
         successQuote: '«Всякая идея, помогающая оперировать с реальностью, — истинна.»',
-        successCite: '— Ч. Пирс'
+        successCite: '— Ч. Пирс',
+        dilemma: {
+          situation: 'Друг просит написать ему блестящую рекомендацию на работу. Ты знаешь его слабые стороны — там он будет неуместен. Но он очень нуждается в этом месте. Что напишешь?',
+          opts: ['Напишу хорошую рекомендацию — помогу другу', 'Напишу честно — это правильнее'],
+          reactions: [
+            'Джеймс сказал бы: истина — это то, что работает. Но Дьюи добавил бы: последствия имеют значение. Работодатель пострадает, друг окажется не на своём месте, ты потеряешь репутацию. Что в итоге «сработало»?',
+            'Прагматизм — не цинизм. Дьюи верил в честность как инструмент, работающий в долгосрочной перспективе. Честная рекомендация может навредить сейчас — но строит доверие на годы. Это тоже практичный результат.'
+          ]
+        }
       },
       {
         id: 'posit',
@@ -1188,7 +1255,15 @@ const CAMPS = [
           }
         ],
         successQuote: '«Высказывание истинно до тех пор, пока не нашлось способа его опровергнуть.»',
-        successCite: '— К. Поппер'
+        successCite: '— К. Поппер',
+        dilemma: {
+          situation: 'Врач говорит: лечение поможет с вероятностью 60%. Знахарь обещает исцеление без оговорок и показывает истории чудесных выздоровлений. Кому доверишься?',
+          opts: ['Знахарю — истории убедительны', 'Врачу — у него цифры и данные'],
+          reactions: [
+            'Поппер спросил бы: как опровергнуть заявления знахаря? Если ничто не может доказать его неправоту — это не знание, а вера. Истории о чудесах не фальсифицируемы: удачи запоминаются, неудачи — нет. Это систематическая ошибка.',
+            '60% — это честность науки. Поппер ценил именно это: научное знание говорит «я могу ошибаться» и проверяет себя. Знахарь не может ошибиться, потому что не проверяет. Ты выбрал знание перед иллюзией.'
+          ]
+        }
       },
       {
         id: 'analyt',
@@ -1278,7 +1353,15 @@ const CAMPS = [
           }
         ],
         successQuote: '«Я вижу две руки — вот они.»',
-        successCite: '— Дж. Мур'
+        successCite: '— Дж. Мур',
+        dilemma: {
+          situation: 'Ты поссорился с близким человеком. Знаешь, что обидел его, но не понимаешь — как именно. Он не объясняет, молчит. Что сделаешь?',
+          opts: ['Попрошу объяснить точно, что я сделал не так', 'Просто извинюсь — пусть само уладится'],
+          reactions: [
+            'Витгенштейн утверждал: большинство конфликтов — это проблемы языка. Ты хочешь прояснить — это честный подход. Без понимания что именно произошло «извинение» остаётся пустым ритуалом, который ничего не решает.',
+            '«О чём нельзя говорить, о том нужно молчать» — но это не значит не действовать. Рассел заметил бы: неясность в словах порождает неясность в отношениях. Ты сглаживаешь симптом, не решая проблему. Конфликт вернётся.'
+          ]
+        }
       },
       {
         id: 'herm',
@@ -1368,7 +1451,15 @@ const CAMPS = [
           }
         ],
         successQuote: '«Понять автора — значит овладеть его языком и психологией.»',
-        successCite: '— Ф. Шлейермахер'
+        successCite: '— Ф. Шлейермахер',
+        dilemma: {
+          situation: 'Ты нашёл старые письма прадеда. Он писал о чём-то важном для него — но ты не понимаешь контекст того времени. Смысл ускользает. Что сделаешь?',
+          opts: ['Прочту по-своему — главное что это значит для меня', 'Изучу эпоху — хочу понять, что имел в виду он'],
+          reactions: [
+            'Гадамер называл это «проекцией» — читать в тексте только себя, а не вступать в диалог. Понимание требует встречи горизонтов: твоего настоящего и его прошлого. Иначе ты читаешь не письмо, а собственное отражение.',
+            'Это и есть герменевтический круг по Гадамеру: целое понимается через части, но и части — через целое. Изучая эпоху, ты входишь в диалог с автором через время. Твой горизонт расширяется — ты становишься богаче.'
+          ]
+        }
       },
       {
         id: 'postmod',
@@ -1471,7 +1562,15 @@ const CAMPS = [
           }
         ],
         successQuote: '«Язык не может рассматриваться как выражение переживаемого.»',
-        successCite: '— Ж. Деррида'
+        successCite: '— Ж. Деррида',
+        dilemma: {
+          situation: 'Все вокруг меняют взгляды, профессии, отношения. Лучший друг говорит: «Нет ничего постоянного — живи моментом». Ты чувствуешь: что-то в этом есть. Но и что-то пугает. Он прав?',
+          opts: ['Да — гибкость и есть мудрость сегодня', 'Нет — есть вещи, которые не должны меняться'],
+          reactions: [
+            'Бауман описал это точно: текучая современность. Твёрдые структуры растворились — и это не катастрофа, а условие жизни. Но он предупреждал: свобода без якорей — это и свобода потеряться. Гибкость без идентичности — не мудрость, а дрейф.',
+            'Деррида деконструировал «центры» — но это не значит, что всё одинаково ценно. Бауман искал возможность ответственности в жидком мире. Твоя потребность в постоянстве — не архаизм. Это вопрос: что ты готов защищать, зная, что мир текуч?'
+          ]
+        }
       }
     ]
   }
@@ -1889,7 +1988,7 @@ function renderDirList() {
       it.className = 'dir-ov-item' + (done ? ' done' : '');
       it.innerHTML = `<span class="dir-ov-name">${done ? '✓' : '○'} ${dir.name}</span>` +
                      `<span class="dir-ov-phil">${dir.philosophers}</span>`;
-      it.onclick = () => { toggleDirList(false); enterEncounter(dir, camp); };
+      it.onclick = () => { toggleDirList(false); if (dir.dilemma) { EXP.running = false; cancelAnimationFrame(EXP.raf); enterDilemma(dir, camp); } else { enterEncounter(dir, camp); } };
       list.appendChild(it);
     });
   });
@@ -2054,10 +2153,48 @@ function drawCover(img, dx, dy, dw, dh) {
   ctx.drawImage(img, sx0, sy0, sw, sh, dx, dy, dw, dh);
 }
 
+let _dlDir = null, _dlCamp = null;
+
+function enterDilemma(dir, camp) {
+  _dlDir = dir; _dlCamp = camp;
+  const d = dir.dilemma;
+  const portrait = document.getElementById('dilemma-portrait');
+  portrait.src = dir.cards && dir.cards[0] ? `img/portraits/${dir.cards[0].id}.jpg` : '';
+  document.getElementById('dilemma-speaker').textContent = dir.name;
+  document.getElementById('dilemma-text').textContent = d.situation;
+  const box = document.getElementById('dilemma-choices');
+  box.innerHTML = '';
+  d.opts.forEach((opt, i) => {
+    const b = document.createElement('button');
+    b.className = 'dl-choice';
+    b.textContent = opt;
+    b.onclick = () => handleDilemmaChoice(i);
+    box.appendChild(b);
+  });
+  document.getElementById('dilemma-continue').classList.add('hidden');
+  document.getElementById('dilemma-overlay').classList.remove('hidden');
+}
+
+function handleDilemmaChoice(idx) {
+  const d = _dlDir.dilemma;
+  document.getElementById('dilemma-choices').innerHTML = '';
+  document.getElementById('dilemma-text').textContent = d.reactions[idx];
+  document.getElementById('dilemma-continue').classList.remove('hidden');
+}
+
+function continueDilemma() {
+  document.getElementById('dilemma-overlay').classList.add('hidden');
+  enterEncounter(_dlDir, _dlCamp);
+}
+
 function exploreAction() {
   if (!EXP.running || !EXP.near) return;
   EXP.running = false; cancelAnimationFrame(EXP.raf);
-  enterEncounter(EXP.near.dir, EXP.near.camp);
+  if (EXP.near.dir.dilemma) {
+    enterDilemma(EXP.near.dir, EXP.near.camp);
+  } else {
+    enterEncounter(EXP.near.dir, EXP.near.camp);
+  }
 }
 
 window.addEventListener('keydown', e => {
