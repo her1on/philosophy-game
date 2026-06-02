@@ -1298,7 +1298,7 @@ const NPC_FRAC = {
 const EXP = {
   running:false, raf:0, ctx:null, canvas:null, img:null, imgReady:false,
   W:1536, H:1024, cw:0, ch:0, zoom:1, camX:0, camY:0,
-  scale:1,     // экранных пикселей на пиксель карты (1 = стоковый масштаб; меньше = дальше)
+  scale:1,     // пересчитывается автоматически в resizeExplore (не трогай вручную)
   keys:{}, joy:{active:false, dx:0, dy:0},
   player:{ x:0, y:0, r:13, dir:'down', moving:false }, sprite:null, npcs:[], near:null, started:false,
   coll:null, collW:0, collH:0, collScale:0.5, collOK:false
@@ -1405,6 +1405,8 @@ function resizeExplore() {
   const wrap = EXP.canvas.parentElement;
   const w = wrap.clientWidth || 880;
   const h = wrap.clientHeight || 480;
+  // авто-масштаб: карта всегда заполняет окно без чёрных полос
+  EXP.scale = Math.max(w / EXP.W, h / EXP.H);
   const dpr = window.devicePixelRatio || 1;
   EXP.canvas.width = w * dpr; EXP.canvas.height = h * dpr;
   EXP.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
