@@ -14,9 +14,11 @@ body {
   min-height: 100vh;
   background-color: #0e0b06;
   background-image:
-    radial-gradient(ellipse 80% 50% at 50% -5%, rgba(180,120,40,.28) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 60% at 15% 40%, rgba(120,70,20,.12) 0%, transparent 50%),
-    radial-gradient(ellipse 30% 40% at 85% 60%, rgba(100,60,15,.08) 0%, transparent 50%);
+    radial-gradient(ellipse 80% 55% at 50% 0%, rgba(180,120,40,.26) 0%, transparent 65%),
+    radial-gradient(ellipse 45% 65% at 12% 35%, rgba(120,70,20,.10) 0%, transparent 55%),
+    radial-gradient(ellipse 35% 45% at 88% 55%, rgba(100,60,15,.07) 0%, transparent 55%);
+  background-attachment: fixed;        /* свечение привязано к экрану, без ползущей полосы при скролле */
+  background-repeat: no-repeat;
   color: #e8d9b0;
   font-family: Georgia, 'Times New Roman', serif;
   padding-bottom: 80px;
@@ -39,6 +41,15 @@ body::before {
   pointer-events: none;
   z-index: 0;
   transform: rotate(15deg);
+}
+
+/* ── Анимированный фон: пыль + созвездия ── */
+#bg-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
 }
 
 /* ── Hero-шапка ── */
@@ -401,6 +412,8 @@ body::before {
 </head>
 <body>
 
+<canvas id="bg-canvas"></canvas>
+
 <!-- Hero -->
 <div class="hero">
   <div class="hero-pretitle">Образовательная игра</div>
@@ -538,6 +551,94 @@ function showWip() {
 
 renderTimeline();
 renderCards();
+
+/* ── Фон: пыль в луче света + созвездия мысли ── */
+(function backdrop() {
+  const cv = document.getElementById('bg-canvas');
+  const ctx = cv.getContext('2d');
+  let W = 0, H = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+  let parts = [];
+  const mouse = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5 };
+
+  function resize() {
+    W = cv.clientWidth; H = cv.clientHeight;
+    cv.width = W * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    // плотность зависит от площади, но с потолком ради производительности
+    const n = Math.min(90, Math.round(W * H / 18000));
+    parts = [];
+    for (let i = 0; i < n; i++) {
+      parts.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: Math.random() * 1.6 + 0.6,
+        vy: -(Math.random() * 0.18 + 0.05),     // медленно вверх
+        vx: (Math.random() - 0.5) * 0.12,        // лёгкий горизонтальный дрейф
+        tw: Math.random() * Math.PI * 2,         // фаза мерцания
+        tws: Math.random() * 0.018 + 0.006,      // скорость мерцания
+        depth: Math.random() * 0.6 + 0.4         // для параллакса
+      });
+    }
+  }
+
+  const LINK = 124;     // дистанция связи в созвездие
+  function frame() {
+    ctx.clearRect(0, 0, W, H);
+    // плавное приближение параллакса к позиции курсора
+    mouse.x += (mouse.tx - mouse.x) * 0.05;
+    mouse.y += (mouse.ty - mouse.y) * 0.05;
+    const px = (mouse.x - 0.5) * 26, py = (mouse.y - 0.5) * 26;
+
+    for (const p of parts) {
+      p.x += p.vx; p.y += p.vy; p.tw += p.tws;
+      if (p.y < -10) { p.y = H + 10; p.x = Math.random() * W; }
+      if (p.x < -10) p.x = W + 10;
+      if (p.x > W + 10) p.x = -10;
+    }
+
+    // линии-созвездия между близкими частицами
+    for (let i = 0; i < parts.length; i++) {
+      const a = parts[i];
+      const ax = a.x + px * a.depth, ay = a.y + py * a.depth;
+      for (let j = i + 1; j < parts.length; j++) {
+        const b = parts[j];
+        const bx = b.x + px * b.depth, by = b.y + py * b.depth;
+        const dx = ax - bx, dy = ay - by;
+        const d2 = dx * dx + dy * dy;
+        if (d2 < LINK * LINK) {
+          const al = (1 - Math.sqrt(d2) / LINK) * 0.16;
+          ctx.strokeStyle = `rgba(200,168,75,${al})`;
+          ctx.lineWidth = 0.6;
+          ctx.beginPath();
+          ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke();
+        }
+      }
+    }
+
+    // сами пылинки
+    for (const p of parts) {
+      const x = p.x + px * p.depth, y = p.y + py * p.depth;
+      const tw = 0.5 + 0.5 * Math.sin(p.tw);
+      const a = 0.25 + tw * 0.55;
+      const glow = ctx.createRadialGradient(x, y, 0, x, y, p.r * 4);
+      glow.addColorStop(0, `rgba(225,195,110,${a})`);
+      glow.addColorStop(1, 'rgba(225,195,110,0)');
+      ctx.fillStyle = glow;
+      ctx.beginPath(); ctx.arc(x, y, p.r * 4, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = `rgba(240,222,160,${a})`;
+      ctx.beginPath(); ctx.arc(x, y, p.r, 0, Math.PI * 2); ctx.fill();
+    }
+    requestAnimationFrame(frame);
+  }
+
+  window.addEventListener('resize', resize);
+  window.addEventListener('mousemove', e => {
+    mouse.tx = e.clientX / window.innerWidth;
+    mouse.ty = e.clientY / window.innerHeight;
+  });
+  resize();
+  frame();
+})();
 </script>
 </body>
 </html>
