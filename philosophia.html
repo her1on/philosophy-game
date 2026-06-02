@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ФИЛОСОФСКИЙ ВЕСТНИК — Новейшая философия</title>
+<title>Новейшая западная философия</title>
 <style>
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 html { height:100%; }
@@ -22,77 +22,7 @@ body {
 .screen { min-height:100vh; }
 .screen.hidden { display:none !important; }
 
-/* ── Карта ── */
-#screen-map { padding-bottom:40px; }
-
-.newspaper-header {
-  text-align:center; padding:22px 32px 14px;
-  border-bottom:3px double #5a3a10;
-}
-.paper-pretitle { font-size:.65em; letter-spacing:6px; color:#7a4a18; text-transform:uppercase; margin-bottom:6px; }
-.paper-title { font-size:2.8em; color:#1a1208; letter-spacing:3px; line-height:1; font-weight:bold; margin-bottom:6px; }
-.paper-subtitle {
-  font-size:.7em; letter-spacing:4px; color:#5a3a10;
-  border-top:1px solid #9a6a30; border-bottom:1px solid #9a6a30;
-  padding:4px 0; margin:0 auto; max-width:500px;
-}
-.paper-date { font-size:.62em; color:#8a6a40; margin-top:8px; letter-spacing:2px; }
-
-.section-rule {
-  display:flex; align-items:center; gap:12px;
-  padding:14px 32px 0; max-width:960px; margin:0 auto;
-}
-.section-rule::before, .section-rule::after { content:''; flex:1; height:1px; background:#9a7040; }
-.section-label { font-size:.6em; letter-spacing:4px; color:#7a5020; white-space:nowrap; text-transform:uppercase; }
-
-.map-wrapper { max-width:920px; margin:14px auto 0; padding:0 24px; }
-.map-container {
-  position:relative;
-  border:2px solid #9a7040;
-  box-shadow:inset 0 0 40px rgba(100,60,10,.12), 3px 3px 0 rgba(100,60,10,.15);
-  background:#d9cb9e; overflow:hidden;
-}
-.map-container svg { display:block; width:100%; height:auto; }
-
-.map-marker { cursor:pointer; }
-.map-marker:hover .marker-circle { filter:brightness(1.15); }
-.marker-circle { transition:transform .2s; transform-origin:center; transform-box:fill-box; }
-.map-tooltip { pointer-events:none; opacity:0; transition:opacity .2s; }
-.map-marker:hover .map-tooltip { opacity:1; }
-
-.map-caption {
-  padding:7px 14px; border-top:1px solid #9a7040;
-  font-size:.68em; color:#6a4820; font-style:italic; text-align:center;
-  background:rgba(200,170,100,.18);
-}
-
-.journal-wrap { max-width:920px; margin:18px auto 0; padding:0 24px; }
-.journal-box { border:1.5px solid #9a7040; background:rgba(255,252,240,.7); padding:18px 22px; }
-.journal-tag { font-size:.58em; letter-spacing:4px; color:#8a5520; text-transform:uppercase; margin-bottom:6px; }
-.journal-title { font-size:1.35em; color:#1a1208; margin-bottom:8px; }
-.journal-hint { font-size:.78em; color:#6a4a20; margin-bottom:14px; line-height:1.55; }
-.journal-list { list-style:none; }
-.journal-item {
-  display:flex; align-items:center; gap:10px;
-  padding:8px 0; border-bottom:1px dashed rgba(150,100,40,.25);
-  font-size:.82em; color:#2a1a08;
-}
-.journal-item:last-child { border-bottom:none; }
-.journal-camp-header {
-  padding:10px 0 4px; font-size:.62em; letter-spacing:3px;
-  color:#7a5020; text-transform:uppercase; border-top:1px solid rgba(150,100,40,.3);
-}
-.journal-camp-header:first-child { border-top:none; padding-top:0; }
-.journal-item-name { flex:1; }
-.ji-badge { font-size:.68em; letter-spacing:1px; padding:2px 9px; border-radius:2px; }
-.ji-done  { background:#2a5a20; color:#c0f0a0; }
-.ji-avail { color:#8a5010; border:1px solid #9a7040; }
-.ji-num { width:22px; height:22px; border-radius:50%; background:#c8a84b; color:#fff; display:flex; align-items:center; justify-content:center; font-size:.7em; font-weight:bold; flex-shrink:0; }
-.ji-num.done { background:#3a7030; }
-
-/* ── Лагерь ── */
-#screen-camp { padding-bottom:50px; }
-
+/* ── Навигация (общая для экранов) ── */
 .top-nav {
   display:flex; align-items:center; gap:14px;
   padding:14px 28px; border-bottom:1px solid #9a7040;
@@ -103,51 +33,6 @@ body {
 }
 .btn-back:hover { background:rgba(150,100,40,.15); }
 .top-breadcrumb { font-size:.68em; color:#8a6030; letter-spacing:1px; }
-
-.camp-header {
-  max-width:920px; margin:22px auto 0; padding:0 24px; text-align:center;
-}
-.camp-section-label { font-size:.6em; letter-spacing:5px; color:#7a5020; text-transform:uppercase; margin-bottom:8px; }
-.camp-title { font-size:1.9em; color:#1a1208; font-weight:bold; margin-bottom:8px; }
-.camp-subtitle-line {
-  font-size:.72em; color:#6a4820; letter-spacing:2px;
-  border-top:1px solid #9a7040; border-bottom:1px solid #9a7040;
-  padding:4px 20px; display:inline-block;
-}
-.camp-progress { font-size:.7em; color:#8a6040; margin-top:10px; letter-spacing:1px; }
-
-.directions-grid {
-  max-width:920px; margin:20px auto 0; padding:0 24px;
-  display:grid; gap:16px;
-}
-.directions-grid.n3 { grid-template-columns:repeat(3,1fr); }
-.directions-grid.n6 { grid-template-columns:repeat(3,1fr); }
-
-@media(max-width:720px) {
-  .directions-grid.n3, .directions-grid.n6 { grid-template-columns:1fr; }
-}
-@media(min-width:721px) and (max-width:900px) {
-  .directions-grid.n6 { grid-template-columns:repeat(2,1fr); }
-}
-
-.dir-card {
-  border:1.5px solid #9a7040; background:rgba(255,252,240,.85);
-  padding:16px 18px; cursor:pointer; transition:all .18s; position:relative;
-}
-.dir-card:hover { background:#e8d9a8; border-color:#6a4820; transform:translateY(-2px); box-shadow:2px 4px 0 rgba(100,60,10,.15); }
-.dir-card.done  { background:rgba(215,238,205,.75); border-color:#5a8040; }
-.dir-card-label { font-size:.58em; letter-spacing:3px; color:#8a5520; text-transform:uppercase; margin-bottom:6px; }
-.dir-card-name  { font-size:1.05em; font-weight:bold; color:#1a1208; margin-bottom:8px; line-height:1.3; }
-.dir-card-phil  { font-size:.72em; color:#5a3a18; line-height:1.5; margin-bottom:12px; }
-.dir-card-badge { font-size:.65em; letter-spacing:1px; padding:3px 10px; border-radius:2px; display:inline-block; }
-.dir-card-badge.done  { background:#2a5a20; color:#c0f0a0; }
-.dir-card-badge.avail { color:#8a5010; border:1px solid #9a7040; }
-.dir-card-check {
-  position:absolute; top:14px; right:14px;
-  width:22px; height:22px; border-radius:50%;
-  background:#3a7030; color:#fff;
-  display:flex; align-items:center; justify-content:center; font-size:.8em;
-}
 
 /* ── Встреча ── */
 #screen-encounter {
@@ -395,8 +280,7 @@ body {
 ::-webkit-scrollbar-thumb { background:rgba(150,100,40,.3); border-radius:3px; }
 
 @media(max-width:640px) {
-  .paper-title { font-size:2em; }
-  .enc-card, .quiz-card, .map-wrapper, .journal-wrap { padding:0 14px; }
+  .enc-card, .quiz-card { padding:0 14px; }
   .banner-name { font-size:1.5em; }
   .top-nav { padding:12px 16px; }
 }
@@ -416,84 +300,6 @@ body {
 }
 .enc-article { animation: screenIn .5s .14s both; }
 
-/* ════════════════════ КАРТА: территории · маршрут · компас · метки ═════════ */
-.territory { pointer-events:none; }
-
-.map-marker { cursor:pointer; transform-box:fill-box; transform-origin:center; animation: markerPop .55s cubic-bezier(.2,1.4,.4,1) both; }
-.map-marker .seal { transition:filter .2s; }
-.map-marker:hover .seal { filter:brightness(1.13); }
-@keyframes markerPop {
-  from { opacity:0; transform:translateY(-12px) scale(.7); }
-  to   { opacity:1; transform:translateY(0) scale(1); }
-}
-
-/* виньетки углов карты */
-.map-container::before, .map-container::after {
-  content:''; position:absolute; top:7px; width:24px; height:24px; z-index:3;
-  border:2px solid #9a7040; pointer-events:none;
-}
-.map-container::before { left:7px;  border-right:none; border-bottom:none; }
-.map-container::after  { right:7px; border-left:none;  border-bottom:none; }
-
-/* ════════════════════ КАСКАД КАРТОЧЕК НАПРАВЛЕНИЙ ════════════════════ */
-.dir-card {
-  opacity:0; transform:translateY(18px);
-  transition: opacity .5s ease,
-              transform .45s cubic-bezier(.2,.7,.2,1),
-              background-color .2s, border-color .2s, box-shadow .2s;
-}
-.dir-card.in       { opacity:1; transform:translateY(0); }
-.dir-card.in:hover { transform:translateY(-2px); }
-
-/* ════════════════════ ЛАГЕРЯ: КОНТРАСТНЫЕ ХАРАКТЕРЫ ════════════════════ */
-/* — Антисциентистский: тёмный, драматичный (по ту сторону разума) — */
-#screen-camp.theme-anti {
-  background-color:#181109;
-  background-image:
-    radial-gradient(130% 90% at 50% -15%, rgba(160,45,20,.22), transparent 60%),
-    repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(255,255,255,.022) 28px, rgba(255,255,255,.022) 29px);
-  color:#e8dcc4;
-}
-#screen-camp.theme-anti .top-nav        { border-bottom-color:#5a3420; }
-#screen-camp.theme-anti .btn-back       { border-color:#7a4830; color:#d9b89a; }
-#screen-camp.theme-anti .btn-back:hover { background:rgba(180,80,40,.16); }
-#screen-camp.theme-anti .top-breadcrumb { color:#b8845a; }
-#screen-camp.theme-anti .camp-section-label { color:#cc6a38; }
-#screen-camp.theme-anti .camp-title     { color:#f2e0c4; text-shadow:0 2px 18px rgba(190,55,22,.4); }
-#screen-camp.theme-anti .camp-subtitle-line { color:#cbb08c; border-color:#7a4830; }
-#screen-camp.theme-anti .camp-progress  { color:#a9805a; }
-#screen-camp.theme-anti .dir-card       { background:linear-gradient(160deg,#2a1c12,#1d1209); border-color:#6a3c22; }
-#screen-camp.theme-anti .dir-card:hover { background:linear-gradient(160deg,#3a2616,#281a0f); border-color:#bf5a2e; box-shadow:0 8px 26px rgba(150,40,15,.35); }
-#screen-camp.theme-anti .dir-card.done  { border-color:#5a8040; background:linear-gradient(160deg,#23311a,#18230f); }
-#screen-camp.theme-anti .dir-card-label { color:#cc6a38; }
-#screen-camp.theme-anti .dir-card-name  { color:#f2e2cb; }
-#screen-camp.theme-anti .dir-card-phil  { color:#bfa07e; }
-#screen-camp.theme-anti .dir-card-badge.avail { color:#dca878; border-color:#7a4830; }
-
-/* — Сциентистский: светлый, упорядоченный, чертёжный (во имя науки) — */
-#screen-camp.theme-sci {
-  background-color:#e9eef0;
-  background-image:
-    radial-gradient(130% 90% at 50% -15%, rgba(40,90,130,.12), transparent 60%),
-    repeating-linear-gradient(0deg,  transparent, transparent 25px, rgba(40,80,120,.07) 25px, rgba(40,80,120,.07) 26px),
-    repeating-linear-gradient(90deg, transparent, transparent 25px, rgba(40,80,120,.07) 25px, rgba(40,80,120,.07) 26px);
-  color:#16242e;
-}
-#screen-camp.theme-sci .top-nav        { border-bottom-color:#9bb4c4; }
-#screen-camp.theme-sci .btn-back       { border-color:#5a7e96; color:#244b63; }
-#screen-camp.theme-sci .btn-back:hover { background:rgba(40,90,130,.1); }
-#screen-camp.theme-sci .top-breadcrumb { color:#3a6a88; }
-#screen-camp.theme-sci .camp-section-label  { color:#2f6f94; }
-#screen-camp.theme-sci .camp-title     { color:#16323f; }
-#screen-camp.theme-sci .camp-subtitle-line  { color:#3a5a6a; border-color:#9bb4c4; }
-#screen-camp.theme-sci .camp-progress  { color:#4a7088; }
-#screen-camp.theme-sci .dir-card       { background:rgba(255,255,255,.92); border-color:#7ba0b8; color:#16242e; }
-#screen-camp.theme-sci .dir-card:hover { background:#eaf3f8; border-color:#2f6f94; box-shadow:0 6px 20px rgba(40,90,130,.2); }
-#screen-camp.theme-sci .dir-card.done  { border-color:#5a8040; background:rgba(225,240,225,.88); }
-#screen-camp.theme-sci .dir-card-label { color:#2f6f94; }
-#screen-camp.theme-sci .dir-card-name  { color:#16323f; }
-#screen-camp.theme-sci .dir-card-phil  { color:#41606f; }
-#screen-camp.theme-sci .dir-card-badge.avail { color:#2f6f94; border-color:#7ba0b8; }
 </style>
 </head>
 <body>
@@ -1600,139 +1406,8 @@ function show(id) {
   window.scrollTo(0, 0);
 }
 
-/* ── Карта ── */
-function renderMarkers() {
-  const g    = document.getElementById('markers-group');
-  const terr = document.getElementById('territory-group');
-  g.innerHTML = '';
-
-  // территории заданы самим рисунком — тонировку не накладываем
-  terr.innerHTML = '';
-
-  CAMPS.forEach((camp, ci) => {
-    const n = camp.directions.length;
-    const doneN = camp.directions.filter(d => isDone(d.id)).length;
-    const allDone = doneN === n;
-    const accent   = camp.id === 'anti' ? '#8b2e1a' : '#244b63';
-    const accentLt = camp.id === 'anti' ? '#e0a878' : '#9fc4dc';
-    const seal = allDone ? '#2f6a26' : accent;
-    const ring = allDone ? '#bfe8a8' : '#d8b24f';
-    const x = camp.mx, y = camp.my, r = 25;
-
-    // лента-подпись под печатью
-    const rW = 156, rL = x - rW / 2, rT = y + r + 10, rH = 26;
-    const ribbon = `M ${rL+14} ${rT}
-      L ${rL+rW-14} ${rT} L ${rL+rW} ${rT+rH/2} L ${rL+rW-14} ${rT+rH}
-      L ${rL+14} ${rT+rH} L ${rL} ${rT+rH/2} Z`;
-
-    const m = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    m.setAttribute('class', 'map-marker');
-    m.style.animationDelay = (ci * 0.18) + 's';
-    m.innerHTML = `
-      <ellipse cx="${x}" cy="${y+r-2}" rx="${r*0.9}" ry="7" fill="rgba(0,0,0,.28)"/>
-      ${!allDone ? `<circle cx="${x}" cy="${y}" r="${r}" fill="none" stroke="${accent}" stroke-width="2" opacity=".5">
-        <animate attributeName="r" from="${r}" to="${r+13}" dur="2.4s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" from=".5" to="0" dur="2.4s" repeatCount="indefinite"/>
-      </circle>` : ''}
-      <circle class="seal" cx="${x}" cy="${y}" r="${r}" fill="${seal}" stroke="${ring}" stroke-width="3"/>
-      <circle cx="${x}" cy="${y}" r="${r-5}" fill="none" stroke="${ring}" stroke-width="1" opacity=".55"/>
-      <text x="${x}" y="${y+7}" text-anchor="middle" font-size="20" fill="${ring}"
-            font-family="Georgia,serif" font-style="italic" font-weight="bold">${allDone ? '✓' : camp.initial}</text>
-      <path d="${ribbon}" fill="#241308" stroke="${ring}" stroke-width="1.5"/>
-      <text x="${x}" y="${rT+17}" text-anchor="middle" font-size="11.5" letter-spacing=".5"
-            fill="#f0dcb4" font-family="Georgia,serif">${camp.short}</text>
-      <text x="${x}" y="${rT+rH+15}" text-anchor="middle" font-size="10"
-            fill="#2a1808" stroke="rgba(245,238,210,.85)" stroke-width="2.6"
-            paint-order="stroke" stroke-linejoin="round"
-            font-family="Georgia,serif" font-style="italic">пройдено ${doneN}/${n}</text>`;
-    m.addEventListener('click', () => enterCamp(camp));
-    g.appendChild(m);
-  });
-
-  const total = doneCount();
-  document.getElementById('map-caption').textContent =
-    total === ALL_DIRS.length
-      ? '✓ Все направления изучены. Репортаж завершён!'
-      : 'Выберите лагерь на карте, чтобы исследовать его направления';
-}
-
-function renderJournal() {
-  document.getElementById('journal-title').textContent = `Пройдено: ${doneCount()} / ${ALL_DIRS.length}`;
-  const list = document.getElementById('journal-list');
-  list.innerHTML = '';
-  let idx = 1;
-  CAMPS.forEach(camp => {
-    const hdr = document.createElement('li');
-    hdr.className = 'journal-camp-header';
-    hdr.textContent = camp.name;
-    list.appendChild(hdr);
-
-    camp.directions.forEach(dir => {
-      const done = isDone(dir.id);
-      const li = document.createElement('li');
-      li.className = 'journal-item';
-      li.innerHTML = `
-        <div class="ji-num ${done?'done':''}">${idx}</div>
-        <div class="journal-item-name"><em>${dir.name}</em></div>
-        <span class="ji-badge ${done?'ji-done':'ji-avail'}">${done?'завершено':'доступно'}</span>`;
-      li.style.cursor = 'pointer';
-      li.addEventListener('click', () => { enterCamp(camp); });
-      list.appendChild(li);
-      idx++;
-    });
-  });
-}
-
-function showMap() { renderMarkers(); renderJournal(); show('screen-map'); }
-
-/* ── Лагерь ── */
-let _camp = null;
-
-function enterCamp(camp) {
-  _camp = camp;
-  const doneN = camp.directions.filter(d => isDone(d.id)).length;
-
-  document.getElementById('screen-camp').className = 'screen theme-' + camp.id;
-  const label = document.querySelector('#screen-camp .camp-section-label');
-  if (label) label.textContent = camp.id === 'anti'
-    ? 'Лагерь I · по ту сторону разума'
-    : 'Лагерь II · во имя науки';
-
-  document.getElementById('camp-breadcrumb').textContent = camp.name;
-  document.getElementById('camp-title').textContent      = camp.name;
-  document.getElementById('camp-subtitle').textContent   = camp.subtitle;
-  document.getElementById('camp-progress').textContent   = `Пройдено: ${doneN} / ${camp.directions.length}`;
-
-  const grid = document.getElementById('directions-grid');
-  grid.className = `directions-grid n${camp.directions.length}`;
-  grid.innerHTML = '';
-
-  camp.directions.forEach((dir, i) => {
-    const done = isDone(dir.id);
-    const card = document.createElement('div');
-    card.className = `dir-card${done ? ' done' : ''}`;
-    card.style.transitionDelay = (i * 0.07) + 's';
-    card.innerHTML = `
-      ${done ? '<div class="dir-card-check">✓</div>' : ''}
-      <div class="dir-card-label">Направление</div>
-      <div class="dir-card-name">${dir.name}</div>
-      <div class="dir-card-phil">${dir.philosophers}</div>
-      <span class="dir-card-badge ${done?'done':'avail'}">${done?'завершено':'доступно'}</span>`;
-    card.addEventListener('click', () => enterEncounter(dir, camp));
-    grid.appendChild(card);
-  });
-
-  show('screen-camp');
-
-  // каскадное появление карточек, затем сброс задержки (чтобы hover был мгновенным)
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    grid.querySelectorAll('.dir-card').forEach(c => c.classList.add('in'));
-  }));
-  setTimeout(() => grid.querySelectorAll('.dir-card')
-    .forEach(c => c.style.transitionDelay = ''), 700 + camp.directions.length * 70);
-}
-
 /* ── Встреча ── */
+let _camp = null;
 let _dir = null;
 
 function enterEncounter(dir, camp) {
