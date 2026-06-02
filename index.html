@@ -232,6 +232,13 @@ body::before {
   box-shadow: 0 0 12px rgba(200,160,70,.2);
 }
 
+.epoch-node:hover .epoch-dot {
+  transform: scale(1.25);
+  background: #c8a84b;
+  border-color: #e0c060;
+  box-shadow: 0 0 0 4px rgba(200,168,75,.12), 0 0 14px rgba(200,168,75,.35);
+}
+
 /* ── Секция с карточками ── */
 .section-label {
   text-align: center;
@@ -402,11 +409,85 @@ body::before {
 }
 .wip-toast.show { opacity: 1; }
 
+/* ── Модальное окно-превью эпохи ── */
+#epoch-modal {
+  position: fixed; inset: 0; z-index: 300;
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  background: rgba(0,0,0,0);
+  transition: background .35s ease;
+}
+#epoch-modal.shown { background: rgba(4,8,5,.72); }
+#epoch-modal.hidden { display: none; }
+.em-box {
+  position: relative;
+  width: 100%; max-width: 660px;
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 0%, rgba(60,105,50,.22), transparent 70%),
+    #0c150e;
+  border: 1.5px solid rgba(200,168,75,.55);
+  box-shadow: 0 24px 70px rgba(0,0,0,.7), 0 0 0 1px rgba(0,0,0,.4);
+  padding: 30px 34px 32px;
+  text-align: center;
+  transform: translateY(28px) scale(.97); opacity: 0;
+}
+#epoch-modal.shown .em-box { animation: emIn .4s cubic-bezier(.2,.8,.25,1) forwards; }
+@keyframes emIn { to { transform: translateY(0) scale(1); opacity: 1; } }
+.em-close {
+  position: absolute; top: 12px; right: 14px;
+  background: none; border: none; color: rgba(200,168,90,.5);
+  font-size: 1.1em; line-height: 1; padding: 6px; transition: color .2s;
+}
+.em-close:hover { color: #c8a84b; }
+.em-label {
+  font-size: .58em; letter-spacing: 5px; text-transform: uppercase;
+  color: rgba(180,140,60,.6); margin-bottom: 10px;
+}
+.em-title {
+  font-size: 1.9em; color: #c8a84b; font-weight: bold; letter-spacing: 1px;
+  line-height: 1.1; margin-bottom: 6px;
+  text-shadow: 0 0 40px rgba(180,130,40,.3);
+}
+.em-period {
+  font-size: .72em; color: rgba(200,170,100,.6); font-style: italic;
+  margin-bottom: 24px;
+}
+.em-figures {
+  display: flex; justify-content: center; gap: 26px;
+  margin-bottom: 24px; flex-wrap: wrap;
+}
+.em-fig { width: 96px; }
+.em-fig-portrait {
+  width: 84px; height: 84px; margin: 0 auto 9px;
+  border-radius: 50%; border: 2px solid rgba(200,168,75,.55);
+  background: linear-gradient(145deg, #2a3a24, #16210f);
+  object-fit: cover; object-position: top center;
+  box-shadow: 0 4px 16px rgba(0,0,0,.5);
+}
+.em-fig-name { font-size: .72em; color: #e8d9b0; font-weight: bold; line-height: 1.2; margin-bottom: 3px; }
+.em-fig-note { font-size: .6em; color: rgba(200,170,100,.55); font-style: italic; }
+.em-about {
+  font-size: .82em; color: rgba(225,210,170,.82); line-height: 1.75;
+  text-align: left; margin-bottom: 26px;
+  padding: 16px 18px; border-left: 2px solid rgba(200,168,75,.4);
+  background: rgba(200,168,75,.05);
+}
+.em-cta {
+  background: #2a4a20; border: 1px solid rgba(120,180,90,.4); color: #d8f0c0;
+  padding: 12px 30px; font-size: .82em; letter-spacing: 2px;
+  transition: all .2s;
+}
+.em-cta:hover { background: #3a6030; box-shadow: 0 0 18px rgba(120,180,90,.25); }
+
 @media (max-width: 640px) {
   .hero-title { font-size: 2.2em; }
   .timeline-wrap, .epochs-grid, .footer { padding: 0 20px; }
   .epochs-grid { grid-template-columns: 1fr; }
   .epoch-card:nth-child(n) { transform: none; }
+  .em-box { padding: 26px 20px 26px; }
+  .em-figures { gap: 16px; }
+  .em-fig { width: 80px; }
+  .em-fig-portrait { width: 68px; height: 68px; }
 }
 </style>
 </head>
@@ -445,6 +526,19 @@ body::before {
 
 <div class="wip-toast" id="wip-toast">Эта локация ещё в разработке</div>
 
+<!-- Модальное окно-превью эпохи -->
+<div id="epoch-modal" class="hidden">
+  <div class="em-box">
+    <button class="em-close" onclick="closeEpochModal()">✕</button>
+    <div class="em-label" id="em-label">Эпоха</div>
+    <div class="em-title" id="em-title"></div>
+    <div class="em-period" id="em-period"></div>
+    <div class="em-figures" id="em-figures"></div>
+    <div class="em-about" id="em-about"></div>
+    <button class="em-cta" id="em-cta">Изучить эпоху →</button>
+  </div>
+</div>
+
 <script>
 const EPOCHS = [
   {
@@ -453,6 +547,7 @@ const EPOCHS = [
     period: 'до VI в. до н.э.',
     year: 'до VI в.',
     desc: 'Философия Древней Индии, Китая и Ближнего Востока. Веды, упанишады, даосизм, конфуцианство.',
+    figures: 'Лао-цзы · Конфуций · Будда',
     available: false,
   },
   {
@@ -461,6 +556,7 @@ const EPOCHS = [
     period: 'VI в. до н.э. — V в. н.э.',
     year: 'VI в. до н.э.',
     desc: 'От досократиков до неоплатонизма. Сократ, Платон, Аристотель, стоики, эпикурейцы.',
+    figures: 'Сократ · Платон · Аристотель',
     available: false,
   },
   {
@@ -469,6 +565,7 @@ const EPOCHS = [
     period: 'V — XIV вв.',
     year: 'V–XIV вв.',
     desc: 'Патристика, схоластика, мистика. Августин, Фома Аквинский, Уильям Оккам.',
+    figures: 'Августин · Фома Аквинский · Оккам',
     available: false,
   },
   {
@@ -477,6 +574,7 @@ const EPOCHS = [
     period: 'XIV — XVI вв.',
     year: 'XIV–XVI вв.',
     desc: 'Гуманизм, натурфилософия, социальные утопии. Эразм, Макиавелли, Бруно, Монтень.',
+    figures: 'Эразм · Макиавелли · Бруно',
     available: false,
   },
   {
@@ -485,6 +583,7 @@ const EPOCHS = [
     period: 'XVII — XVIII вв.',
     year: 'XVII–XVIII вв.',
     desc: 'Рационализм и эмпиризм. Декарт, Спиноза, Лейбниц, Локк, Юм, Кант.',
+    figures: 'Декарт · Спиноза · Локк · Юм',
     available: false,
   },
   {
@@ -493,6 +592,7 @@ const EPOCHS = [
     period: 'конец XVIII — начало XIX в.',
     year: 'XVIII–XIX вв.',
     desc: 'Немецкий идеализм. Кант, Фихте, Шеллинг, Гегель, Фейербах.',
+    figures: 'Кант · Фихте · Шеллинг · Гегель',
     available: false,
   },
   {
@@ -501,8 +601,17 @@ const EPOCHS = [
     period: 'XIX — XX вв.',
     year: 'XIX–XX вв.',
     desc: 'Антисциентизм и сциентизм. Ницше, Фрейд, Хайдеггер, Витгенштейн, Деррида.',
+    figures: 'Ницше · Фрейд · Хайдеггер · Сартр',
     available: true,
     url: 'philosophia.html',
+    preview: {
+      figures: [
+        { id: 'nietzsche', name: 'Ф. Ницше',  note: '«Бог умер»' },
+        { id: 'freud',     name: 'З. Фрейд',   note: 'Психоанализ' },
+        { id: 'sartre',    name: 'Ж.-П. Сартр', note: 'Экзистенциализм' },
+      ],
+      about: 'Философия XIX–XX веков раскололась надвое. Одни верили в разум, науку и логику (позитивизм, аналитика). Другие считали, что главное в человеке наука не объяснит — это инстинкты, бессознательное и личные переживания (философия жизни, психоанализ, экзистенциализм). Девять направлений, десятки мыслителей: от «Бог умер» Ницше до деконструкции Деррида.',
+    },
   },
 ];
 
@@ -536,7 +645,11 @@ function renderCards() {
       <div class="card-period">${ep.period}</div>
       <div class="card-desc">${ep.desc}</div>
       <span class="card-status ${ep.available ? 'available' : 'wip'}">${ep.available ? 'Открыто' : 'В разработке'}</span>`;
-    card.addEventListener('click', () => ep.available ? location.href = ep.url : showWip());
+    card.addEventListener('click', () => {
+      if (ep.available && ep.preview) openEpochModal(ep);
+      else if (ep.available) location.href = ep.url;
+      else showWip();
+    });
     grid.appendChild(card);
   });
 }
@@ -548,6 +661,47 @@ function showWip() {
   clearTimeout(wipTimer);
   wipTimer = setTimeout(() => t.classList.remove('show'), 2200);
 }
+
+/* ── Модальное окно-превью эпохи ── */
+function openEpochModal(ep) {
+  document.getElementById('em-label').textContent = 'Эпоха · ' + ep.year;
+  document.getElementById('em-title').textContent = ep.name;
+  document.getElementById('em-period').textContent = ep.period;
+  document.getElementById('em-about').textContent = ep.preview.about;
+
+  const figs = document.getElementById('em-figures');
+  figs.innerHTML = ep.preview.figures.map(f => {
+    const mono = f.name.split(' ').pop()[0];
+    return `
+      <div class="em-fig">
+        <img class="em-fig-portrait" src="img/portraits/${f.id}.jpg" alt="${f.name}"
+             onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'em-fig-portrait',style:'display:flex;align-items:center;justify-content:center;font-size:1.5em;color:#c8a84b;',textContent:'${mono}'}))">
+        <div class="em-fig-name">${f.name}</div>
+        <div class="em-fig-note">${f.note}</div>
+      </div>`;
+  }).join('');
+
+  const cta = document.getElementById('em-cta');
+  cta.onclick = () => location.href = ep.url;
+
+  const m = document.getElementById('epoch-modal');
+  m.classList.remove('hidden');
+  requestAnimationFrame(() => m.classList.add('shown'));
+}
+
+function closeEpochModal() {
+  const m = document.getElementById('epoch-modal');
+  m.classList.remove('shown');
+  setTimeout(() => m.classList.add('hidden'), 320);
+}
+
+// закрытие по клику на фон и по Esc
+document.getElementById('epoch-modal').addEventListener('click', e => {
+  if (e.target.id === 'epoch-modal') closeEpochModal();
+});
+window.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && !document.getElementById('epoch-modal').classList.contains('hidden')) closeEpochModal();
+});
 
 renderTimeline();
 renderCards();
@@ -582,7 +736,33 @@ renderCards();
   }
 
   const LINK = 124;     // дистанция связи в созвездие
+
+  // падающая звезда — изредка пролетает по небу
+  let star = null, lastStar = performance.now(), nextDelay = 4000 + Math.random() * 6000;
+  function spawnStar() {
+    const fromLeft = Math.random() < 0.5;
+    const x = fromLeft ? W * (0.05 + Math.random() * 0.3) : W * (0.65 + Math.random() * 0.3);
+    const y = H * (0.02 + Math.random() * 0.22);
+    const dir = fromLeft ? 1 : -1;
+    star = { x, y, vx: dir * (4 + Math.random() * 3), vy: 4 + Math.random() * 3 };
+  }
+  function drawStar() {
+    const mag = Math.hypot(star.vx, star.vy) || 1;
+    const tx = star.x - star.vx / mag * 150, ty = star.y - star.vy / mag * 150;
+    const g = ctx.createLinearGradient(star.x, star.y, tx, ty);
+    g.addColorStop(0, 'rgba(255,240,205,.9)');
+    g.addColorStop(1, 'rgba(255,240,205,0)');
+    ctx.strokeStyle = g; ctx.lineWidth = 2; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(star.x, star.y); ctx.lineTo(tx, ty); ctx.stroke();
+    const hg = ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, 6);
+    hg.addColorStop(0, 'rgba(255,250,228,1)');
+    hg.addColorStop(1, 'rgba(255,250,228,0)');
+    ctx.fillStyle = hg;
+    ctx.beginPath(); ctx.arc(star.x, star.y, 6, 0, Math.PI * 2); ctx.fill();
+  }
+
   function frame() {
+    const now = performance.now();
     ctx.clearRect(0, 0, W, H);
     // плавное приближение параллакса к позиции курсора
     mouse.x += (mouse.tx - mouse.x) * 0.05;
@@ -628,6 +808,17 @@ renderCards();
       ctx.fillStyle = `rgba(240,222,160,${a})`;
       ctx.beginPath(); ctx.arc(x, y, p.r, 0, Math.PI * 2); ctx.fill();
     }
+
+    // падающая звезда
+    if (!star && now - lastStar > nextDelay) spawnStar();
+    if (star) {
+      star.x += star.vx; star.y += star.vy;
+      drawStar();
+      if (star.x < -160 || star.x > W + 160 || star.y > H + 160) {
+        star = null; lastStar = now; nextDelay = 9000 + Math.random() * 9000;
+      }
+    }
+
     requestAnimationFrame(frame);
   }
 
