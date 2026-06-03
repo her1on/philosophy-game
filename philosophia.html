@@ -439,7 +439,7 @@ const CAMPS = [
     id: 'anti',
     name: 'Антисциентистские направления',
     short: 'Антисциентисты',
-    subtitle: 'воля · бессознательное · существование',
+    subtitle: 'воля · бессознательное · существование · смысл',
     mx: 152, my: 205,
     initial: 'А',
     directions: [
@@ -803,7 +803,7 @@ const CAMPS = [
     id: 'sci',
     name: 'Сциентистские направления',
     short: 'Сциентисты',
-    subtitle: 'наука · логика · язык · понимание',
+    subtitle: 'наука · логика · язык · опыт',
     mx: 512, my: 158,
     initial: 'С',
     directions: [
@@ -1410,7 +1410,13 @@ const CAMPS = [
   }
 ];
 
-const ALL_DIRS = CAMPS.flatMap(c => c.directions.map(d => ({ ...d, campId: c.id, campName: c.name })));
+// Деление по Герман: сциентисты — 3 направления (позитивизм, прагматизм, аналитическая),
+// остальные 6 — антисциентисты. Принадлежность задаётся явно (не зависит от порядка в CAMPS).
+const SCI_IDS = new Set(['posit', 'pragma', 'analyt']);
+const ALL_DIRS = CAMPS.flatMap(c => c.directions).map(d => {
+  const campId = SCI_IDS.has(d.id) ? 'sci' : 'anti';
+  return { ...d, campId, campName: CAMPS.find(c => c.id === campId).name };
+});
 
 /* ── Прогресс ── */
 const STORE = 'philo_v2';
@@ -1586,11 +1592,11 @@ function completeEncounter() {
    Координаты философов заданы в долях карты (0..1) — подгоним под арт.
 ═══════════════════════════════════════════════════════════════════════ */
 const NPC_FRAC = {
-  // антисциентисты — 2 пещеры + каменный круг (слева)
+  // антисциентисты (6) — лес слева
   life:   [0.182, 0.185], psycho: [0.074, 0.414], exist:  [0.290, 0.349],
-  // сциентисты — обсерватория, фонтан и дома (справа)
-  phenom: [0.632, 0.132], pragma: [0.705, 0.805], posit:  [0.762, 0.178],
-  analyt: [0.764, 0.514], herm:   [0.852, 0.641], postmod:[0.884, 0.808]
+  phenom: [0.340, 0.230], herm:   [0.380, 0.550], postmod:[0.230, 0.800],
+  // сциентисты (3) — город справа
+  pragma: [0.705, 0.805], posit:  [0.762, 0.178], analyt: [0.764, 0.514]
 };
 const EXP = {
   running:false, raf:0, ctx:null, canvas:null, img:null, imgReady:false,
@@ -1685,7 +1691,7 @@ function renderDirList() {
     const h = document.createElement('div');
     h.className = 'dir-ov-camp'; h.textContent = camp.name;
     list.appendChild(h);
-    camp.directions.forEach(dir => {
+    ALL_DIRS.filter(d => d.campId === camp.id).forEach(dir => {
       const done = isDone(dir.id);
       const it = document.createElement('button');
       it.className = 'dir-ov-item' + (done ? ' done' : '');
