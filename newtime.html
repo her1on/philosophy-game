@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cogito Ergo Sum — Философский Квест</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap');
+
+  :root {
+    --parchment: #f4ebd0;
+    --dark-ink: #140d07;
+    --sepia: #5c3d1e;
+    --gold: #c59b27;
+    --gold-light: #eec567;
+    --rust: #964b23;
+    --shadow: rgba(20,13,7,0.8);
+    --panel-bg: rgba(12, 8, 4, 0.94);
+    --glow: rgba(197,155,39,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #080503;
+    color: var(--parchment);
+    font-family: 'Cormorant Garamond', serif;
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+  }
+
+  #stars {
+    position: fixed; inset: 0; z-index: 0;
+    background: radial-gradient(ellipse at 50% 50%, #1e1307 0%, #080503 80%);
+  }
+
+  .star {
+    position: absolute; border-radius: 50%; background: #fff;
+    animation: twinkle linear infinite;
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.1; transform: scale(0.8); }
+    50% { opacity: 0.8; transform: scale(1.2); }
+  }
+
+  #game {
+    position: relative; z-index: 10;
+    width: 100vw; height: 100vh;
+    display: flex; flex-direction: column;
+    background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5));
+  }
+
+  /* Header */
+  #header {
+    text-align: center;
+    padding: 15px 20px;
+    border-bottom: 2px solid var(--gold);
+    background: linear-gradient(180deg, #140d07 0%, transparent 100%);
+    flex-shrink: 0;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+  }
+
+  #title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(18px, 3vw, 26px);
+    color: var(--gold-light);
+    letter-spacing: 0.2em;
+    text-shadow: 0 0 15px var(--gold);
+  }
+
+  /* Stats bar */
+  #stats {
+    display: flex; gap: 30px; justify-content: center; padding: 8px 20px;
+    border-bottom: 1px solid rgba(197,155,39,0.25);
+    background: rgba(20,13,7,0.4); flex-shrink: 0;
+  }
+
+  .stat { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+  .stat-label { color: #b59975; text-transform: uppercase; font-size: 11px; }
+  .stat-value { color: var(--gold-light); font-weight: bold; font-family: 'IM Fell English', serif; font-size: 16px;}
+
+  /* Main layouts */
+  #main { display: flex; flex: 1; overflow: hidden; }
+
+  #scene-panel {
+    flex: 1.4; display: flex; flex-direction: column;
+    border-right: 1px solid rgba(197,155,39,0.25); overflow: hidden; background: var(--panel-bg);
+  }
+
+  #scene-art {
+    flex-shrink: 0; height: 200px; position: relative; overflow: hidden;
+    border-bottom: 1px solid rgba(197,155,39,0.3);
+  }
+
+  .scene-illustration {
+    width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+    position: relative; background-size: cover; background-position: center; transition: all 0.7s ease-in-out;
+  }
+
+  .scene-mind { background-image: radial-gradient(circle, #2a1b40 0%, #080503 100%), url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1000'); background-blend-mode: overlay; }
+  .scene-library { background-image: radial-gradient(circle, rgba(92,61,30,0.5) 0%, #080503 100%), url('https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1000'); background-blend-mode: multiply; }
+  .scene-salon { background-image: radial-gradient(circle, rgba(114,34,34,0.4) 0%, #080503 100%), url('https://images.unsplash.com/photo-1541123437800-1bb1317badc2?q=80&w=1000'); background-blend-mode: multiply; }
+  .scene-garden { background-image: radial-gradient(circle, rgba(34,114,64,0.4) 0%, #080503 100%), url('https://images.unsplash.com/photo-1584467541268-b040f83be3fd?q=80&w=1000'); background-blend-mode: multiply; }
+  .scene-boss { background-image: radial-gradient(circle, rgba(150,40,40,0.6) 0%, #020101 100%), url('https://images.unsplash.com/photo-1519074069444-1ba4fff16411?q=80&w=1000'); background-blend-mode: color-burn; }
+  .scene-end { background-image: radial-gradient(circle, rgba(197,155,39,0.3) 0%, #050505 100%), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1000'); background-blend-mode: overlay; }
+
+  .scene-illustration::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(0deg, var(--panel-bg) 0%, transparent 60%, rgba(0,0,0,0.6) 100%);
+  }
+
+  #location-name {
+    position: absolute; bottom: 12px; left: 20px; font-family: 'Cinzel Decorative', serif;
+    font-size: 13px; color: var(--gold-light); letter-spacing: 0.15em; z-index: 5; text-shadow: 2px 2px 4px #000;
+  }
+
+  #text-area {
+    flex: 1; overflow-y: auto; padding: 20px 25px; scrollbar-width: thin; scrollbar-color: var(--gold) transparent;
+  }
+
+  #narrative { font-family: 'Cormorant Garamond', serif; font-size: 21px; line-height: 1.65; color: var(--parchment); }
+  #narrative p { margin-bottom: 14px; }
+  #narrative em { color: var(--gold-light); font-style: italic; font-weight: 600; }
+  #narrative strong { color: #fff; border-bottom: 1px dotted var(--gold); }
+
+  .philosopher-speech {
+    margin: 15px 0; padding: 12px 18px; border-left: 3px solid var(--gold);
+    background: rgba(20,13,7,0.7); font-style: italic; color: #f7dfb0; font-size: 19px; border-radius: 0 8px 8px 0;
+  }
+
+  .philosopher-name {
+    color: var(--gold-light); font-style: normal; font-weight: bold; font-size: 12px;
+    text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 6px; display: block; font-family: 'Cinzel Decorative', serif;
+  }
+
+  /* МИНИ-ИГРЫ СТИЛИ */
+  .minigame-container {
+    margin: 20px 0; padding: 15px; border: 1px dashed var(--gold); background: rgba(0,0,0,0.4); border-radius: 6px; text-align: center;
+  }
+  .minigame-title { font-family: 'Cinzel Decorative', serif; font-size: 14px; color: var(--gold-light); margin-bottom: 10px; }
+  
+  /* Декарт: Координатная сетка */
+  .grid-map {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; max-width: 200px; margin: 10px auto;
+  }
+  .grid-cell {
+    aspect-ratio: 1; border: 1px solid rgba(197,155,39,0.3); background: rgba(20,13,7,0.6);
+    display: flex; align-items: center; justify-content: center; font-size: 12px; color: #b59975; cursor: pointer; transition: all 0.2s;
+  }
+  .grid-cell:hover { background: var(--gold); color: #000; font-weight: bold; }
+
+  /* Спиноза: Шлифовка линз */
+  .lens-blur-text { font-size: 22px; filter: blur(8px); transition: filter 0.1s; margin: 15px 0; font-style: italic; color: #fff; }
+  .lens-slider { width: 80%; accent-color: var(--gold); margin-top: 10px; }
+
+  /* Right panel */
+  #right-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: rgba(10, 6, 3, 0.96); }
+
+  #philosopher-portrait {
+    flex-shrink: 0; padding: 15px 20px; border-bottom: 1px solid rgba(197,155,39,0.25); display: flex; align-items: center; gap: 15px; background: rgba(0,0,0,0.2);
+  }
+
+  .portrait-circle {
+    width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--gold);
+    display: flex; align-items: center; justify-content: center; font-size: 32px;
+    background: radial-gradient(circle, rgba(197,155,39,0.2), transparent); flex-shrink: 0; box-shadow: 0 0 15px var(--glow);
+  }
+
+  .portrait-info { flex: 1; }
+  .portrait-name { font-family: 'Cinzel Decorative', serif; font-size: 14px; color: var(--gold-light); margin-bottom: 2px; }
+  .portrait-desc { font-size: 13px; color: #b59975; font-style: italic; line-height: 1.3; white-space: pre-line; }
+
+  /* Кнопка динамической подсказки */
+  #hint-btn {
+    width: calc(100% - 40px); margin: 10px auto 0; background: linear-gradient(135deg, #7a2222 0%, #4a1111 100%);
+    border: 1px solid var(--gold); color: #fff; padding: 8px; font-family: 'Cormorant Garamond', serif;
+    font-size: 15px; font-weight: bold; cursor: pointer; border-radius: 4px; display: none; text-shadow: 1px 1px 2px #000;
+    box-shadow: 0 0 10px rgba(255,0,0,0.2); transition: all 0.3s;
+  }
+  #hint-btn:hover { background: #9a3333; transform: scale(1.02); }
+
+  /* Choices */
+  #choices-area { flex: 1; overflow-y: auto; padding: 15px 20px; display: flex; flex-direction: column; gap: 10px; }
+  .choice-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; color: #b59975; margin-bottom: 2px; }
+
+  .choice-btn {
+    background: linear-gradient(90deg, rgba(197,155,39,0.06) 0%, rgba(197,155,39,0.01) 100%);
+    border: 1px solid rgba(197,155,39,0.3); color: var(--parchment); padding: 12px 16px;
+    text-align: left; cursor: pointer; font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; line-height: 1.3;
+    transition: all 0.3s ease; border-radius: 4px; position: relative; width: 100%;
+  }
+  .choice-btn::before { content: '◈ '; color: var(--gold); margin-right: 4px; }
+  .choice-btn:hover {
+    background: linear-gradient(90deg, rgba(197,155,39,0.18) 0%, rgba(0,0,0,0) 100%);
+    border-color: var(--gold-light); color: #fff; transform: translateX(4px); box-shadow: -3px 0 0 var(--gold-light);
+  }
+  .choice-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  /* Inventory */
+  #inventory { border-top: 1px solid rgba(197,155,39,0.25); padding: 12px 20px; flex-shrink: 0; background: rgba(0,0,0,0.3); }
+  .inv-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: #b59975; margin-bottom: 6px; }
+  .inv-items { display: flex; flex-wrap: wrap; gap: 6px; }
+  .inv-item {
+    background: rgba(197,155,39,0.1); border: 1px solid rgba(197,155,39,0.35); padding: 3px 8px;
+    font-size: 12px; color: var(--gold-light); border-radius: 4px; display: flex; align-items: center; gap: 5px;
+  }
+
+  /* Notifications */
+  #notification {
+    position: fixed; top: 75px; left: 50%; transform: translateX(-50%) translateY(-20px);
+    background: #140d07; border: 2px solid var(--gold); color: var(--gold-light); padding: 10px 22px;
+    font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 16px; border-radius: 4px;
+    opacity: 0; pointer-events: none; transition: all 0.4s ease; z-index: 100; box-shadow: 0 0 25px #000;
+  }
+  #notification.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* Progress dots */
+  #progress { position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 50; }
+  .prog-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(197,155,39,0.2); border: 1px solid rgba(197,155,39,0.5); }
+  .prog-dot.done { background: var(--gold); }
+  .prog-dot.current { background: var(--gold-light); box-shadow: 0 0 8px var(--gold); }
+
+  .fade-in { animation: fadeInUp 0.5s ease forwards; }
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+
+<div id="stars"></div>
+
+<a href="index.html" style="position:fixed;top:14px;left:16px;z-index:100;font-family:'Cormorant Garamond',serif;font-size:15px;letter-spacing:1px;color:#d8c89a;text-decoration:none;border:1px solid rgba(200,168,90,.45);padding:6px 14px;border-radius:3px;background:rgba(10,10,20,.6);">← В меню</a>
+
+<div id="game">
+  <div id="header">
+    <div id="title">COGITO ERGO SUM</div>
+  </div>
+
+  <div id="stats">
+    <div class="stat"><span class="stat-label">Разум</span> <span class="stat-value" id="stat-reason">0</span></div>
+    <div class="stat"><span class="stat-label">Опыт</span> <span class="stat-value" id="stat-empirism">0</span></div>
+    <div class="stat"><span class="stat-label">Добродетель</span> <span class="stat-value" id="stat-virtue">0</span></div>
+    <div class="stat"><span class="stat-label">Истины</span> <span class="stat-value" id="stat-truths">0 / 8</span></div>
+  </div>
+
+  <div id="main">
+    <div id="scene-panel">
+      <div id="scene-art">
+        <div class="scene-illustration" id="scene-bg"></div>
+        <div id="location-name"></div>
+      </div>
+      <div id="text-area">
+        <div id="narrative"></div>
+        <div id="minigame-slot"></div>
+      </div>
+    </div>
+
+    <div id="right-panel">
+      <div id="philosopher-portrait">
+        <div class="portrait-circle" id="portrait-emoji">🧠</div>
+        <div class="portrait-info">
+          <div class="portrait-name" id="portrait-name">—</div>
+          <div class="portrait-desc" id="portrait-desc">Начните своё путешествие</div>
+        </div>
+      </div>
+
+      <button id="hint-btn" onclick="showDynamicHint()">💡 Попросить подсказку к экзамену Стража</button>
+
+      <div id="choices-area">
+        <div class="choice-label" id="choice-title">Ваш путь:</div>
+        <div id="choices"></div>
+      </div>
+
+      <div id="inventory">
+        <div class="inv-label">📜 Обретённые истины</div>
+        <div class="inv-items" id="inv-items"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="notification"></div>
+<div id="progress"></div>
+
+<script>
+// ГЕНЕРАЦИЯ ЗВЕЗД
+const starsEl = document.getElementById('stars');
+for (let i = 0; i < 80; i++) {
+  const s = document.createElement('div'); s.className = 'star';
+  const size = Math.random() * 2 + 0.5;
+  s.style.cssText = `width:${size}px; height:${size}px; left:${Math.random()*100}%; top:${Math.random()*100}%; animation-duration:${Math.random()*5+3}s; animation-delay:${Math.random()*2}s;`;
+  starsEl.appendChild(s);
+}
+
+// СОСТОЯНИЕ ИГРЫ
+const state = {
+  reason: 0, empirism: 0, virtue: 0, truths: [],
+  currentScene: 'intro', bossStage: 0,
+  failPhilosopher: null
+};
+
+const MAX_TRUTHS = 8;
+
+const bossQuestions = [
+  {
+    question: "Каких идолов Фрэнсис Бэкон связывал с личными иллюзиями, особенностями воспитания и характера отдельного человека?",
+    options: [{ text: "Идолы Театра", isCorrect: false }, { text: "Идолы Пещеры", isCorrect: true }, { text: "Идолы Рынка", isCorrect: false }],
+    failScene: "bacon",
+    hint: "Бэкон говорил: 'У каждого из нас есть своя субъективная норка или темница восприятия — это Идолы Пещеры, рожденные нашим характером!'"
+  },
+  {
+    question: "Какой идеальный образ ученого, собирающего и перерабатывающего знания силой разума, предлагал Бэкон в противовес 'паукам' и 'муравьям'?",
+    options: [{ text: "Образ Пчелы", isCorrect: true }, { text: "Образ Бобра", isCorrect: false }, { text: "Образ Совы", isCorrect: false }],
+    failScene: "bacon",
+    hint: "Вспомните мое любимое насекомое! Муравей просто копит опыт, паук плетет теории из себя, а Пчела собирает нектар и перерабатывает его в мед разума."
+  },
+  {
+    question: "На каком несомненном акте основывается знаменитое утверждение Рене Декарта 'Cogito ergo sum'?",
+    options: [{ text: "На чувственном восприятии", isCorrect: false }, { text: "На самом акте сомнения и мышления", isCorrect: true }],
+    failScene: "descartes",
+    hint: "Даже если злой демон обманывает меня, я абсолютно уверен в одном: я сомневаюсь. А сомневаться — значит мыслить!"
+  },
+  {
+    question: "Согласно дуализму Декарта, материальный мир и человеческое тело относятся к субстанции...?",
+    options: [{ text: "Res cogitans (мыслящая вещь)", isCorrect: false }, { text: "Res extensa (протяженная вещь)", isCorrect: true }],
+    failScene: "descartes",
+    hint: "Запомните раз и навсегда! Мышление — это дух (res cogitans), а физическая материя, космос и тела имеют длину и протяженность — это res extensa."
+  },
+  {
+    question: "Какое определение Бенедикт Спиноза давал единственной бесконечной Субстанции в своем монизме?",
+    options: [{ text: "Бог или Природа (Deus sive Natura)", isCorrect: true }, { text: "Набор независимых Монад", isCorrect: false }],
+    failScene: "spinoza",
+    hint: "Моя философия соединяет Творца и творение. Бог не отделен от мира, Он и есть весь наш мир — Бог или Природа."
+  },
+  {
+    question: "Как, согласно Спинозе, человек может обрести истинную духовную свободу?",
+    options: [{ text: "Через отрицание законов природы", isCorrect: false }, { text: "Через познание необходимости и своих страстей разумом", isCorrect: true }],
+    failScene: "spinoza",
+    hint: "Люди считают себя свободными по глупости. Свобода — это осознанная необходимость. Познайте свои страсти умом, и вы усмирите их."
+  },
+  {
+    question: "Что представляют собой Монады в метафизике Готфрида Лейбница?",
+    options: [{ text: "Физические атомы материи", isCorrect: false }, { text: "Простые, неделимые, душеподобные субстанции — зеркала Вселенной", isCorrect: true }],
+    failScene: "leibniz",
+    hint: "Материя делима, а дух — нет. Монады — это нематериальные живые точки, психические атомы, отражающие весь космос."
+  },
+  {
+    question: "Сформулируйте суть Категорического императива Иммануила Канта:",
+    options: [{ text: "Ищи выгоду во всем", isCorrect: false }, { text: "Поступай только по такой максиме, которая может стать всеобщим законом", isCorrect: true }],
+    failScene: "kant",
+    hint: "Мой категорический долг прост: делай то, что справедливо для всех людей без исключения. Твой поступок должен иметь силу всеобщего закона."
+  }
+];
+
+function gainStat(stat, amount, label) {
+  state[stat] = Math.min(10, state[stat] + amount);
+  notify(`+${amount} ${label}`);
+  updateStats();
+}
+
+function addTruth(truth, emoji) {
+  if (!state.truths.find(t => t.text === truth)) {
+    state.truths.push({ text: truth, emoji });
+    updateInventory();
+    notify(`✦ Истина обретена!`);
+  }
+  updateStats();
+}
+
+function updateStats() {
+  document.getElementById('stat-reason').textContent = state.reason;
+  document.getElementById('stat-empirism').textContent = state.empirism;
+  document.getElementById('stat-virtue').textContent = state.virtue;
+  document.getElementById('stat-truths').textContent = `${state.truths.length} / ${MAX_TRUTHS}`;
+}
+
+function updateInventory() {
+  const inv = document.getElementById('inv-items');
+  inv.innerHTML = state.truths.length === 0 ? '<div style="color:#b59975;font-size:12px;font-style:italic;">Пока пусто…</div>' : state.truths.map(t => `<div class="inv-item">${t.emoji} ${t.text}</div>`).join('');
+}
+
+function notify(msg) {
+  const el = document.getElementById('notification'); el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2300);
+}
+
+function showDynamicHint() {
+  if (!state.failPhilosopher) return;
+  const relevantQuestion = bossQuestions.find(q => q.failScene === state.failPhilosopher && bossQuestions.indexOf(q) >= state.bossStage);
+  if (relevantQuestion) {
+    alert(`💡 Совет мастера:\n"${relevantQuestion.hint}"`);
+  } else {
+    alert("💡 Совет: Внимательно перечитайте тексты философа, истина скрыта прямо в его речах!");
+  }
+}
+
+// ОПИСАНИЕ СЦЕН
+const scenes = {
+  intro: {
+    location: 'Преддверие разума', sceneClass: 'scene-mind',
+    portrait: { emoji: '🕯️', name: 'Голос Эпохи', desc: 'XVII век. Разум просыпается.' },
+    text: `<p>Вы стоите на пороге великой эпохи — <em>Нового времени</em>. Схоластика уходит в тень, и разум начинает триумфальное движение.</p><p>Выберите, с чьих идей начнется ваше погружение в философию:</p>`,
+    choices: [
+      { text: 'Войти в Лондонскую библиотеку — к Фрэнсису Бэкону', next: 'bacon' },
+      { text: 'Отправиться в парижский салон — к Рене Декарту', next: 'descartes' },
+      { text: 'Посетить амстердамский сад — к Бенедикту Спинозе', next: 'spinoza' }
+    ]
+  },
+  bacon: {
+    location: 'Лондон — Королевская библиотека', sceneClass: 'scene-library',
+    portrait: { emoji: '🧪', name: 'Фрэнсис Бэкон', desc: '1561–1626\n«Знание — сила»' },
+    get text() {
+      if (state.failPhilosopher === 'bacon') {
+        return `<div class="philosopher-speech"><span class="philosopher-name">Фрэнсис Бэкон</span>«Ага! Гнев Стража Разума отбросил вас ко мне на пересдачу? Вы запутались в основах! Давайте я напомню вам о ловушках нашего разума...»</div>` + this._baconText;
+      }
+      return this._baconText;
+    },
+    _baconText: `<p>Вас встречает **лорд-канцлер Англии Фрэнсис Бэкон**. Он требует доверять только фактам и опыту.</p><p>Он описывает <em>Идолов ума</em> (Рода, Пещеры, Театра и Рынка) — иллюзии, которые мешают нам видеть мир объективно.</p>`,
+    choices: [
+      { text: 'Изучить Идолов ума и заблуждения', next: 'bacon_cave', stat: { empirism: 1 } },
+      { text: 'Спросить об идеальном методе познания', next: 'bacon_debate', stat: { reason: 1 } }
+    ]
+  },
+  bacon_cave: {
+    location: 'Лондон — Кабинет Бэкона', sceneClass: 'scene-library',
+    portrait: { emoji: '🧪', name: 'Фрэнсис Бэкон', desc: 'Заблуждения ума' },
+    text: `<p>Бэкон указывает на тени на стене:</p><div class="philosopher-speech"><span class="philosopher-name">Фрэнсис Бэкон</span>«<strong>Идолы Пещеры</strong> — это ошибки отдельного человека, рожденные его воспитанием, характером и привычками. У каждого своя темная пещера восприятия!»</div>`,
+    choices: [{ text: 'Усвоить урок об Идолах Пещеры', next: 'bacon_learned', stat: { empirism: 2 }, truth: { text: '4 идола Бэкона', emoji: '🪞' } }]
+  },
+  bacon_debate: {
+    location: 'Лондон — Дискуссия', sceneClass: 'scene-library',
+    portrait: { emoji: '🧪', name: 'Фрэнсис Бэкон', desc: 'Спор о муравьях и пчелах' },
+    text: `<div class="philosopher-speech"><span class="philosopher-name">Фрэнсис Бэкон</span>«Ученый-муравей бессистемно копит факты. Ученый-паук ткет теории из головы. Но истинный мудрец подобен **Пчеле**: она собирает материал везде, но перерабатывает его в мед силами своего ума!»</div>`,
+    choices: [{ text: 'Принять образ Пчелы-исследователя', next: 'bacon_learned', stat: { empirism: 1, reason: 1 }, truth: { text: 'Пчела Бэкона', emoji: '🐝' } }]
+  },
+  bacon_learned: {
+    location: 'Лондон — Прощание', sceneClass: 'scene-library',
+    portrait: { emoji: '📜', name: 'Фрэнсис Бэкон', desc: 'Эмпиризм освоен' },
+    text: `<p>Бэкон благословляет вас на дальнейшие поиски. Разум зовет вперед.</p>`,
+    choices: [{ text: 'Отправиться в Париж к Рене Декарту', next: 'descartes' }, { text: 'Посетить Спинозу в Нидерландах', next: 'spinoza' }]
+  },
+  descartes: {
+    location: 'Париж — Светский салон', sceneClass: 'scene-salon',
+    portrait: { emoji: '🔭', name: 'Рене Декарт', desc: '1596–1650\n«Я мыслю...»' },
+    get text() {
+      if (state.failPhilosopher === 'descartes') {
+        return `<div class="philosopher-speech"><span class="philosopher-name">Рене Декарт</span>«Рассудок подвел вас перед Стражем? Вы перепутали метафизические основы дуализма! Нам нужно повторить пройденное...»</div>` + this._descartesText;
+      }
+      return this._descartesText;
+    },
+    _descartesText: `<p>За камином вас встречает великий геометр **Рене Декарт**. Он призывает подвергнуть всё тотальному сомнению, чтобы найти чистую истину.</p><p>Он делит мир на две субстанции: духовную (мышление) и материальную (протяженность).</p>`,
+    choices: [
+      { text: 'Постичь великое «Cogito ergo sum»', next: 'descartes_cogito', stat: { reason: 1 } },
+      { text: 'Пройти испытание Декарта геометрией', next: 'descartes_game' }
+    ]
+  },
+  descartes_cogito: {
+    location: 'Париж — Мысли Декарта', sceneClass: 'scene-salon',
+    portrait: { emoji: '💭', name: 'Рене Декарт', desc: 'Опора логики' },
+    text: `<div class="philosopher-speech"><span class="philosopher-name">Рене Декарт</span>«Я могу сомневаться во всем. Но сам акт моего сомнения доказывает, что я существую как мыслящее существо: <strong>Я мыслю, следовательно, существую (Cogito ergo sum)</strong>!»</div>`,
+    choices: [{ text: 'Записать закон Cogito', next: 'descartes_learned', stat: { reason: 2 }, truth: { text: 'Cogito ergo sum', emoji: '💭' } }]
+  },
+  descartes_game: {
+    location: 'Париж — Координатная плоскость', sceneClass: 'scene-salon',
+    portrait: { emoji: '📐', name: 'Рене Декарт', desc: 'Испытание Рационализма' },
+    text: `<p>Декарт берет перо: «Мой метод строг, как математика. Докажите силу вашего ума. Найдите на моей координатной сетке точку пересечения <strong>X: 3, Y: 2</strong> и кликните на нее!»</p>`,
+    choices: [],
+    minigame: 'descartes_grid'
+  },
+  descartes_learned: {
+    location: 'Париж — Конец урока', sceneClass: 'scene-salon',
+    portrait: { emoji: '🔭', name: 'Рене Декарт', desc: 'Путь открыт' },
+    text: `<p>Декарт доволен вашей логикой. Куда лежит ваш дальнейший путь?</p>`,
+    choices: [{ text: 'К Спинозе в Амстердам', next: 'spinoza' }, { text: 'К Лейбницу в Лейпциг', next: 'leibniz' }]
+  },
+  spinoza: {
+    location: 'Амстердам — Уединенный сад', sceneClass: 'scene-garden',
+    portrait: { emoji: '🔬', name: 'Бенедикт Спиноза', desc: '1632–1677\n«Бог или Природа»' },
+    get text() {
+      if (state.failPhilosopher === 'spinoza') {
+        return `<div class="philosopher-speech"><span class="philosopher-name">Бенедикт Спиноза</span>«Мир вам. Страж не пускает тех, чей разум затуманен страстями и разделением субстанций. Очистим ваш взгляд заново...»</div>` + this._spinozaText;
+      }
+      return this._spinozaText;
+    },
+    _spinozaText: `<p>В тихом саду вас встречает скромный **Бенедикт Спиноза**. Он учит, что мир — это единая бесконечная субстанция: **Бог или Природа (Deus sive Natura)**.</p>`,
+    choices: [
+      { text: 'Узнать его учение о Свободе духа', next: 'spinoza_freedom', stat: { virtue: 1 } },
+      { text: 'Помочь Спинозе отшлифовать линзу истины', next: 'spinoza_game' }
+    ]
+  },
+  spinoza_freedom: {
+    location: 'Амстердам — Мудрость Спинозы', sceneClass: 'scene-garden',
+    portrait: { emoji: '🕊️', name: 'Бенедикт Спиноза', desc: 'Осознание' },
+    text: `<div class="philosopher-speech"><span class="philosopher-name">Бенедикт Спиноза</span>«Человек считает себя свободным лишь из-за незнания истинных причин своих желаний. Настоящая свобода — это <strong>осознанная необходимость</strong>. Подчините страсти разуму!»</div>`,
+    choices: [{ text: 'Обрести внутреннюю свободу', next: 'spinoza_learned', stat: { virtue: 2 }, truth: { text: 'Свобода Спинозы', emoji: '🕊️' } }]
+  },
+  spinoza_game: {
+    location: 'Амстердам — Мастерская оптики', sceneClass: 'scene-garden',
+    portrait: { emoji: '🔬', name: 'Бенедикт Спиноза', desc: 'Прояснение разума' },
+    text: `<p>Спиноза протягивает вам необработанное стекло: «Наши страсти размывают истину. Двигайте ползунок внизу, чтобы **идеально настроить фокус линзы** и сделать текст четким!»</p>`,
+    choices: [],
+    minigame: 'spinoza_lens'
+  },
+  spinoza_learned: {
+    location: 'Амстердам — Прощание', sceneClass: 'scene-garden',
+    portrait: { emoji: '🔬', name: 'Бенедикт Спиноза', desc: 'Пантеизм понят' },
+    text: `<p>Спиноза провожает вас теплым взглядом. Впереди новые горизонты мысли.</p>`,
+    choices: [{ text: 'К дипломату Лейбницу в Лейпциг', next: 'leibniz' }, { text: 'К великому критику Канту в Кёнигсберг', next: 'kant' }]
+  },
+  leibniz: {
+    location: 'Лейпциг — Княжеский замок', sceneClass: 'scene-salon',
+    portrait: { emoji: '📐', name: 'Готфрид Лейбниц', desc: '1646–1716' },
+    get text() { if (state.failPhilosopher === 'leibniz') { return `<div class="philosopher-speech"><span class="philosopher-name">Готфрид Лейбниц</span>«Страж устроил вам экзамен? Неужели концепт монад ускользнул от вас? Разберем структуру вселенной заново!»</div>` + this._leibnizText; } return this._leibnizText; },
+    _leibnizText: `<p>Вас встречает **Готфрид Лейбниц**. Он утверждает, что вселенная соткана из миллиардов уникальных живых духовных атомов — **Монад**, которые идеально согласованы Богом изначально.</p>`,
+    choices: [{ text: 'Понять концепцию Монад реальности', next: 'leibniz_monads', stat: { reason: 2 }, truth: { text: 'Монады Лейбница', emoji: '🔮' } }]
+  },
+  leibniz_monads: {
+    location: 'Лейпциг — Кабинет', sceneClass: 'scene-salon',
+    portrait: { emoji: '🔮', name: 'Готфрид Лейбниц', desc: 'Монадология' },
+    text: `<div class="philosopher-speech"><span class="philosopher-name">Готфрид Лейбниц</span>«Монады не имеют окон, через которые в них могло бы что-то проникнуть. Но каждая из них — живое, уникальное духовное зеркало всей нашей вселенной!»</div>`,
+    choices: [{ text: 'Двигаться дальше к финалу эпохи', next: 'kant' }]
+  },
+  kant: {
+    location: 'Кёнигсберг — Строгий кабинет', sceneClass: 'scene-mind',
+    portrait: { emoji: '⚖️', name: 'Иммануил Кант', desc: '1724–1804' },
+    get text() { if (state.failPhilosopher === 'kant') { return `<div class="philosopher-speech"><span class="philosopher-name">Иммануил Кант</span>«Ошибка у Стража? Это доказывает, что ваш moralischer Закон разума еще не осознан в полной мере. Позвольте повторить основы...»</div>` + this._kantText; } return this._kantText; },
+    _kantText: `<p>Великий **Иммануил Кант** ждет вас. Он объединил разум и опыт, провозгласив закон внутреннего человеческого долга.</p>`,
+    choices: [{ text: 'Изучить великий Категорический императив', next: 'kant_moral', stat: { virtue: 2 }, truth: { text: 'Императив Канта', emoji: '⚖️' } }]
+  },
+  kant_moral: {
+    location: 'Кёнигсберг — Аллея', sceneClass: 'scene-mind',
+    portrait: { emoji: '⚖️', name: 'Иммануил Кант', desc: 'Этика долга' },
+    text: `<div class="philosopher-speech"><span class="philosopher-name">Иммануил Кант</span>«Поступай только по такой максиме (правилу), руководствуясь которой ты одновременно можешь пожелать, чтобы она стала **всеобщим законом** для всего человечества!»</div>`,
+    choices: [{ text: 'Взойти на судилище к Стражу Разума', next: 'boss_battle' }]
+  },
+  boss_battle: {
+    location: 'Врата Чистого Разума', sceneClass: 'scene-boss',
+    portrait: { emoji: '👑', name: 'Страж Разума', desc: 'Схоластический Дух-Хранитель' },
+    get text() {
+      const q = bossQuestions[state.bossStage];
+      return `
+        <p>Перед вами высится исполинская огненная фигура **Стража Разума**. На его плечах тяжелые цепи догм старого мира.</p>
+        <div class="philosopher-speech"><span class="philosopher-name">Страж Разума</span>«Докажи, искатель, что ты усвоил философию Нового Времени, или отправляйся назад в прошлое!»</div>
+        <p style="color:var(--gold-light); font-weight: bold; margin-top:10px;">Вопрос ${state.bossStage + 1} из ${bossQuestions.length}:</p>
+        <p style="background: rgba(0,0,0,0.4); padding: 12px; border: 1px solid var(--gold); border-radius:4px; margin-top:5px;"><strong>${q.question}</strong></p>
+      `;
+    },
+    get choices() {
+      const q = bossQuestions[state.bossStage];
+      return q.options.map(opt => {
+        return {
+          text: opt.text,
+          action: () => {
+            if (opt.isCorrect) {
+              state.bossStage++;
+              notify("✔ Верно! Страж отступает.");
+              if (state.bossStage >= bossQuestions.length) render('ending');
+              else render('boss_battle');
+            } else {
+              state.failPhilosopher = q.failScene;
+              notify("❌ Неверно! Вас отбросило во времени!");
+              state.bossStage = 0;
+              render(state.failPhilosopher);
+            }
+          }
+        };
+      });
+    }
+  },
+  ending: {
+    location: 'Чертоги Абсолютной Истины', sceneClass: 'scene-end',
+    portrait: { emoji: '🌟', name: 'Новое Время', desc: 'Триумф человечества' },
+    text: '',
+    choices: [{ text: 'Начать великий путь заново', next: 'intro', reset: true }]
+  }
+};
+
+// СИСТЕМА ОТРИСОВКИ СЦЕН И МИНИ-ИГР
+function render(sceneKey) {
+  const scene = scenes[sceneKey];
+  if (!scene) return;
+
+  state.currentScene = sceneKey;
+
+  const hintBtn = document.getElementById('hint-btn');
+  if (state.failPhilosopher && sceneKey === state.failPhilosopher) {
+    hintBtn.style.display = 'block';
+  } else {
+    hintBtn.style.display = 'none';
+  }
+
+  document.getElementById('scene-bg').className = 'scene-illustration ' + scene.sceneClass;
+  document.getElementById('location-name').textContent = scene.location;
+
+  document.getElementById('portrait-emoji').textContent = scene.portrait.emoji;
+  document.getElementById('portrait-name').textContent = scene.portrait.name;
+  document.getElementById('portrait-desc').textContent = scene.portrait.desc;
+
+  const narr = document.getElementById('narrative');
+  narr.innerHTML = sceneKey === 'ending' ? buildEndingText() : scene.text;
+  
+  narr.classList.remove('fade-in'); void narr.offsetWidth; narr.classList.add('fade-in');
+
+  const slot = document.getElementById('minigame-slot');
+  slot.innerHTML = '';
+  if (scene.minigame) buildMinigame(scene.minigame, slot);
+
+  const choicesEl = document.getElementById('choices');
+  choicesEl.innerHTML = '';
+  document.getElementById('choice-title').textContent = (sceneKey === 'boss_battle') ? "Ваш ответ Стражу:" : "Ваш выбор:";
+
+  scene.choices.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn fade-in';
+    btn.textContent = c.text;
+    btn.style.animationDelay = `${i * 0.05}s`;
+
+    btn.addEventListener('click', () => {
+      if (state.failPhilosopher === sceneKey) state.failPhilosopher = null;
+      if (c.action) c.action();
+      else {
+        if (c.stat) Object.entries(c.stat).forEach(([k, v]) => gainStat(k, v, statLabel(k)));
+        if (c.truth) addTruth(c.truth.text, c.truth.emoji);
+        if (c.reset) resetState();
+        render(c.next);
+      }
+    });
+    choicesEl.appendChild(btn);
+  });
+
+  updateProgress();
+}
+
+function buildMinigame(type, targetEl) {
+  const container = document.createElement('div');
+  container.className = 'minigame-container fade-in';
+
+  if (type === 'descartes_grid') {
+    container.innerHTML = `<div class="minigame-title">📐 Математический тест Декарта</div><div class="grid-map" id="d-grid"></div>`;
+    targetEl.appendChild(container);
+    const grid = document.getElementById('d-grid');
+    
+    for (let y = 1; y <= 5; y++) {
+      for (let x = 1; x <= 5; x++) {
+        const cell = document.createElement('div');
+        cell.className = 'grid-cell';
+        cell.textContent = `${x},${y}`;
+        cell.addEventListener('click', () => {
+          if (x === 3 && y === 2) {
+            notify("✔ Абсолютно точные координаты! Разум торжествует.");
+            gainStat('reason', 2, 'Разума');
+            addTruth('Дедукция Декарта', '📐');
+            render('descartes_learned');
+          } else {
+            notify("❌ Мимо. Декарт недоволен погрешностью!");
+          }
+        });
+        grid.appendChild(cell);
+      }
+    }
+  } 
+  else if (type === 'spinoza_lens') {
+    container.innerHTML = `
+      <div class="minigame-title">🔬 Шлифовальный станок Спинозы</div>
+      <div class="lens-blur-text" id="lens-text">Бог есть единая Природа</div>
+      <input type="range" class="lens-slider" id="l-slider" min="0" max="100" value="0">
+      <p style="font-size:13px; margin-top:5px; color:#b59975;">Настройте ползунком идеальную четкость (100%)</p>
+    `;
+    targetEl.appendChild(container);
+    
+    const slider = document.getElementById('l-slider');
+    const txt = document.getElementById('lens-text');
+    
+    slider.addEventListener('input', (e) => {
+      const val = parseInt(e.target.value);
+      const blurVal = ((100 - val) / 10).toFixed(1);
+      txt.style.filter = `blur(${blurVal}px)`;
+      
+      if (val === 100) {
+        notify("✔ Линза идеально чиста! Истина прояснилась.");
+        gainStat('reason', 1, 'Разума');
+        gainStat('virtue', 1, 'Добродетели');
+        addTruth('Монизм Спинозы', '∞');
+        setTimeout(() => render('spinoza_learned'), 1000);
+      }
+    });
+  }
+}
+
+function buildEndingText() {
+  return `
+    <p style="text-align:center; font-family:'Cinzel Decorative',serif; font-size: 24px; color:var(--gold-light); margin-bottom:15px; text-shadow:0 0 10px var(--gold);">Великий Философ Синтеза</p>
+    <p style="font-size:22px; text-align:center; font-style:italic; color:#fff; margin-bottom:15px;">«Экзамен Стража пройден безупречно!»</p>
+    <p>Вы разгромили схоластические догмы Стража Разума. Вам удалось гармонично объединить опыт Бэкона, математику Декарта, широту Спинозы, логику Лейбница и долг Канта!</p>
+    <br>
+    <p style="background:rgba(197,155,39,0.1); padding:10px; border-radius:6px; border:1px dashed var(--gold); text-align:center; font-size:18px;">
+      🧠 Разум: <strong>${state.reason}</strong> | 🧪 Опыт: <strong>${state.empirism}</strong> | ⚖️ Добродетель: <strong>${state.virtue}</strong>
+    </p>
+  `;
+}
+
+function statLabel(key) {
+  const labels = { reason: 'Разум', empirism: 'Опыт', virtue: 'Добродетель' };
+  return labels[key] || key;
+}
+
+function resetState() {
+  state.reason = 0; state.empirism = 0; state.virtue = 0; state.truths = []; state.bossStage = 0; state.failPhilosopher = null;
+  updateStats(); updateInventory();
+}
+
+function updateProgress() {
+  const progressEl = document.getElementById('progress'); progressEl.innerHTML = '';
+  for (let i = 0; i < MAX_TRUTHS; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'prog-dot' + (i < state.truths.length ? ' done' : (i === state.truths.length ? ' current' : ''));
+    progressEl.appendChild(dot);
+  }
+}
+
+// Запуск
+updateStats(); updateInventory(); render('intro');
+</script>
+</body>
+</html>
