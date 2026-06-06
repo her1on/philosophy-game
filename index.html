@@ -479,7 +479,7 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
             <div class="mm" id="m-8"  data-name="Портик Невозмутимых"     style="left:83.0%;top:21%">VIII</div>
             <div class="mm" id="m-9"  data-name="Чертог Истока"           style="left:83.0%;top:84%">IX</div>
             <div class="mm" id="m-10" data-name="Круг Сомнений"           style="left:88%;top:63%">X</div>
-            <div class="mm" id="m-11" data-name="Метка"                   style="left:4%;top:5%">✦</div>
+            <div class="mm" id="m-11" data-name="Метка"                   style="left:4%;top:95%">✦</div>
 
             <div class="zone-label" style="left:15%;top:93%;transform:translateX(-50%)"><span class="zone-label-icon">🌿</span><span class="zone-label-text">Натуральная философия</span></div>
             <div class="zone-label" style="left:55%;top:93%;transform:translateX(-50%)"><span class="zone-label-icon">🏛</span><span class="zone-label-text">Классическая философия</span></div>
@@ -1439,6 +1439,8 @@ var BLOCKED_ZONES=[
   {x1:91,y1:11,  x2:99,y2:100},
   // Стена вниз от Метки (4%,5%) до нижнего края
   {x1:2,y1:11,   x2:6,y2:100},
+  // Стена вправо от Метки (4%,5%) до правого края
+  {x1:6,y1:1,    x2:100,y2:11},
 ];
 function isWalkable(px,py){
   for(var i=0;i<BLOCKED_ZONES.length;i++){
