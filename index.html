@@ -619,11 +619,11 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 
 <script>
 const CHARACTERS=[
-  {id:'ariston', name:'Аристон из Коринфа', sub:'странник в поисках мудрости',  icon:'🎓', sprite:'animation.png',        cols:3, rows:4, mapSize:64, previewSize:96, unlocked:true,
+  {id:'ariston', name:'Аристон из Коринфа', sub:'странник в поисках мудрости',  icon:'🎓', sprite:'animation.png',        cols:3, rows:4, mapSize:80, previewSize:96, unlocked:true,
    desc:'Юный философ из Коринфа. Задаёт вопросы и убеждён, что незнание — начало мудрости.'},
-  {id:'kallia',  name:'Каллия Афинская',    sub:'хранительница знаний',         icon:'📜', sprite:'girl.png',             cols:4, rows:4, mapSize:96, previewSize:96, unlocked:true,
+  {id:'kallia',  name:'Каллия Афинская',    sub:'хранительница знаний',         icon:'📜', sprite:'girl.png',             cols:4, rows:4, mapSize:120, previewSize:96, unlocked:true,
    desc:'Учёная из Афин, знаток рукописей. Находит смысл в словах великих мыслителей.'},
-  {id:'pyrr',    name:'Пирр Эпирский',      sub:'воин, познавший тщету побед',  icon:'⚔️', sprite:'character3_sheet.png', cols:3, rows:4, mapSize:96, previewSize:96, dirMap:{down:3,left:1,right:2,up:0}, downRow:3, unlocked:true,
+  {id:'pyrr',    name:'Пирр Эпирский',      sub:'воин, познавший тщету побед',  icon:'⚔️', sprite:'character3_sheet.png', cols:3, rows:4, mapSize:120, previewSize:96, dirMap:{down:3,left:1,right:2,up:0}, downRow:3, unlocked:true,
    desc:'Вернулся с войны. Ищет у философов ответ: ради чего всё это было нужно?'}
 ];
 let selectedChar=CHARACTERS[0];
@@ -1472,7 +1472,7 @@ let mapT={ox:0,oy:0,s:1,iw:1400,ih:900};
   var spr=new Image();
   var DIR_ROW={down:0,right:2,left:1,up:3};
   var DIR_COL={up:0,left:1,right:2,down:3};
-  var _fw=0,_fh=0,_dw=96,_dh=96,_heroFrames=3,_heroRows=4,_heroDirMode='row',_heroDirMap=null;
+  var _fw=0,_fh=0,_dw=120,_dh=120,_heroFrames=3,_heroRows=4,_heroDirMode='row',_heroDirMap=null;
 
   spr.onload=function(){
     _fw=Math.floor(spr.naturalWidth/_heroFrames);
