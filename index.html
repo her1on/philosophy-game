@@ -1433,6 +1433,8 @@ var BLOCKED_ZONES=[
   {x1:81,y1:8,   x2:89,y2:19},
   // Метка: left:95%, top:5%
   {x1:91,y1:1,   x2:99,y2:11},
+  // Стена влево от Метки (95%,5%) до левого края
+  {x1:0,y1:1,    x2:91,y2:11},
 ];
 function isWalkable(px,py){
   for(var i=0;i<BLOCKED_ZONES.length;i++){
