@@ -1570,9 +1570,9 @@ let mapT={ox:0,oy:0,s:1,iw:1400,ih:900};
     _markerEls.forEach(function(m,i){
       if(!m)return;
       var dist=Math.hypot(hs.x-parseFloat(m.style.left),hs.y-parseFloat(m.style.top));
-      if(dist<7){
+      if(dist<12){
         m.classList.add('nearby');
-        if(getStat(LOCS[i])!=='locked'&&dist<5)near=i;
+        if(getStat(LOCS[i])!=='locked'&&dist<9)near=i;
       }else{
         m.classList.remove('nearby');
       }
