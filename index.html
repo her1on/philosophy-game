@@ -375,7 +375,7 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 /* ── Location screen ── */
 #loc-screen{position:fixed;inset:0;z-index:800;display:none;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;will-change:opacity}
 #loc-screen.complete-mode{justify-content:center}
-#loc-screen.show{display:flex;animation:loc-screen-in .22s ease-out both}
+#loc-screen.show{display:flex;animation:loc-screen-in .12s ease-out both}
 #loc-screen.hiding{animation:loc-screen-out .3s ease-in both}
 @keyframes loc-screen-in{from{opacity:0}to{opacity:1}}
 @keyframes loc-screen-out{from{opacity:1}to{opacity:0}}
@@ -383,7 +383,7 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 @keyframes loc-zoom{from{transform:scale(1.1) translateZ(0);opacity:.4}to{transform:scale(1) translateZ(0);opacity:1}}
 #loc-screen-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(4,1,0,.97) 0%,rgba(8,3,1,.75) 38%,rgba(0,0,0,.38) 75%,rgba(0,0,0,.15) 100%);z-index:1}
 #loc-content{position:relative;z-index:2;width:100%;max-width:620px;padding:32px 40px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;will-change:transform,opacity}
-#loc-screen.show #loc-content{animation:loc-up .32s .1s ease-out both}
+#loc-screen.show #loc-content{animation:loc-up .18s .06s ease-out both}
 #loc-era-big{display:none}
 @keyframes loc-up{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
 #loc-icon-big{font-size:54px;line-height:1;filter:drop-shadow(0 0 18px rgba(201,162,39,.75));margin-bottom:4px}
@@ -397,7 +397,7 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 #loc-screen.trial-mode #loc-content{opacity:0;pointer-events:none;transition:opacity .2s}
 #loc-screen.complete-mode #loc-content{display:none}
 #loc-complete{position:relative;z-index:2;width:100%;max-width:520px;padding:40px 40px 64px;text-align:center;display:none;flex-direction:column;align-items:center;gap:18px;animation:loc-up .5s ease-out both;will-change:transform,opacity}
-#loc-screen.complete-mode #loc-complete{display:flex;animation:loc-up .28s .06s ease-out both}
+#loc-screen.complete-mode #loc-complete{display:flex;animation:loc-up .18s .03s ease-out both}
 #lc-badge{font-size:80px;line-height:1;filter:drop-shadow(0 0 32px rgba(232,197,71,.9));margin-bottom:8px}
 #lc-title{font-family:'Cinzel',serif;font-size:20px;letter-spacing:4px;color:#e8c547;text-transform:uppercase;text-shadow:0 0 20px rgba(232,197,71,.5)}
 #lc-name{font-family:'Cinzel',serif;font-size:13px;color:rgba(232,197,71,.6);letter-spacing:2px;margin-bottom:6px}
@@ -954,7 +954,7 @@ function showLocScreen(idx){
   _curLoc=loc;
 
   bgEl.style.animation='none';
-  requestAnimationFrame(()=>{bgEl.style.animation='loc-zoom 8s ease-out forwards';});
+  requestAnimationFrame(()=>{bgEl.style.animation='loc-zoom 5s ease-out forwards';});
 
   const isDone=state.done.includes(loc.id);
   if(isDone){
