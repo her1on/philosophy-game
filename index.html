@@ -85,7 +85,7 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 
 /* ── Hero ── */
 /* ── Hero ── */
-#hero-wrap{position:absolute;z-index:100;pointer-events:none;transform:translate(-50%,-90%) translateZ(0);text-align:center;will-change:transform;backface-visibility:hidden}
+#hero-wrap{position:absolute;left:0;top:0;z-index:100;pointer-events:none;text-align:center;will-change:transform;backface-visibility:hidden}
 #hero-sprite{display:block;width:96px;height:96px;overflow:hidden;clip-path:inset(0);background:url('animation.png') no-repeat 0 0;background-size:auto;image-rendering:pixelated;image-rendering:crisp-edges;margin:0 auto;transform-origin:center}
 #hero-shadow{display:none}
 #hero-hint{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1a0a03,#2c1508);color:#e8c547;font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;padding:5px 14px;border:1px solid var(--gold);white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.9);animation:hintPulse 1s ease-in-out infinite}
@@ -1428,6 +1428,7 @@ let mapT={ox:0,oy:0,s:1,iw:1400,ih:900};
   }
 
   var _lastTick=0;
+  var _msc=null,_markerEls=null;
   function tick(now){
     var dt=_lastTick?Math.min((now-_lastTick)/16.667,3):1;
     _lastTick=now;
@@ -1436,6 +1437,8 @@ let mapT={ox:0,oy:0,s:1,iw:1400,ih:900};
       wrap=document.getElementById('hero-wrap');
       hint=document.getElementById('hero-hint');
       heroSprite=document.getElementById('hero-sprite');
+      _msc=document.getElementById('map-scroll');
+      _markerEls=LOCS.map(function(_,i){return document.getElementById('m-'+(i+1));});
       if(!wrap){requestAnimationFrame(tick);return;}
     }
 
@@ -1466,8 +1469,7 @@ let mapT={ox:0,oy:0,s:1,iw:1400,ih:900};
     drawHero(dt);
 
     // Камера плавно следует за героем (lerp, frame-rate independent)
-    var msc=document.getElementById('map-scroll');
-    var cw=msc.clientWidth,ch=msc.clientHeight;
+    var cw=_msc.clientWidth,ch=_msc.clientHeight;
     var s2=mapT.s,iw2=mapT.iw,ih2=mapT.ih;
     var tox=Math.min(0,Math.max(cw-iw2*s2, cw/2-(hs.x/100)*iw2*s2));
     var toy=Math.min(0,Math.max(ch-ih2*s2, ch/2-(hs.y/100)*ih2*s2));
@@ -1476,19 +1478,18 @@ let mapT={ox:0,oy:0,s:1,iw:1400,ih:900};
     mapT.oy+=(toy-mapT.oy)*lf;
     document.getElementById('map-inner').style.transform=
       'translate('+mapT.ox+'px,'+mapT.oy+'px) scale('+s2+')';
-    // Герой позиционируется через toScreen — при clamping движется по экрану
+    // Позиция героя только через transform — никакого layout recalculation
     var sc=toScreen(hs.x,hs.y);
-    wrap.style.left=sc.x+'px';
-    wrap.style.top=sc.y+'px';
+    wrap.style.transform='translate('+sc.x+'px,'+sc.y+'px) translate(-50%,-90%) translateZ(0)';
+    window._heroSX=sc.x; window._heroSY=sc.y;
 
     near=null;
-    LOCS.forEach(function(loc,i){
-      var m=document.getElementById('m-'+(i+1));
+    _markerEls.forEach(function(m,i){
       if(!m)return;
       var dist=Math.hypot(hs.x-parseFloat(m.style.left),hs.y-parseFloat(m.style.top));
       if(dist<7){
         m.classList.add('nearby');
-        if(getStat(loc)!=='locked'&&dist<5)near=i;
+        if(getStat(LOCS[i])!=='locked'&&dist<5)near=i;
       }else{
         m.classList.remove('nearby');
       }
@@ -1658,24 +1659,25 @@ showFinal=function(){
 // ── HERO DUST TRAIL ──
 (function(){
   var scroll=document.getElementById('map-scroll');
-  var hw=document.getElementById('hero-wrap');
-  if(!scroll||!hw)return;
+  if(!scroll)return;
   var px=-1,py=-1;
-  new MutationObserver(function(){
-    var x=parseFloat(hw.style.left),y=parseFloat(hw.style.top);
-    if(isNaN(x)||isNaN(y)||Math.hypot(x-px,y-py)<3)return;
-    if(Math.random()<.42){
-      var d=document.createElement('div');
-      d.className='hero-dust';
-      var sz=3+Math.random()*5;
-      d.style.cssText='left:'+(x-sz/2+(Math.random()-.5)*10)+'px;'
-        +'top:'+(y-sz/2+(Math.random()-.5)*6)+'px;'
-        +'width:'+sz+'px;height:'+sz+'px;';
-      scroll.appendChild(d);
-      setTimeout(function(){d.remove();},850);
+  (function dustLoop(){
+    var x=window._heroSX||0,y=window._heroSY||0;
+    if(Math.hypot(x-px,y-py)>=3){
+      if(Math.random()<.42){
+        var d=document.createElement('div');
+        d.className='hero-dust';
+        var sz=3+Math.random()*5;
+        d.style.cssText='left:'+(x-sz/2+(Math.random()-.5)*10)+'px;'
+          +'top:'+(y-sz/2+(Math.random()-.5)*6)+'px;'
+          +'width:'+sz+'px;height:'+sz+'px;';
+        scroll.appendChild(d);
+        setTimeout(function(){d.remove();},850);
+      }
+      px=x;py=y;
     }
-    px=x;py=y;
-  }).observe(hw,{attributes:true,attributeFilter:['style']});
+    requestAnimationFrame(dustLoop);
+  })();
 })();
 
 // ── WEATHER SYSTEM ──
