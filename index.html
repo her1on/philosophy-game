@@ -1112,8 +1112,8 @@ function showQuestion(loc){
   document.getElementById('hint-btn').disabled=hintUsed;
   document.getElementById('hint-btn').style.display='';
   var hintBox=document.getElementById('hint-box');
-  if(hintUsed&&loc.hint){hintBox.textContent=loc.hint;hintBox.style.display='block';}
-  else{hintBox.textContent='';hintBox.style.display='none';}
+  hintBox.textContent='';
+  hintBox.style.display='none';
   document.getElementById('panel-idle').style.display='none';
   document.getElementById('q-block').style.display='flex';
   openModal();
