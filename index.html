@@ -15,7 +15,7 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 
 /* ── Topbar ── */
 #topbar{background:linear-gradient(135deg,#1a0a05,#2c1810);padding:8px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--gold);flex-shrink:0;box-shadow:0 2px 20px rgba(0,0,0,.6);gap:10px;position:relative}
-.tb-char{display:flex;align-items:center;gap:9px;min-width:0;max-width:220px;overflow:hidden;margin-left:3.5cm}
+.tb-char{display:flex;align-items:center;gap:9px;min-width:0;margin-left:3.5cm}
 .tb-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#4a1208,#8a2e12);border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;box-shadow:0 0 10px rgba(201,162,39,.3)}
 .tb-char>div{min-width:0;overflow:hidden}
 .tb-name{font-family:'Cinzel',serif;font-size:11px;color:#e8c547;letter-spacing:.5px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -32,6 +32,8 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 .prog-txt{font-family:'Cinzel',serif;font-size:9px;color:var(--parch);opacity:.6}
 .tb-reset{font-family:'Cinzel',serif;font-size:8px;letter-spacing:1px;color:var(--stone);background:transparent;border:1px solid rgba(122,122,112,.3);padding:5px 10px;cursor:pointer;text-transform:uppercase;transition:.2s;flex-shrink:0}
 .tb-reset:hover{color:#c04a20;border-color:#c04a20}
+#fs-btn{margin-left:.5cm;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1px;color:#e8c547;background:rgba(201,162,39,.12);border:1.5px solid rgba(201,162,39,.6);padding:7px 16px;cursor:pointer;text-transform:uppercase;transition:.2s;flex-shrink:0;border-radius:2px}
+#fs-btn:hover{background:rgba(201,162,39,.25);border-color:#e8c547;color:#fff}
 
 /* ── Layout ── */
 #game-content{display:flex;flex:1;min-height:0}
@@ -87,7 +89,7 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 /* ── Hero ── */
 /* ── Hero ── */
 #hero-wrap{position:absolute;left:0;top:0;z-index:100;pointer-events:none;text-align:center;opacity:0;transition:opacity .2s ease;will-change:transform;backface-visibility:hidden}
-#hero-sprite{display:block;width:96px;height:96px;overflow:hidden;clip-path:inset(0);background:url('animation.png') no-repeat 0 0;background-size:auto;image-rendering:pixelated;image-rendering:crisp-edges;margin:0 auto;transform-origin:center;will-change:background-position}
+#hero-sprite{display:block;width:96px;height:96px;overflow:hidden;clip-path:inset(0);background:none no-repeat 0 0;background-size:auto;image-rendering:pixelated;image-rendering:crisp-edges;margin:0 auto;transform-origin:center;will-change:background-position}
 #hero-shadow{display:none}
 #hero-hint{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1a0a03,#2c1508);color:#e8c547;font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;padding:5px 14px;border:1px solid var(--gold);white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.9);animation:hintPulse 1s ease-in-out infinite}
 #hero-hint::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--gold)}
@@ -466,6 +468,7 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
         <div class="tb-name">Аристон из Коринфа</div>
         <div class="tb-sub">странник в поисках мудрости</div>
       </div>
+      <button id="fs-btn" title="Во весь экран">⛶ Во весь экран</button>
     </div>
     <div class="tb-title">Философское путешествие</div>
     <div class="tb-right">
@@ -500,7 +503,7 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
             <div class="mm" id="m-8"  data-name="Портик Невозмутимых"     style="left:83.0%;top:21%">VIII</div>
             <div class="mm" id="m-9"  data-name="Чертог Истока"           style="left:83.0%;top:84%">IX</div>
             <div class="mm" id="m-10" data-name="Круг Сомнений"           style="left:88%;top:63%">X</div>
-            <div class="mm" id="m-11" data-name="Метка"                   style="left:37%;top:14%">✦</div>
+
 
             <div class="zone-label" style="left:15%;top:93%;transform:translateX(-50%)"><span class="zone-label-icon">🌿</span><span class="zone-label-text">Натурфилософский период</span></div>
             <div class="zone-label" style="left:55%;top:93%;transform:translateX(-50%)"><span class="zone-label-icon">🏛</span><span class="zone-label-text">Классический период</span></div>
@@ -511,7 +514,7 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
         <div id="map-vignette"></div>
         <div id="weather-overlay"></div>
         <!-- Hero character — outside map-inner so it's not scaled -->
-        <div id="hero-wrap">
+        <div id="hero-wrap" style="opacity:0">
           <div id="hero-sprite"></div>
           <div id="hero-shadow"></div>
           <div id="hero-hint">[ E ]</div>
@@ -777,7 +780,9 @@ const LOCS=[
    opts3:[{t:'Они возвращаются к огню как первоначалу',c:0},{t:'Они растворяются в пустоте',c:0},{t:'Они возвращаются в то, из чего возникли, следуя необходимости, наказывая друг друга за несправедливость',c:1},{t:'Они соединяются в единое неподвижное бытие',c:0}],
    ok3:'Верно! Анаксимандр: «Из чего все вещи получают своё рождение, в то все они и возвращаются, следуя необходимости».',
    fail3:'Нет. Анаксимандр: вещи «возвращаются» туда, «откуда получают рождение, следуя необходимости», наказывая друг друга.',
-   hint:'Что есть там, где живёт жизнь, и чего нет там, где она угасла?'},
+   hint1:'Аристотель пишет: Фалес заметил, что всё питается влагой, а тепло рождается из влажного. Что здесь первоначало?',
+   hint2:'Диоген рассказывает о живом мире, полном незримых сущностей. Каким Фалес видел весь мир вокруг?',
+   hint3:'Анаксимандр: вещи «наказывают друг друга за несправедливость» — возвращаясь туда, откуда пришли.'},
 
   {id:'apeiron', nm:'Грот Апейрона', phil:'Анаксимандр, Анаксимен', era:'VI в. до н.э.', icon:'🌊', o:1, desc:'Пещера в скале · беспредельное как начало сущего',
    quote:'«Из чего все вещи рождаются, туда и возвращаются, следуя необходимости» — Анаксимандр',
@@ -794,7 +799,9 @@ const LOCS=[
    opts3:[{t:'Душа есть гармония противоположностей в теле',c:0},{t:'Как наша душа, будучи воздухом, скрепляет нас, так воздух объемлет всё мироздание',c:1},{t:'Душа бессмертна и переходит в другие тела',c:0},{t:'Душа есть часть мирового огня',c:0}],
    ok3:'Верно! Аэций: «Как наша душа, будучи воздухом, скрепляет каждого из нас, так и дыхание и воздух объемлют всё мироздание».',
    fail3:'Нет. Аэций: «как наша душа, будучи воздухом, скрепляет нас — так воздух объемлет всё мироздание».',
-   hint:'То, что не имеет ни лица, ни имени, ни предела — из него всё, и в него всё возвращается.'},
+   hint1:'Апейрон — не вода и не огонь. Он беспределен, вечен и не имеет конкретной формы.',
+   hint2:'Вдохни. Что ты вдыхаешь? Анаксимен именно это возвёл в первоначало всего сущего.',
+   hint3:'Если то, что скрепляет тебя изнутри, — то же, что объемлет всё мироздание, что это такое?'},
 
   {id:'heraclitus', nm:'Храм Вечного Огня', phil:'Гераклит Эфесский', era:'V в. до н.э.', icon:'🔥', o:2, desc:'Большой храм · космос как вечно живой огонь',
    quote:'«Этот космос… всегда был, есть и будет вечно живым огнём, мерами разгорающимся и мерами потухающим» — Гераклит',
@@ -811,7 +818,9 @@ const LOCS=[
    opts3:[{t:'Познанием чисел и математических пропорций',c:0},{t:'Воздержанием от суждений',c:0},{t:'Говорить правду и действовать в согласии с природой, ей внимая',c:1},{t:'Созерцанием единого неподвижного бытия',c:0}],
    ok3:'Верно! Стобей: «Мудрость состоит в том, чтобы говорить правду и действовать в согласии с природой, ей внимая».',
    fail3:'Нет. По Стобею, мудрость у Гераклита — «говорить правду и действовать в согласии с природой, ей внимая».',
-   hint:'Войди в реку дважды. Что изменилось? Что осталось? Что за этим непостоянством неизменно?'},
+   hint1:'Никакой демиург его не создавал. Космос был, есть и будет — живым, самовозгорающимся.',
+   hint2:'Войди в реку дважды. Та же вода? Тот же ты? Гераклит: «существуем и не существуем».',
+   hint3:'Гераклит ценил не знание ради знания, а умение жить в согласии с тем, что правит всем.'},
 
   {id:'pythagoras', nm:'Площадь Числа', phil:'Пифагор Самосский', era:'VI–V вв. до н.э.', icon:'🔢', o:3, desc:'Навес с лавками · вся Вселенная — гармония и число',
    quote:'«Всю Вселенную признали гармонией и числом» — Аристотель о пифагорейцах',
@@ -828,7 +837,9 @@ const LOCS=[
    opts3:[{t:'Молчание — путь к слиянию с Единым',c:0},{t:'Учение запрещали городские власти',c:0},{t:'Из-за абсолютного авторитета Пифагора и требования приписывать все открытия учителю',c:1},{t:'Чтобы не нарушать гармонию небесных сфер',c:0}],
    ok3:'Верно! Абсолютный авторитет Пифагора в сочетании с требованием приписывать учителю все открытия учеников вынуждал учеников давать строгий обет молчания.',
    fail3:'Нет. Причина обета — абсолютный авторитет Пифагора и требование приписывать ему все открытия учеников.',
-   hint:'Ученики молчали годами. Числа священны, слова опасны. Спроси: что скрывает молчание?'},
+   hint1:'Пифагорейцы слышали музыку в орбитах планет. Что общее между музыкой и движением небес?',
+   hint2:'Напряги струну — звук. Расслабь — молчание. Если тело — инструмент, что такое душа?',
+   hint3:'Каждое открытие принадлежало учителю. Слова могли это нарушить. Отсюда — строгий обет.'},
 
   {id:'socrates', nm:'Агора Сократа', phil:'Сократ', era:'V в. до н.э.', icon:'🗣️', o:4, desc:'Площадь с компасной розой · диалог как путь к истине',
    quote:'«Незнание самого себя и самозаблуждение — понятия, близкие к безумию» — Ксенофонт о Сократе',
@@ -845,7 +856,9 @@ const LOCS=[
    opts3:[{t:'Чтобы победить их в споре и показать свою мудрость',c:0},{t:'Чтобы вдуматься в слова и извлечь полезное знание',c:1},{t:'Чтобы доказать существование богов',c:0},{t:'Чтобы разоблачить ложные ценности',c:0}],
    ok3:'Верно! Сократ: «стараюсь вдуматься в это… выспрашиваю его, чтобы извлечь таким образом полезное знание».',
    fail3:'Нет. Сократ говорит Гиппию: расспрашиваю «чтобы извлечь таким образом полезное знание».',
-   hint:'Тот, кто уверен в своих знаниях, закрыт для истины. Что открывает то, что кажется пустым?'},
+   hint1:'Сократ различал два незнания: одно опасно, другое — начало мудрости. Какое именно он осуждал?',
+   hint2:'Сократ не писал, не учил с кафедры. Он задавал вопросы. Что рождается в разговоре двоих?',
+   hint3:'Сократ говорит Гиппию: «Я расспрашиваю не чтобы победить». Зачем же тогда?'},
 
   {id:'platon', nm:'Академия Идей', phil:'Платон', era:'IV в. до н.э.', icon:'💎', o:5, desc:'Большой синий купол · мир идей как истинная реальность',
    quote:'«Свет от огня уподобляется мощи Солнца, а идея Блага — владычица умопостигаемого» — Платон',
@@ -862,7 +875,9 @@ const LOCS=[
    opts3:[{t:'Время существовало всегда вместе с вечностью',c:0},{t:'Творец создал время как «движущееся подобие вечности» вместе с рождением неба',c:1},{t:'Время — иллюзия, порождённая движением атомов',c:0},{t:'Время слагается из отдельных «теперь»',c:0}],
    ok3:'Верно! Платон: «Он замыслил сотворить некое движущее подобие вечности… которое мы назвали временем. Ведь не было ни дней, ни ночей… пока не было рождено небо».',
    fail3:'Нет. Платон: Творец создал время как «движущееся подобие вечности» вместе с сотворением неба.',
-   hint:'За огнём — солнце. За солнцем — что? Поднимись на одну ступень выше, чем кажется возможным.'},
+   hint1:'Узник вышел из пещеры и увидел наконец солнце. Что оно символизирует в мире идей?',
+   hint2:'Платон: государство не избавится от зол, пока им не правит тот, кто познал истину.',
+   hint3:'До неба не было дней и ночей. Значит, время появилось вместе с чем?'},
 
   {id:'aristoteles', nm:'Ликей Причин', phil:'Аристотель Стагирит', era:'IV в. до н.э.', icon:'📐', o:6, desc:'Малый храм · четыре причины и первая энтелехия',
    quote:'«О причинах говорится в четырёх значениях… четвёртая — то, ради чего, или благо» — Аристотель',
@@ -879,7 +894,9 @@ const LOCS=[
    opts3:[{t:'Он становится мудрейшим из людей',c:0},{t:'Он «уже не составляет элемента государства, становясь либо животным, либо божеством»',c:1},{t:'Он достигает истинной свободы',c:0},{t:'Он превращается в тирана',c:0}],
    ok3:'Верно! Аристотель: «Тот, кто не способен вступить в общение… уже не составляет элемента государства, становясь либо животным, либо божеством».',
    fail3:'Нет. По Аристотелю, такой человек «становится либо животным, либо божеством».',
-   hint:'Желудь не знает, что станет дубом — и всё же становится. Что ведёт вещь к тому, чем она должна стать?'},
+   hint1:'Стол из дерева, в форме стола, руками мастера — и ради чего? Четвёртая причина отвечает на последний вопрос.',
+   hint2:'Тело обладает возможностью жить. Душа — это первое, что эту возможность реализует.',
+   hint3:'Аристотель: человек — политическое животное. Тот, кто им не является, либо ниже, либо выше человека.'},
 
   {id:'stoics2', nm:'Портик Невозмутимых', phil:'Зенон, Сенека, Марк Аврелий', era:'III в. до н.э. — II в. н.э.', icon:'🏛️', o:7, desc:'Белый храм с колоннами · жизнь сообразно природе',
    quote:'«Живи сообразно с природой вещей… в этом и заключается мудрость» — Сенека',
@@ -896,7 +913,9 @@ const LOCS=[
    opts3:[{t:'Добродетель и слава',c:0},{t:'Любовь к родине',c:0},{t:'Одно и единственное — философия',c:1},{t:'Разум богов',c:0}],
    ok3:'Верно! Марк Аврелий, кн. 2.17: «Что способно сопутствовать нам? Одно и единственное — философия».',
    fail3:'Нет. Марк Аврелий (кн. 2.17): «Одно и единственное — философия».',
-   hint:'Отними дом, имущество, власть, здоровье. Что невозможно отнять? Именно это стоики считали единственным благом.'},
+   hint1:'Стоики видели мир пронизанным разумом. Всё связано причинно. Как они называли эту цепь?',
+   hint2:'Сенека: мудрость не в том, чтобы бежать от природы, а в том, чтобы следовать ей.',
+   hint3:'Марк Аврелий перечисляет всё, что нас покидает. Что остаётся с тобой при любых потерях?'},
 
   {id:'plotinus2', nm:'Чертог Истока', phil:'Плотин, Порфирий', era:'III в. н.э.', icon:'☀️', o:8, desc:'Купол с фиолетовой крышей · Красота и Благо как первоначало',
    quote:'«В качестве первого начала надо полагать Красоту. Она тождественна с Благом» — Плотин',
@@ -913,7 +932,9 @@ const LOCS=[
    opts3:[{t:'Через чувственное созерцание красоты мира',c:0},{t:'Через воздержание от суждений',c:0},{t:'Убедившись в божественной природе души, через неё и ею достигаешь и познаёшь Бога',c:1},{t:'Через математическое созерцание чисел',c:0}],
    ok3:'Верно! Плотин: «Убедившись… в высоком достоинстве, в божественной природе души, ты можешь уверовать, что через неё и ею достигаешь и познаёшь Бога».',
    fail3:'Нет. Плотин: «через неё [душу] и ею достигаешь и познаёшь Бога».',
-   hint:'Источник не убывает, когда из него льётся вода. Первоначало не умаляется, порождая мир. Что стоит ближайшим к истоку?'},
+   hint1:'Плотин начинает не с числа и не с материи. Он начинает с того, что делает мир прекрасным.',
+   hint2:'Единое у Плотина не заперто в одном месте. Найди то, что одновременно везде — и нигде.',
+   hint3:'Загляни в себя. Если душа имеет высокую природу, через неё можно достичь чего-то ещё большего.'},
 
   {id:'skeptics2', nm:'Круг Сомнений', phil:'Секст Эмпирик, Протагор', era:'IV в. до н.э. — II в. н.э.', icon:'⚖️', o:9, desc:'Круглый амфитеатр · эпохе и воздержание от суждений',
    quote:'«Человек есть мера всех вещей: существующих, что они существуют» — Протагор',
@@ -930,9 +951,11 @@ const LOCS=[
    opts3:[{t:'Потому что боги скрывают истину от людей',c:0},{t:'Доказательство нуждается в критерии, а критерий — в доказательстве: оба попадают в порочный круг',c:1},{t:'Потому что мир состоит только из теней, а не из подлинных вещей',c:0},{t:'Потому что душа не помнит истину из прошлых жизней',c:0}],
    ok3:'Верно! Секст: «Доказательство нуждается в критерии, а критерий — в доказательстве, и таким образом оба попадают в заколдованный круг».',
    fail3:'Нет. Секст: «доказательство и критерий попадают в заколдованный круг, в котором то и другое оказывается недостоверным».',
-   hint:'Каждое доказательство требует другого. Каждый критерий — обоснования. Где в этой бесконечной цепи найти твёрдую почву?'},
+   hint1:'Скептик не доказывает и не опровергает. Каждому утверждению он противопоставляет равносильное.',
+   hint2:'Двое смотрят на одно — видят разное. Протагор дал краткий ответ: кто решает, что истина?',
+   hint3:'Нужно доказательство? Требуй критерий. Нужен критерий? Требуй доказательство. Куда ведёт этот путь?'},
 
-  {id:'metka', nm:'Метка', phil:'', era:'', icon:'✦', o:10, desc:'', quote:'', tip:'', q:'', opts:[], ok:'', fail:'', q2:'', opts2:[], ok2:'', fail2:'', q3:'', opts3:[], ok3:'', fail3:''},
+
 ];
 
 // Порядок прохождения: последовательный от Сада Первоначал
@@ -1144,6 +1167,7 @@ function showIdle(){
 }
 
 var _curLoc=null;
+var _curQNum=1;
 var _isReplay=false;
 var _advanceTimer=null;
 function scheduleAdvance(loc){
@@ -1160,10 +1184,11 @@ function showQuestion(loc){
   document.getElementById('hint-btn').disabled=hintUsed;
   document.getElementById('hint-btn').style.display='';
   document.getElementById('panel-idle').style.display='none';
-  document.getElementById('q-block').style.display='flex';
   var hintBox=document.getElementById('hint-box');
   hintBox.textContent='';
+  hintBox.style.animation='none';
   hintBox.style.display='none';
+  document.getElementById('q-block').style.display='flex';
   openModal();
 
   document.getElementById('phil-icon').textContent=loc.icon;
@@ -1186,6 +1211,7 @@ function showQuestion(loc){
   if(isDone&&!_isReplay)qNum='done';
   else if(isHalf)qNum=3;
   else if(isQ1)qNum=2;
+  _curQNum=(qNum==='done'?3:qNum);
 
   const lbl=document.getElementById('q-num-lbl');
   if(lbl)lbl.textContent=qNum==='done'?'Пройдено':('Вопрос '+qNum+' / 3');
@@ -1244,7 +1270,7 @@ function onAns(loc,btn,correct,optsEl,qNum){
       save();updateUI();
       fb.className='fb ok';fb.textContent=loc.ok3;
       showToast(_isReplay?'✓ Тест пройден повторно! Знания закреплены':'+5 · '+loc.nm+' завершено!');
-      var _doneAll=state.done.length===10;
+      var _doneAll=state.done.length===10&&!_isReplay;
       setTimeout(function(){
         showLocComplete(loc);
         if(_doneAll)setTimeout(showFinal,1800);
@@ -1368,9 +1394,10 @@ document.getElementById('retry-btn').addEventListener('click',function(){
 });
 
 document.getElementById('hint-btn').addEventListener('click',function(){
-  if(!_curLoc||!_curLoc.hint)return;
+  var hintText=_curLoc&&(_curLoc['hint'+_curQNum]||_curLoc.hint);
+  if(!hintText)return;
   var box=document.getElementById('hint-box');
-  box.textContent=_curLoc.hint;
+  box.textContent=hintText;
   box.style.animation='none';
   box.style.display='block';
   box.offsetHeight;
@@ -1435,6 +1462,24 @@ document.getElementById('rst-btn').addEventListener('click',()=>{
   document.getElementById('intro-btn').textContent='⟳ Начать';
   document.getElementById('intro-cancel-btn').style.display='block';
   document.getElementById('s-intro').style.display='flex';
+});
+
+document.getElementById('fs-btn').addEventListener('click',function(){
+  if(!document.fullscreenElement){
+    document.documentElement.requestFullscreen().catch(()=>{});
+    this.textContent='✕ Выйти';
+    this.title='Выйти из полного экрана';
+  }else{
+    document.exitFullscreen().catch(()=>{});
+    this.textContent='⛶ Во весь экран';
+    this.title='Во весь экран';
+  }
+});
+document.addEventListener('fullscreenchange',function(){
+  var btn=document.getElementById('fs-btn');
+  if(!btn)return;
+  btn.textContent=document.fullscreenElement?'✕ Выйти':'⛶ Во весь экран';
+  btn.title=document.fullscreenElement?'Выйти из полного экрана':'Во весь экран';
 });
 
 // Запуск
