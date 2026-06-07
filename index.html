@@ -655,6 +655,7 @@ var _resetMode=false;
   if(savedId){var sc=CHARACTERS.find(function(c){return c.id===savedId&&c.unlocked;});if(sc)selectedChar=sc;}
   var cs=document.getElementById('char-select');
   if(!cs)return;
+  var _cardAnims=[];
   CHARACTERS.forEach(function(ch){
     var card=document.createElement('div');
     card.className='char-card'+(ch.id===selectedChar.id?' selected':'')+(ch.unlocked?'':' locked');
@@ -668,15 +669,15 @@ var _resetMode=false;
       img.onload=function(){
         var fw=Math.floor(img.naturalWidth/charData.cols);
         var fh=Math.floor(img.naturalHeight/charData.rows);
-        var w=64,h=Math.round(w*fh/fw);
+        var w=Math.round(72*(95/charData.mapSize)),h=Math.round(w*fh/fw);
         var downRow=charData.downRow||0;
         var el=document.getElementById('char-av-'+charData.id);
         if(!el)return;
         el.style.backgroundImage='url('+charData.sprite+')';
         el.style.backgroundSize=(w*charData.cols)+'px '+(h*charData.rows)+'px';
-        el.style.backgroundPosition='0px '+(-downRow*h)+'px';
         el.style.width=w+'px';
         el.style.height=h+'px';
+        _cardAnims.push({el:el,w:w,h:h,cols:charData.cols,downRow:downRow,frame:0,t:0});
       };
       img.src=charData.sprite;
     })(ch);
@@ -690,6 +691,18 @@ var _resetMode=false;
     }
     cs.appendChild(card);
   });
+  (function animCards(){
+    var now=Date.now();
+    _cardAnims.forEach(function(s){
+      if(!s.lastT)s.lastT=now;
+      if(now-s.lastT>140){
+        s.lastT=now;
+        s.frame=(s.frame+1)%s.cols;
+        s.el.style.backgroundPosition=(-s.frame*s.w)+'px '+(-s.downRow*s.h)+'px';
+      }
+    });
+    requestAnimationFrame(animCards);
+  })();
 })();
 
 (function(){
