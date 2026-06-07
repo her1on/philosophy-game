@@ -355,7 +355,7 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 .char-card{flex:1;padding:10px 8px 10px;border:1.5px solid rgba(201,162,39,.28);background:rgba(0,0,0,.3);cursor:pointer;text-align:center;transition:.2s;border-radius:6px;user-select:none}
 .char-card:hover{border-color:rgba(201,162,39,.7);background:rgba(201,162,39,.09);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.4)}
 .char-card.selected{border-color:var(--gold);background:rgba(201,162,39,.14);box-shadow:0 0 22px rgba(201,162,39,.32),inset 0 0 14px rgba(201,162,39,.08)}
-.char-av{height:56px;margin:0 auto 6px;image-rendering:pixelated;image-rendering:crisp-edges;background-repeat:no-repeat;background-position:0 0;filter:drop-shadow(0 0 6px rgba(201,162,39,.35))}
+.char-av{width:68px;height:68px;margin:0 auto 6px;image-rendering:pixelated;image-rendering:crisp-edges;background-repeat:no-repeat;filter:drop-shadow(0 0 6px rgba(201,162,39,.35))}
 .char-nm{font-family:'Cinzel',serif;font-size:11px;color:#e8c547;letter-spacing:.6px;margin-bottom:4px;line-height:1.35}
 .char-cls{font-size:10px;color:#c9a227;opacity:.75;font-style:italic;margin-bottom:6px;line-height:1.4}
 .char-dsc{font-size:10px;color:#e8d4a0;opacity:.65;line-height:1.6}
@@ -640,7 +640,7 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 
 <script>
 const CHARACTERS=[
-  {id:'ariston', name:'Аристон из Коринфа', sub:'странник в поисках мудрости',  icon:'🎓', sprite:'animation.png',        cols:3, rows:4, mapSize:80, previewSize:96, cardH:40, unlocked:true,
+  {id:'ariston', name:'Аристон из Коринфа', sub:'странник в поисках мудрости',  icon:'🎓', sprite:'animation.png',        cols:3, rows:4, mapSize:80, previewSize:96, unlocked:true,
    desc:'Юный философ из Коринфа. Задаёт вопросы и убеждён, что незнание — начало мудрости.'},
   {id:'kallia',  name:'Каллия Афинская',    sub:'хранительница знаний',         icon:'📜', sprite:'girl.png',             cols:4, rows:4, mapSize:95, previewSize:96, unlocked:true,
    desc:'Учёная из Афин, знаток рукописей. Находит смысл в словах великих мыслителей.'},
@@ -669,15 +669,17 @@ var _resetMode=false;
       img.onload=function(){
         var fw=Math.floor(img.naturalWidth/charData.cols);
         var fh=Math.floor(img.naturalHeight/charData.rows);
-        var h=charData.cardH||56,w=Math.round(h*fw/fh);
+        var box=68;
+        var scale=fw>=fh?(box/fw):(box/fh);
+        var w=Math.round(fw*scale),h=Math.round(fh*scale);
+        var ox=Math.round((box-w)/2),oy=Math.round((box-h)/2);
         var downRow=charData.downRow||0;
         var el=document.getElementById('char-av-'+charData.id);
         if(!el)return;
         el.style.backgroundImage='url('+charData.sprite+')';
         el.style.backgroundSize=(w*charData.cols)+'px '+(h*charData.rows)+'px';
-        el.style.width=w+'px';
-        el.style.height=h+'px';
-        _cardAnims.push({el:el,w:w,h:h,cols:charData.cols,downRow:downRow,frame:0,t:0});
+        el.style.backgroundPosition=ox+'px '+(oy-downRow*h)+'px';
+        _cardAnims.push({el:el,w:w,h:h,cols:charData.cols,downRow:downRow,ox:ox,oy:oy,frame:0,t:0});
       };
       img.src=charData.sprite;
     })(ch);
@@ -698,7 +700,7 @@ var _resetMode=false;
       if(now-s.lastT>140){
         s.lastT=now;
         s.frame=(s.frame+1)%s.cols;
-        s.el.style.backgroundPosition=(-s.frame*s.w)+'px '+(-s.downRow*s.h)+'px';
+        s.el.style.backgroundPosition=(s.ox-s.frame*s.w)+'px '+(s.oy-s.downRow*s.h)+'px';
       }
     });
     requestAnimationFrame(animCards);
