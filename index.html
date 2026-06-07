@@ -170,6 +170,11 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 .intro-ttl{font-family:'Cinzel',serif;font-size:28px;color:#e8c547;margin-bottom:8px;text-shadow:0 2px 18px rgba(201,162,39,.6);letter-spacing:2px}
 .intro-sub{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2.5px;color:#c9a227;opacity:.65;text-transform:uppercase;margin-bottom:22px}
 .intro-desc{color:var(--parch);font-size:14px;line-height:1.85;font-style:italic;margin-bottom:26px;opacity:.85}
+.intro-goal{margin-bottom:22px;padding:16px 22px;border:1px solid rgba(201,162,39,.35);border-radius:8px;background:rgba(201,162,39,.04);text-align:left}
+.intro-goal-ttl{font-family:'Cinzel',serif;font-size:11px;letter-spacing:3px;color:#c9a227;text-transform:uppercase;margin-bottom:12px;opacity:.8;text-align:center}
+.intro-goal-item{font-size:13px;color:var(--parch);line-height:1.7;opacity:.85;padding-left:16px;position:relative;margin-bottom:6px}
+.intro-goal-item:last-child{margin-bottom:0}
+.intro-goal-item::before{content:'✦';position:absolute;left:0;color:#c9a227;font-size:9px;top:4px;opacity:.7}
 .intro-rules{display:flex;flex-direction:column;gap:12px;margin-bottom:32px;padding:18px 24px;border:1px solid rgba(201,162,39,.22);border-radius:8px;background:rgba(0,0,0,.25)}
 .intro-rule{font-family:'Cinzel',serif;font-size:13px;color:#d4ae44;letter-spacing:1.5px;opacity:.9;display:flex;align-items:center;gap:10px}
 .intro-rule::before{content:'';display:inline-block;width:4px;height:4px;border-radius:50%;background:#c9a227;opacity:.7;flex-shrink:0}
@@ -426,6 +431,14 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
     <div class="intro-ttl">Философское путешествие</div>
     <div class="intro-sub">По следам великих мыслителей Древней Греции</div>
     <p class="intro-desc">Перед тобой карта античного мира. Посети 10 философских школ, ответь на вопросы великих мудрецов и познай истину бытия.</p>
+    <div class="intro-goal">
+      <div class="intro-goal-ttl">Цель игры</div>
+      <div class="intro-goal-list">
+        <div class="intro-goal-item">Исследуй карту и найди 10 философских школ</div>
+        <div class="intro-goal-item">В каждой школе ответь на 3 вопроса великих мыслителей</div>
+        <div class="intro-goal-item">Набери максимум очков и заверши путешествие по античной мысли</div>
+      </div>
+    </div>
     <div id="char-preview">
       <div id="char-preview-stage"><div id="char-preview-sprite"></div></div>
       <div id="char-preview-nm">Аристон из Коринфа</div>
