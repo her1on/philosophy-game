@@ -1032,6 +1032,7 @@ document.getElementById('loc-trial-btn').addEventListener('click',function(){
     // Сбрасываем только прогресс вопросов, state.done не трогаем
     state.half=state.half.filter(id=>id!==_curLoc.id);
     state.q1=state.q1.filter(id=>id!==_curLoc.id);
+    state.hinted=state.hinted.filter(id=>id!==_curLoc.id);
     save();updateUI();
     _isReplay=true;
   } else {
@@ -1356,6 +1357,7 @@ document.getElementById('lc-replay').addEventListener('click',function(){
   // state.done не трогаем — чтобы не блокировать следующие локации
   state.half=state.half.filter(id=>id!==_curLoc.id);
   state.q1=state.q1.filter(id=>id!==_curLoc.id);
+  state.hinted=state.hinted.filter(id=>id!==_curLoc.id);
   save();updateUI();
   _isReplay=true;
   var ls=document.getElementById('loc-screen');
