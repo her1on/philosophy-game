@@ -640,7 +640,7 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 
 <script>
 const CHARACTERS=[
-  {id:'ariston', name:'Аристон из Коринфа', sub:'странник в поисках мудрости',  icon:'🎓', sprite:'animation.png',        cols:3, rows:4, mapSize:80, previewSize:96, unlocked:true,
+  {id:'ariston', name:'Аристон из Коринфа', sub:'странник в поисках мудрости',  icon:'🎓', sprite:'animation.png',        cols:3, rows:4, mapSize:80, previewSize:96, cardBox:50, unlocked:true,
    desc:'Юный философ из Коринфа. Задаёт вопросы и убеждён, что незнание — начало мудрости.'},
   {id:'kallia',  name:'Каллия Афинская',    sub:'хранительница знаний',         icon:'📜', sprite:'girl.png',             cols:4, rows:4, mapSize:95, previewSize:96, unlocked:true,
    desc:'Учёная из Афин, знаток рукописей. Находит смысл в словах великих мыслителей.'},
@@ -669,7 +669,7 @@ var _resetMode=false;
       img.onload=function(){
         var fw=Math.floor(img.naturalWidth/charData.cols);
         var fh=Math.floor(img.naturalHeight/charData.rows);
-        var box=68;
+        var box=charData.cardBox||68;
         var scale=fw>=fh?(box/fw):(box/fh);
         var w=Math.round(fw*scale),h=Math.round(fh*scale);
         var ox=Math.round((box-w)/2),oy=Math.round((box-h)/2);
