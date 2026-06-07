@@ -15,10 +15,11 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 
 /* ── Topbar ── */
 #topbar{background:linear-gradient(135deg,#1a0a05,#2c1810);padding:8px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--gold);flex-shrink:0;box-shadow:0 2px 20px rgba(0,0,0,.6);gap:10px;position:relative}
-.tb-char{display:flex;align-items:center;gap:9px;min-width:0}
+.tb-char{display:flex;align-items:center;gap:9px;min-width:0;margin-left:3.5cm}
 .tb-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#4a1208,#8a2e12);border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;box-shadow:0 0 10px rgba(201,162,39,.3)}
-.tb-name{font-family:'Cinzel',serif;font-size:11px;color:#e8c547;letter-spacing:.5px;line-height:1.3}
-.tb-sub{font-size:10px;color:#e8d4a0;opacity:.55;font-style:italic}
+.tb-char>div{min-width:0;overflow:hidden}
+.tb-name{font-family:'Cinzel',serif;font-size:11px;color:#e8c547;letter-spacing:.5px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-sub{font-size:10px;color:#e8d4a0;opacity:.55;font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tb-title{font-family:'Cinzel',serif;font-size:13px;letter-spacing:3px;color:#c9a227;text-transform:uppercase;text-shadow:0 1px 10px rgba(201,162,39,.5);text-align:center;position:absolute;left:50%;transform:translateX(-50%);pointer-events:none;white-space:nowrap}
 .tb-right{display:flex;align-items:center;gap:16px;flex-shrink:0}
 .score-box{text-align:center}
@@ -31,6 +32,8 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 .prog-txt{font-family:'Cinzel',serif;font-size:9px;color:var(--parch);opacity:.6}
 .tb-reset{font-family:'Cinzel',serif;font-size:8px;letter-spacing:1px;color:var(--stone);background:transparent;border:1px solid rgba(122,122,112,.3);padding:5px 10px;cursor:pointer;text-transform:uppercase;transition:.2s;flex-shrink:0}
 .tb-reset:hover{color:#c04a20;border-color:#c04a20}
+#fs-btn{margin-left:.5cm;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1px;color:#e8c547;background:rgba(201,162,39,.12);border:1.5px solid rgba(201,162,39,.6);padding:7px 16px;cursor:pointer;text-transform:uppercase;transition:.2s;flex-shrink:0;border-radius:2px}
+#fs-btn:hover{background:rgba(201,162,39,.25);border-color:#e8c547;color:#fff}
 
 /* ── Layout ── */
 #game-content{display:flex;flex:1;min-height:0}
@@ -38,55 +41,55 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 
 /* ── Map ── */
 #map-wrap{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden;background:#1a0e06}
-#map-scroll{flex:1;min-height:0;overflow:hidden;position:relative;cursor:default;background:#0a0401}
+#map-scroll{flex:1;min-height:0;overflow:hidden;position:relative;cursor:default;background:#0a0401;opacity:0;transition:opacity .35s ease}
 #map-scroll::before,#map-scroll::after{content:'✦';position:absolute;font-size:22px;color:rgba(201,162,39,.35);z-index:10;pointer-events:none;line-height:1}
 #map-scroll::before{top:10px;left:10px}
 #map-scroll::after{bottom:10px;right:10px}
-#map-inner{position:relative;transform-origin:0 0}
+#map-inner{position:relative;transform-origin:0 0;will-change:transform;backface-visibility:hidden}
 #map-img{display:block}
 #map-overlay{position:absolute;top:0;left:0;width:100%;height:100%}
 #map-status{flex-shrink:0;background:rgba(26,8,2,.95);color:#c9a227;font-size:11px;padding:7px 18px;font-family:'Cinzel',serif;letter-spacing:1px;border-top:1px solid rgba(201,162,39,.35);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0}
 
 /* ── Markers ── */
-.mm{position:absolute;width:76px;height:76px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0;transform:translate(-50%,-50%);transition:transform .2s,box-shadow .2s}
-.mm::before{content:attr(data-name);position:absolute;bottom:calc(100% + 12px);left:50%;transform:translateX(-50%);background:rgba(8,4,2,.97);color:#e8c547;font-family:'Cinzel',serif;font-size:24px;letter-spacing:1.5px;padding:12px 24px;white-space:nowrap;border:1px solid rgba(201,162,39,.6);pointer-events:none;opacity:0;transition:opacity .22s,font-size .22s,padding .22s;z-index:100;box-shadow:0 6px 20px rgba(0,0,0,.85),0 0 12px rgba(201,162,39,.15)}
-.mm.nearby::before{font-size:42px;padding:16px 32px}
-.mm:hover::before,.mm.nearby::before{opacity:1}
-.mm.nearby{box-shadow:0 0 0 4px rgba(255,230,100,.6),0 0 22px 8px rgba(255,200,0,.55),0 0 44px 14px rgba(255,150,0,.25)!important;transform:translate(-50%,-50%) scale(1.12)!important;transition:transform .25s,box-shadow .25s}
+.mm{position:absolute;width:102px;height:102px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0;transform:translate(-50%,-50%) translateZ(0);transition:transform .2s;will-change:transform;backface-visibility:hidden}
+.mm::before{content:attr(data-name);position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);background:rgba(8,4,2,.97);color:#e8c547;font-family:'Cinzel',serif;font-size:13px;letter-spacing:1.5px;padding:6px 14px;white-space:nowrap;border:1px solid rgba(201,162,39,.6);pointer-events:none;opacity:0;transition:opacity .22s,font-size .22s,padding .22s;z-index:100;box-shadow:0 4px 12px rgba(0,0,0,.85)}
+.mm.nearby::before,.mm:hover::before{opacity:1}
+.mm.nearby::before{font-size:44px;padding:16px 36px;letter-spacing:3px}
+.mm.nearby{box-shadow:0 0 0 4px rgba(255,230,100,.6),0 0 22px 10px rgba(255,200,0,.55),0 0 44px 16px rgba(255,150,0,.25)!important;transform:translate(-50%,-50%) scale(1.12) translateZ(0)!important;transition:transform .25s}
 .mm.active{
   background:radial-gradient(circle at 32% 28%,rgba(255,255,220,.7) 6%,transparent 40%),radial-gradient(circle at 38% 30%,#fffce0,#ffd020 35%,#c9900a 62%,#7a5200);
-  border:4px solid rgba(255,220,60,.9);color:#4a2800;text-shadow:0 1px 3px rgba(255,200,0,.4);cursor:pointer;
-  box-shadow:0 0 10px 4px rgba(255,210,0,.95),0 0 24px 8px rgba(255,170,0,.7),0 0 44px 14px rgba(255,120,0,.35),inset 0 0 0 4px rgba(200,150,0,.2),inset 0 2px 8px rgba(255,255,180,.55);
+  border:4px solid rgba(255,220,60,.9);color:#4a2800;cursor:pointer;
+  box-shadow:0 0 10px 5px rgba(255,210,0,.95),0 0 38px 14px rgba(255,120,0,.35),inset 0 0 0 3px rgba(200,150,0,.2);
   animation:mpulse 2s ease-in-out infinite}
-.mm.active:hover{transform:translate(-50%,-50%) scale(1.3);animation:none;box-shadow:0 0 16px 6px rgba(255,220,0,1),0 0 36px 14px rgba(255,180,0,.85),0 0 65px 22px rgba(255,130,0,.5),inset 0 0 0 4px rgba(200,150,0,.25),inset 0 2px 8px rgba(255,255,180,.6)}
+.mm.active:hover{transform:translate(-50%,-50%) scale(1.3) translateZ(0);animation:none}
 .mm.done{
   background:radial-gradient(circle at 32% 28%,rgba(210,255,210,.6) 6%,transparent 40%),radial-gradient(circle at 38% 30%,#d8ffd8,#38d038 38%,#145014);
-  border:4px solid rgba(70,210,70,.85);color:#062808;text-shadow:0 1px 2px rgba(0,100,0,.4);cursor:pointer;
-  box-shadow:0 0 10px 4px rgba(60,210,60,.9),0 0 24px 8px rgba(40,180,40,.65),0 0 44px 14px rgba(20,140,20,.3),inset 0 0 0 4px rgba(0,150,0,.18),inset 0 2px 7px rgba(180,255,180,.45)}
-.mm.done:hover{transform:translate(-50%,-50%) scale(1.2);box-shadow:0 0 14px 5px rgba(60,210,60,1),0 0 32px 12px rgba(40,180,40,.8),inset 0 0 0 4px rgba(0,150,0,.25)}
+  border:4px solid rgba(70,210,70,.85);color:#062808;cursor:pointer;
+  box-shadow:0 0 10px 5px rgba(60,210,60,.9),0 0 38px 14px rgba(20,140,20,.3),inset 0 0 0 3px rgba(0,150,0,.18)}
+.mm.done:hover{transform:translate(-50%,-50%) scale(1.2) translateZ(0)}
 .mm.locked{
   background:radial-gradient(circle at 32% 28%,rgba(255,210,210,.5) 6%,transparent 40%),radial-gradient(circle at 38% 30%,#ffb0b0,#c0392b 38%,#7b1010);
-  border:3px solid rgba(200,50,50,.75);color:#ffe0e0;text-shadow:0 1px 3px rgba(0,0,0,.7);
-  box-shadow:0 0 10px 4px rgba(180,30,30,.8),0 0 22px 7px rgba(150,20,20,.5),inset 0 0 0 4px rgba(160,0,0,.2),inset 0 2px 6px rgba(255,120,120,.22)}
+  border:3px solid rgba(200,50,50,.75);color:#ffe0e0;
+  box-shadow:0 0 10px 5px rgba(180,30,30,.8),0 0 28px 10px rgba(150,20,20,.5),inset 0 0 0 3px rgba(160,0,0,.2)}
 .mm.half{
   background:radial-gradient(circle at 32% 28%,rgba(255,245,200,.6) 6%,transparent 40%),radial-gradient(circle at 38% 30%,#fff0c0,#ff9900 38%,#b05000);
-  border:4px solid rgba(255,160,0,.85);color:#4a2000;text-shadow:0 1px 3px rgba(180,80,0,.4);cursor:pointer;
-  box-shadow:0 0 10px 4px rgba(255,150,0,.9),0 0 24px 8px rgba(255,110,0,.65),0 0 44px 14px rgba(220,70,0,.3),inset 0 0 0 4px rgba(200,100,0,.2),inset 0 2px 7px rgba(255,220,120,.45);
+  border:4px solid rgba(255,160,0,.85);color:#4a2000;cursor:pointer;
+  box-shadow:0 0 10px 5px rgba(255,150,0,.9),0 0 38px 14px rgba(220,70,0,.3),inset 0 0 0 3px rgba(200,100,0,.2);
   animation:hpulse 2s ease-in-out infinite}
-.mm.half:hover{transform:translate(-50%,-50%) scale(1.25);animation:none;box-shadow:0 0 16px 6px rgba(255,160,0,1),0 0 36px 14px rgba(255,110,0,.8),0 0 65px 22px rgba(220,70,0,.45),inset 0 0 0 4px rgba(200,100,0,.25),inset 0 2px 7px rgba(255,220,120,.55)}
+.mm.half:hover{transform:translate(-50%,-50%) scale(1.25) translateZ(0);animation:none}
 @keyframes hpulse{
-  0%,100%{box-shadow:0 0 10px 4px rgba(255,150,0,.9),0 0 24px 8px rgba(255,110,0,.65),0 0 44px 14px rgba(220,70,0,.3),inset 0 0 0 4px rgba(200,100,0,.2),inset 0 2px 7px rgba(255,220,120,.45)}
-  60%{box-shadow:0 0 16px 6px rgba(255,150,0,.7),0 0 36px 12px rgba(255,110,0,.45),0 0 60px 18px rgba(220,70,0,.15),inset 0 0 0 4px rgba(200,100,0,.2),inset 0 2px 7px rgba(255,220,120,.45)}
+  0%,100%{transform:translate(-50%,-50%) translateZ(0) scale(1)}
+  50%{transform:translate(-50%,-50%) translateZ(0) scale(1.1)}
 }
 @keyframes mpulse{
-  0%,100%{box-shadow:0 0 10px 4px rgba(255,210,0,.95),0 0 24px 8px rgba(255,170,0,.7),0 0 44px 14px rgba(255,120,0,.35),inset 0 0 0 4px rgba(200,150,0,.2),inset 0 2px 8px rgba(255,255,180,.55)}
-  60%{box-shadow:0 0 16px 6px rgba(255,210,0,.75),0 0 36px 12px rgba(255,170,0,.5),0 0 62px 20px rgba(255,120,0,.2),inset 0 0 0 4px rgba(200,150,0,.2),inset 0 2px 8px rgba(255,255,180,.55)}
+  0%,100%{transform:translate(-50%,-50%) translateZ(0) scale(1)}
+  50%{transform:translate(-50%,-50%) translateZ(0) scale(1.12)}
 }
 
 /* ── Hero ── */
 /* ── Hero ── */
-#hero-wrap{position:absolute;z-index:100;pointer-events:none;transform:translate(-50%,-90%);text-align:center}
-#hero-sprite{display:block;width:96px;height:96px;overflow:hidden;clip-path:inset(0);background:url('animation.png') no-repeat 0 0;background-size:auto;image-rendering:pixelated;image-rendering:crisp-edges;margin:0 auto;transform-origin:center}
+#hero-wrap{position:absolute;left:0;top:0;z-index:100;pointer-events:none;text-align:center;opacity:0;transition:opacity .2s ease;will-change:transform;backface-visibility:hidden}
+#hero-sprite{display:block;width:96px;height:96px;overflow:hidden;clip-path:inset(0);background:none no-repeat 0 0;background-size:auto;image-rendering:pixelated;image-rendering:crisp-edges;margin:0 auto;transform-origin:center;will-change:background-position}
 #hero-shadow{display:none}
 #hero-hint{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1a0a03,#2c1508);color:#e8c547;font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;padding:5px 14px;border:1px solid var(--gold);white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.9);animation:hintPulse 1s ease-in-out infinite}
 #hero-hint::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--gold)}
@@ -165,13 +168,19 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 
 /* ── Intro screen ── */
 #s-intro{position:fixed;inset:0;z-index:1100;background:radial-gradient(ellipse at 50% 40%,rgba(58,30,14,.97),rgba(8,4,2,.99));display:flex;align-items:center;justify-content:center}
-.intro-box{border:2px solid var(--gold);padding:44px 54px;max-width:580px;width:90%;background:rgba(244,228,193,.04);box-shadow:0 0 100px rgba(201,162,39,.18),inset 0 0 60px rgba(0,0,0,.35);text-align:center}
-.intro-orn{color:var(--gold);font-size:18px;letter-spacing:10px;margin-bottom:18px;opacity:.8}
-.intro-ttl{font-family:'Cinzel',serif;font-size:28px;color:#e8c547;margin-bottom:8px;text-shadow:0 2px 18px rgba(201,162,39,.6);letter-spacing:2px}
-.intro-sub{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2.5px;color:#c9a227;opacity:.65;text-transform:uppercase;margin-bottom:22px}
-.intro-desc{color:var(--parch);font-size:14px;line-height:1.85;font-style:italic;margin-bottom:26px;opacity:.85}
-.intro-rules{display:flex;flex-direction:column;gap:10px;margin-bottom:32px;padding:16px 20px;border:1px dashed rgba(201,162,39,.3);background:rgba(0,0,0,.2)}
-.intro-rule{font-family:'Cinzel',serif;font-size:11px;color:#c9a227;letter-spacing:1px;opacity:.85}
+.intro-box{border:2px solid var(--gold);padding:28px 40px;max-width:580px;width:90%;max-height:92vh;overflow-y:auto;background:rgba(244,228,193,.04);box-shadow:0 0 100px rgba(201,162,39,.18),inset 0 0 60px rgba(0,0,0,.35);text-align:center;scrollbar-width:thin;scrollbar-color:rgba(201,162,39,.4) transparent}
+.intro-orn{color:var(--gold);font-size:18px;letter-spacing:10px;margin-bottom:10px;opacity:.8}
+.intro-ttl{font-family:'Cinzel',serif;font-size:28px;color:#e8c547;margin-bottom:6px;text-shadow:0 2px 18px rgba(201,162,39,.6);letter-spacing:2px}
+.intro-sub{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2.5px;color:#c9a227;opacity:.65;text-transform:uppercase;margin-bottom:12px}
+.intro-desc{color:var(--parch);font-size:14px;line-height:1.75;font-style:italic;margin-bottom:14px;opacity:.85}
+.intro-goal{margin-bottom:14px;padding:12px 18px;border:1px solid rgba(201,162,39,.35);border-radius:8px;background:rgba(201,162,39,.04);text-align:left}
+.intro-goal-ttl{font-family:'Cinzel',serif;font-size:11px;letter-spacing:3px;color:#c9a227;text-transform:uppercase;margin-bottom:12px;opacity:.8;text-align:center}
+.intro-goal-item{font-size:13px;color:var(--parch);line-height:1.7;opacity:.85;padding-left:16px;position:relative;margin-bottom:6px}
+.intro-goal-item:last-child{margin-bottom:0}
+.intro-goal-item::before{content:'✦';position:absolute;left:0;color:#c9a227;font-size:9px;top:4px;opacity:.7}
+.intro-rules{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;padding:12px 18px;border:1px solid rgba(201,162,39,.22);border-radius:8px;background:rgba(0,0,0,.25)}
+.intro-rule{font-family:'Cinzel',serif;font-size:13px;color:#d4ae44;letter-spacing:1.5px;opacity:.9;display:flex;align-items:center;gap:10px}
+.intro-rule::before{content:'';display:inline-block;width:4px;height:4px;border-radius:50%;background:#c9a227;opacity:.7;flex-shrink:0}
 
 /* ── Final overlay ── */
 #s-final{display:none;position:fixed;inset:0;z-index:999;background:radial-gradient(ellipse at 50% 40%,rgba(58,30,14,.97),rgba(10,5,2,.98));align-items:center;justify-content:center;flex-direction:column}
@@ -188,7 +197,7 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 .btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(201,162,39,.6)}
 
 /* ── Ambient map particles ── */
-.map-ptcl{position:absolute;border-radius:50%;pointer-events:none;z-index:6;animation:ptcl-rise linear forwards}
+.map-ptcl{position:absolute;border-radius:50%;pointer-events:none;z-index:6;animation:ptcl-rise linear forwards;will-change:transform,opacity;backface-visibility:hidden}
 @keyframes ptcl-rise{0%{opacity:0;transform:translateY(0) scale(.4)}15%{opacity:.9}85%{opacity:.3}100%{opacity:0;transform:translateY(-65px) scale(.2)}}
 
 /* ── Active / half spinning outer ring ── */
@@ -215,19 +224,19 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 @keyframes ripple{to{transform:scale(4);opacity:0}}
 
 /* ── Score flash ── */
-@keyframes sc-flash{0%{transform:scale(1.6);color:#ffd700;text-shadow:0 0 18px rgba(255,215,0,1)}100%{transform:scale(1)}}
+@keyframes sc-flash{0%{transform:scale(1.6) translateZ(0)}100%{transform:scale(1) translateZ(0)}}
 .sc-flash{animation:sc-flash .55s ease-out}
 
 /* ── Map vignette breathing ── */
-#map-vignette{position:absolute;inset:0;pointer-events:none;z-index:2;background:radial-gradient(ellipse at 50% 50%,transparent 30%,rgba(0,0,0,.52) 100%);animation:vign-breathe 5s ease-in-out infinite}
+#map-vignette{position:absolute;inset:0;pointer-events:none;z-index:2;background:radial-gradient(ellipse at 50% 50%,transparent 30%,rgba(0,0,0,.52) 100%);animation:vign-breathe 5s ease-in-out infinite;will-change:opacity}
 @keyframes vign-breathe{0%,100%{opacity:.75}50%{opacity:.4}}
 
 /* ── Hero dust trail ── */
-.hero-dust{position:absolute;border-radius:50%;pointer-events:none;z-index:99;background:radial-gradient(circle,rgba(200,160,60,.55),transparent);animation:dust-fade .75s ease-out forwards}
+.hero-dust{position:absolute;border-radius:50%;pointer-events:none;z-index:99;background:radial-gradient(circle,rgba(200,160,60,.55),transparent);animation:dust-fade .75s ease-out forwards;will-change:transform,opacity;backface-visibility:hidden}
 @keyframes dust-fade{0%{opacity:.7;transform:scale(1)}100%{opacity:0;transform:scale(3)}}
 
 /* ── Final confetti ── */
-.confetti-bit{position:absolute;top:-8px;pointer-events:none;border-radius:1px;animation:conf-fall linear forwards}
+.confetti-bit{position:absolute;top:-8px;pointer-events:none;border-radius:1px;animation:conf-fall linear forwards;will-change:transform,opacity;backface-visibility:hidden}
 @keyframes conf-fall{0%{opacity:1;transform:translateY(0) rotate(0deg)}100%{opacity:0;transform:translateY(98vh) rotate(900deg)}}
 
 /* ── Progress bar smooth ── */
@@ -245,11 +254,16 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 .btn-retry:hover{background:rgba(155,58,26,.2);color:#c04a20;border-color:#c04a20}
 .btn-back-map{background:rgba(201,162,39,.06);border-color:rgba(201,162,39,.45);color:#c9a227;margin-top:2px}
 .btn-back-map:hover{background:rgba(201,162,39,.16);border-color:var(--gold);color:#e8c547}
+.btn-hint{background:rgba(60,40,10,.07);border-color:rgba(140,100,30,.5);color:#8a6820;margin-top:2px}
+.btn-hint:hover:not(:disabled){background:rgba(140,100,30,.15);border-color:rgba(180,130,40,.8);color:#b08a2a}
+.btn-hint:disabled{opacity:.45;cursor:default}
+#hint-box{display:none;background:rgba(60,35,5,.09);border:1px solid rgba(180,130,40,.4);border-radius:4px;padding:10px 14px;font-family:'Crimson Text',serif;font-style:italic;font-size:13px;color:#6b4c10;line-height:1.6;margin-top:2px}
+#hint-box::before{content:'💡 ';font-style:normal}
 .btn-replay{background:rgba(45,122,45,.08);border-color:rgba(45,122,45,.5);color:#2d7a2d;margin-top:2px}
 .btn-replay:hover{background:rgba(45,122,45,.18);border-color:var(--green);color:#1a5a1a}
 
 /* ── Floating quotes ── */
-.float-quote{position:absolute;font-family:'Crimson Text',Georgia,serif;font-style:italic;font-size:14px;color:rgba(232,197,71,.92);text-shadow:0 0 14px rgba(201,162,39,.8),0 1px 4px rgba(0,0,0,.9);pointer-events:none;z-index:8;white-space:nowrap;animation:quote-float 9s ease-out forwards}
+.float-quote{position:absolute;font-family:'Crimson Text',Georgia,serif;font-style:italic;font-size:14px;color:rgba(232,197,71,.92);text-shadow:0 0 14px rgba(201,162,39,.8),0 1px 4px rgba(0,0,0,.9);pointer-events:none;z-index:8;white-space:nowrap;animation:quote-float 9s ease-out forwards;will-change:transform,opacity;backface-visibility:hidden}
 @keyframes quote-float{0%{opacity:0;transform:translateY(0)}12%{opacity:1}78%{opacity:.8}100%{opacity:0;transform:translateY(-90px)}}
 
 /* ── Wandering travelers ── */
@@ -273,8 +287,8 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 .oracle-pop-text{font-family:'Crimson Text',serif;font-style:italic;font-size:14px;color:#e8d4a0;line-height:1.65}
 
 /* ── Moving mist ── */
-.map-mist{position:absolute;pointer-events:none;z-index:3;border-radius:50%;animation:mist-drift linear forwards}
-@keyframes mist-drift{0%{opacity:0;transform:translateX(-250px)}10%{opacity:1}88%{opacity:.6}100%{opacity:0;transform:translateX(110vw)}}
+.map-mist{position:absolute;pointer-events:none;z-index:3;border-radius:50%;animation:mist-drift linear forwards;will-change:transform,opacity;backface-visibility:hidden}
+@keyframes mist-drift{0%{opacity:0;transform:translateX(-250px) translateZ(0)}10%{opacity:1;transform:translateX(-200px) translateZ(0)}88%{opacity:.6;transform:translateX(100vw) translateZ(0)}100%{opacity:0;transform:translateX(110vw) translateZ(0)}}
 
 /* ── Weather system ── */
 #weather-overlay{position:absolute;inset:0;pointer-events:none;z-index:4;opacity:0;transition:background 4s,opacity 4s}
@@ -282,33 +296,33 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 @keyframes sun-pulse{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
 .sun-ray{position:absolute;top:0;right:0;width:3px;background:linear-gradient(rgba(255,230,100,.18),transparent);pointer-events:none;z-index:5;transform-origin:top right;animation:ray-fade 4s ease-in-out infinite}
 @keyframes ray-fade{0%,100%{opacity:.4}50%{opacity:.9}}
-.raindrop{position:absolute;top:-20px;width:1.5px;height:16px;background:linear-gradient(transparent,rgba(160,210,255,.75));pointer-events:none;z-index:6;animation:rain-fall linear forwards}
+.raindrop{position:absolute;top:-20px;width:1.5px;height:16px;background:linear-gradient(transparent,rgba(160,210,255,.75));pointer-events:none;z-index:6;animation:rain-fall linear forwards;will-change:transform,opacity;backface-visibility:hidden}
 @keyframes rain-fall{0%{transform:translateY(0) skewX(-10deg);opacity:.9}100%{transform:translateY(110vh) skewX(-10deg);opacity:.2}}
 .lightning-flash{position:absolute;inset:0;pointer-events:none;z-index:11;animation:lightning-anim .35s ease-out forwards}
 @keyframes lightning-anim{0%{opacity:0}10%{opacity:1;background:rgba(200,230,255,.18)}35%{opacity:0}55%{opacity:.5;background:rgba(200,230,255,.1)}100%{opacity:0}}
 .meteor{position:absolute;width:2px;pointer-events:none;z-index:7;background:linear-gradient(to bottom,transparent,rgba(255,255,255,.95) 40%,rgba(180,210,255,.5));box-shadow:0 0 4px 1px rgba(200,220,255,.7);transform:rotate(40deg);transform-origin:top center;animation:meteor-fall linear forwards}
 @keyframes meteor-fall{0%{opacity:0;transform:rotate(40deg) translateY(-60px)}12%{opacity:1}85%{opacity:.9}100%{opacity:0;transform:rotate(40deg) translateY(1000px)}}
-.weather-toast{position:fixed;top:54px;left:50%;transform:translateX(-50%);font-family:'Cinzel',serif;font-size:13px;letter-spacing:2px;padding:10px 28px;border:1px solid;z-index:9999;pointer-events:none;text-align:center;white-space:nowrap;animation:wtoast-in 4s ease-out forwards}
-@keyframes wtoast-in{0%{opacity:0;transform:translateX(-50%) translateY(-20px)}15%{opacity:1;transform:translateX(-50%) translateY(0)}75%{opacity:1;transform:translateX(-50%) translateY(0)}100%{opacity:0;transform:translateX(-50%) translateY(-10px)}}
+.weather-toast{position:fixed;top:54px;left:50%;transform:translateX(-50%) translateY(-16px) translateZ(0);font-family:'Cinzel',serif;font-size:13px;letter-spacing:2px;padding:10px 28px;border:1px solid;border-radius:12px;z-index:9999;pointer-events:none;text-align:center;white-space:nowrap;animation:wtoast-in 4s cubic-bezier(.22,1,.36,1) forwards;will-change:transform,opacity;backface-visibility:hidden}
+@keyframes wtoast-in{0%{opacity:0;transform:translateX(-50%) translateY(-16px) translateZ(0)}12%{opacity:1;transform:translateX(-50%) translateY(0) translateZ(0)}78%{opacity:1;transform:translateX(-50%) translateY(0) translateZ(0)}100%{opacity:0;transform:translateX(-50%) translateY(-8px) translateZ(0)}}
 
 /* ── Night ── */
-.weather-moon{position:absolute;top:30px;right:60px;width:90px;height:90px;border-radius:50%;background:radial-gradient(circle at 40% 40%,rgba(255,255,230,.95),rgba(220,230,255,.6) 50%,transparent 75%);pointer-events:none;z-index:6;box-shadow:0 0 30px 14px rgba(200,215,255,.18),0 0 70px 30px rgba(160,180,255,.08);animation:moon-glow 7s ease-in-out infinite}
-@keyframes moon-glow{0%,100%{opacity:.85;transform:scale(1)}50%{opacity:1;transform:scale(1.04)}}
-.night-star{position:absolute;border-radius:50%;background:white;pointer-events:none;z-index:5;animation:star-twinkle ease-in-out infinite}
-@keyframes star-twinkle{0%,100%{opacity:.15;transform:scale(.7)}50%{opacity:1;transform:scale(1.3)}}
-.night-torch{position:absolute;border-radius:50%;pointer-events:none;z-index:6;transform:translate(-50%,-50%);animation:torch-flicker ease-in-out infinite}
-@keyframes torch-flicker{0%,100%{opacity:.8;transform:translate(-50%,-50%) scale(1)}30%{opacity:1;transform:translate(-50%,-50%) scale(1.25)}60%{opacity:.65;transform:translate(-50%,-50%) scale(.85)}}
+.weather-moon{position:absolute;top:30px;right:60px;width:90px;height:90px;border-radius:50%;background:radial-gradient(circle at 40% 40%,rgba(255,255,230,.95),rgba(220,230,255,.6) 50%,transparent 75%);pointer-events:none;z-index:6;box-shadow:0 0 30px 14px rgba(200,215,255,.18),0 0 70px 30px rgba(160,180,255,.08);animation:moon-glow 7s ease-in-out infinite;will-change:transform,opacity;backface-visibility:hidden}
+@keyframes moon-glow{0%,100%{opacity:.85;transform:scale(1) translateZ(0)}50%{opacity:1;transform:scale(1.04) translateZ(0)}}
+.night-star{position:absolute;border-radius:50%;background:white;pointer-events:none;z-index:5;animation:star-twinkle ease-in-out infinite;will-change:transform,opacity;backface-visibility:hidden}
+@keyframes star-twinkle{0%,100%{opacity:.15;transform:scale(.7) translateZ(0)}50%{opacity:1;transform:scale(1.3) translateZ(0)}}
+.night-torch{position:absolute;border-radius:50%;pointer-events:none;z-index:6;transform:translate(-50%,-50%) translateZ(0);animation:torch-flicker ease-in-out infinite;will-change:transform,opacity;backface-visibility:hidden}
+@keyframes torch-flicker{0%,100%{opacity:.8;transform:translate(-50%,-50%) translateZ(0) scale(1)}30%{opacity:1;transform:translate(-50%,-50%) translateZ(0) scale(1.25)}60%{opacity:.65;transform:translate(-50%,-50%) translateZ(0) scale(.85)}}
 .night-mode .mm{will-change:transform}
-.night-mode .mm.active{box-shadow:0 0 44px 16px rgba(255,220,0,1),0 0 90px 40px rgba(255,160,0,.6),inset 0 0 0 4px rgba(255,230,0,.9)!important}
-.night-mode .mm.done{box-shadow:0 0 44px 16px rgba(50,255,50,1),0 0 90px 40px rgba(20,200,20,.6),inset 0 0 0 4px rgba(50,255,50,.9)!important}
-.night-mode .mm.locked{box-shadow:0 0 44px 16px rgba(255,40,40,1),0 0 90px 40px rgba(190,10,10,.6),inset 0 0 0 4px rgba(255,40,40,.9)!important}
-.night-mode .mm.half{box-shadow:0 0 44px 16px rgba(255,165,0,1),0 0 90px 40px rgba(240,80,0,.6),inset 0 0 0 4px rgba(255,170,0,.9)!important}
+.night-mode .mm.active{box-shadow:0 0 28px 12px rgba(255,220,0,1),0 0 60px 24px rgba(255,160,0,.6),inset 0 0 0 3px rgba(255,230,0,.9)!important}
+.night-mode .mm.done{box-shadow:0 0 28px 12px rgba(50,255,50,1),0 0 60px 24px rgba(20,200,20,.6),inset 0 0 0 3px rgba(50,255,50,.9)!important}
+.night-mode .mm.locked{box-shadow:0 0 28px 12px rgba(255,40,40,1),0 0 60px 24px rgba(190,10,10,.6),inset 0 0 0 3px rgba(255,40,40,.9)!important}
+.night-mode .mm.half{box-shadow:0 0 28px 12px rgba(255,165,0,1),0 0 60px 24px rgba(240,80,0,.6),inset 0 0 0 3px rgba(255,170,0,.9)!important}
 
 /* ── Zone labels ── */
-.zone-label{position:absolute;display:flex;align-items:center;gap:10px;background:rgba(12,7,2,.82);border:1.5px solid rgba(201,162,39,.65);border-radius:999px;padding:14px 32px 14px 24px;font-family:'Cinzel',serif;font-size:28px;letter-spacing:3px;color:#c9a227;text-transform:uppercase;cursor:pointer;z-index:20;white-space:nowrap;backdrop-filter:blur(4px);box-shadow:0 4px 20px rgba(0,0,0,.7);transition:all .2s ease}
-.zone-label:hover{background:rgba(20,12,3,.92);border-color:rgba(201,162,39,1);color:#e8c547;box-shadow:0 4px 24px rgba(0,0,0,.8),0 0 16px rgba(201,162,39,.3);transform:translateX(-50%) scale(1.04)}
-.zone-label-icon{line-height:1}
-.zone-label-text{line-height:1}
+.zone-label{position:absolute;display:flex;align-items:center;gap:10px;background:rgba(6,3,1,.92);border:2px solid rgba(201,162,39,.85);border-radius:999px;padding:14px 32px 14px 24px;font-family:'Cinzel',serif;font-size:46px;letter-spacing:3px;color:#f0d060;text-transform:uppercase;cursor:pointer;z-index:20;white-space:nowrap;backdrop-filter:blur(6px);box-shadow:0 4px 24px rgba(0,0,0,.85),0 0 12px rgba(201,162,39,.2);transition:all .2s ease}
+.zone-label:hover{background:rgba(14,8,2,.97);border-color:#e8c547;color:#ffe880;box-shadow:0 4px 28px rgba(0,0,0,.9),0 0 20px rgba(201,162,39,.4);transform:translateX(-50%) scale(1.05)}
+.zone-label-icon{line-height:1;font-size:26px}
+.zone-label-text{line-height:1;text-shadow:0 1px 8px rgba(0,0,0,.95)}
 #zone-popup{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.9);z-index:9500;width:420px;max-width:92vw;background:linear-gradient(160deg,#f5e8ca,#e8d49e);border:2px solid var(--gold);border-radius:3px;box-shadow:0 24px 80px rgba(0,0,0,.9),0 0 60px rgba(201,162,39,.2);opacity:0;pointer-events:none;transition:opacity .22s cubic-bezier(.22,1,.36,1),transform .25s cubic-bezier(.22,1,.36,1);will-change:transform,opacity}
 #zone-popup.show{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
 .zp-header{background:linear-gradient(135deg,#5a1508,#9b3a1a);padding:14px 18px;display:flex;align-items:center;gap:14px;border-bottom:2px solid var(--gold)}
@@ -322,38 +336,40 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 .zp-phil{font-family:'Cinzel',serif;font-size:10px;color:#5a3020;background:rgba(155,58,26,.1);border:1px solid rgba(155,58,26,.3);padding:4px 10px;border-radius:12px}
 .zp-close{position:absolute;right:10px;top:12px;background:transparent;border:1px solid rgba(232,197,71,.35);color:rgba(232,197,71,.7);width:24px;height:24px;border-radius:50%;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
 .zp-close:hover{border-color:var(--gold);color:var(--gold)}
-.zone-label-icon{font-size:128px;opacity:.95;line-height:1}
+.zone-label-icon{font-size:50px;opacity:.95;line-height:1}
 
 /* ── Day/Night banner ── */
-#phase-banner{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.85);z-index:10000;text-align:center;pointer-events:none;opacity:0;transition:opacity .4s cubic-bezier(.22,1,.36,1),transform .4s cubic-bezier(.22,1,.36,1);will-change:transform,opacity}
-#phase-banner.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
-.phase-banner-box{padding:22px 48px;border:2px solid;font-family:'Cinzel',serif;letter-spacing:4px;text-transform:uppercase;box-shadow:0 0 60px rgba(0,0,0,.8)}
+#phase-banner{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.82) translateZ(0);z-index:10000;text-align:center;pointer-events:none;opacity:0;transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1);will-change:transform,opacity;backface-visibility:hidden}
+#phase-banner.show{opacity:1;transform:translate(-50%,-50%) scale(1) translateZ(0)}
+.phase-banner-box{padding:22px 48px;border:2px solid;border-radius:16px;font-family:'Cinzel',serif;letter-spacing:4px;text-transform:uppercase;box-shadow:0 0 60px rgba(0,0,0,.8)}
 .phase-banner-icon{font-size:36px;margin-bottom:10px}
 .phase-banner-txt{font-size:18px;font-weight:700}
 .phase-banner-sub{font-size:11px;opacity:.7;margin-top:6px;letter-spacing:3px}
 
 /* ── Toast ── */
-#toast{position:fixed;top:54px;left:50%;transform:translateX(-50%) translateY(-120px);background:linear-gradient(135deg,#1a5e1a,#0d3d0d);color:#a8e6a8;font-family:'Cinzel',serif;font-size:12px;letter-spacing:1.5px;padding:11px 32px;border:1px solid #3aaa3a;border-top:none;box-shadow:0 8px 32px rgba(0,0,0,.75);z-index:9999;transition:transform .45s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;pointer-events:none}
+#toast{position:fixed;top:54px;left:50%;transform:translateX(-50%) translateY(-120px) translateZ(0);background:linear-gradient(135deg,#1a5e1a,#0d3d0d);color:#a8e6a8;font-family:'Cinzel',serif;font-size:12px;letter-spacing:1.5px;padding:11px 32px;border:1px solid #3aaa3a;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.75);z-index:9999;transition:transform .45s cubic-bezier(.34,1.56,.64,1),opacity .45s ease;white-space:nowrap;pointer-events:none;will-change:transform,opacity;backface-visibility:hidden}
 #toast.show{transform:translateX(-50%) translateY(0)}
 
 /* ── Character select (intro) ── */
-.char-sel-lbl{font-family:'Cinzel',serif;font-size:9px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;opacity:.85;margin:0 0 12px;display:flex;align-items:center;gap:10px}
-.char-sel-lbl::before,.char-sel-lbl::after{content:'';flex:1;height:1px;background:var(--gold);opacity:.35}
-.char-select{display:flex;gap:9px;margin-bottom:22px}
-.char-card{flex:1;padding:12px 7px 10px;border:1.5px solid rgba(201,162,39,.28);background:rgba(0,0,0,.3);cursor:pointer;text-align:center;transition:.2s;border-radius:2px;user-select:none}
-.char-card:hover{border-color:rgba(201,162,39,.65);background:rgba(201,162,39,.09)}
-.char-card.selected{border-color:var(--gold);background:rgba(201,162,39,.14);box-shadow:0 0 18px rgba(201,162,39,.28),inset 0 0 12px rgba(201,162,39,.07)}
-.char-av{font-size:30px;margin-bottom:7px;line-height:1}
-.char-nm{font-family:'Cinzel',serif;font-size:9px;color:#e8c547;letter-spacing:.4px;margin-bottom:3px;line-height:1.35}
-.char-cls{font-size:9px;color:#c9a227;opacity:.7;font-style:italic;margin-bottom:5px;line-height:1.4}
-.char-dsc{font-size:9px;color:#e8d4a0;opacity:.6;line-height:1.5}
-.char-card.locked{opacity:.5;cursor:default;pointer-events:none;position:relative}
-.char-card.locked::after{content:'Скоро';position:absolute;top:5px;right:5px;font-family:'Cinzel',serif;font-size:7px;letter-spacing:1px;color:#c9a227;background:rgba(0,0,0,.55);padding:2px 5px;border:1px solid rgba(201,162,39,.35);border-radius:1px}
-#char-preview{display:flex;flex-direction:column;align-items:center;gap:7px;margin:0 0 20px}
-#char-preview-stage{width:112px;height:112px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle,rgba(201,162,39,.14) 0%,transparent 70%);border-radius:50%;border:1px solid rgba(201,162,39,.2);box-shadow:0 0 22px rgba(201,162,39,.1)}
-#char-preview-sprite{image-rendering:pixelated;image-rendering:crisp-edges;width:96px;height:96px;overflow:hidden;filter:drop-shadow(0 0 8px rgba(201,162,39,.55))}
-#char-preview-nm{font-family:'Cinzel',serif;font-size:11px;color:#e8c547;letter-spacing:1px;text-align:center}
-#char-preview-sub{font-size:9px;color:#c9a227;opacity:.7;font-style:italic;text-align:center}
+.char-sel-lbl{font-family:'Cinzel',serif;font-size:12px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;opacity:.9;margin:0 0 14px;display:flex;align-items:center;gap:12px}
+.char-sel-lbl::before,.char-sel-lbl::after{content:'';flex:1;height:1px;background:linear-gradient(to right,transparent,rgba(201,162,39,.5));opacity:1}
+.char-sel-lbl::after{background:linear-gradient(to left,transparent,rgba(201,162,39,.5))}
+.char-select{display:flex;gap:10px;margin-bottom:14px}
+.char-card{flex:1;padding:10px 8px 10px;border:1.5px solid rgba(201,162,39,.28);background:rgba(0,0,0,.3);cursor:pointer;text-align:center;transition:.2s;border-radius:6px;user-select:none}
+.char-card:hover{border-color:rgba(201,162,39,.7);background:rgba(201,162,39,.09);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.4)}
+.char-card.selected{border-color:var(--gold);background:rgba(201,162,39,.14);box-shadow:0 0 22px rgba(201,162,39,.32),inset 0 0 14px rgba(201,162,39,.08)}
+.char-av-wrap{height:68px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:6px}
+.char-av{display:block;image-rendering:pixelated;image-rendering:crisp-edges;background-repeat:no-repeat;filter:drop-shadow(0 0 6px rgba(201,162,39,.35))}
+.char-nm{font-family:'Cinzel',serif;font-size:11px;color:#e8c547;letter-spacing:.6px;margin-bottom:4px;line-height:1.35}
+.char-cls{font-size:10px;color:#c9a227;opacity:.75;font-style:italic;margin-bottom:6px;line-height:1.4}
+.char-dsc{font-size:10px;color:#e8d4a0;opacity:.65;line-height:1.6}
+.char-card.locked{opacity:.45;cursor:default;pointer-events:none;position:relative}
+.char-card.locked::after{content:'Скоро';position:absolute;top:5px;right:5px;font-family:'Cinzel',serif;font-size:8px;letter-spacing:1px;color:#c9a227;background:rgba(0,0,0,.55);padding:2px 6px;border:1px solid rgba(201,162,39,.35);border-radius:3px}
+#char-preview{display:flex;flex-direction:column;align-items:center;gap:8px;margin:0 0 22px}
+#char-preview-stage{width:118px;height:118px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle,rgba(201,162,39,.18) 0%,transparent 70%);border-radius:50%;border:1px solid rgba(201,162,39,.28);box-shadow:0 0 28px rgba(201,162,39,.14)}
+#char-preview-sprite{image-rendering:pixelated;image-rendering:crisp-edges;width:96px;height:96px;overflow:hidden;filter:drop-shadow(0 0 10px rgba(201,162,39,.6))}
+#char-preview-nm{font-family:'Cinzel',serif;font-size:15px;color:#e8c547;letter-spacing:1.5px;text-align:center;text-shadow:0 0 16px rgba(201,162,39,.45)}
+#char-preview-sub{font-size:11px;color:#c9a227;opacity:.75;font-style:italic;text-align:center}
 #intro-cancel-btn{display:none;background:transparent;border:none;color:rgba(201,162,39,.4);font-family:'Cinzel',serif;font-size:9px;letter-spacing:1.5px;cursor:pointer;padding:6px 12px;margin-top:4px;text-transform:uppercase;transition:.2s;width:100%}
 #intro-cancel-btn:hover{color:rgba(201,162,39,.8)}
 
@@ -373,28 +389,32 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 .btn-enter-no:hover{opacity:1;border-color:rgba(201,162,39,.55)}
 
 /* ── Location screen ── */
-#loc-screen{position:fixed;inset:0;z-index:800;display:none;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+#loc-screen{position:fixed;inset:0;z-index:800;display:none;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;will-change:opacity}
 #loc-screen.complete-mode{justify-content:center}
-#loc-screen.show{display:flex}
-#loc-bg{position:absolute;inset:-10px;background-size:cover;background-position:center;background-repeat:no-repeat;z-index:0;animation:loc-zoom 12s ease-out forwards}
-@keyframes loc-zoom{from{transform:scale(1.08)}to{transform:scale(1)}}
+#loc-screen.show{display:flex;animation:loc-screen-in .12s ease-out both}
+#loc-screen.hiding{animation:loc-screen-out .3s ease-in both}
+@keyframes loc-screen-in{from{opacity:0}to{opacity:1}}
+@keyframes loc-screen-out{from{opacity:1}to{opacity:0}}
+#loc-bg{position:absolute;inset:-10px;background-size:cover;background-position:center;background-repeat:no-repeat;z-index:0;animation:loc-zoom 14s ease-out forwards;will-change:transform,opacity;backface-visibility:hidden}
+@keyframes loc-zoom{from{transform:scale(1.1) translateZ(0);opacity:.4}to{transform:scale(1) translateZ(0);opacity:1}}
 #loc-screen-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(4,1,0,.97) 0%,rgba(8,3,1,.75) 38%,rgba(0,0,0,.38) 75%,rgba(0,0,0,.15) 100%);z-index:1}
-#loc-content{position:relative;z-index:2;width:100%;max-width:620px;padding:32px 40px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;animation:loc-up .5s ease-out both}
+#loc-content{position:relative;z-index:2;width:100%;max-width:620px;padding:32px 40px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;will-change:transform,opacity}
+#loc-screen.show #loc-content{animation:loc-up .18s .06s ease-out both}
 #loc-era-big{display:none}
-@keyframes loc-up{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes loc-up{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
 #loc-icon-big{font-size:54px;line-height:1;filter:drop-shadow(0 0 18px rgba(201,162,39,.75));margin-bottom:4px}
 #loc-title-big{font-family:'Cinzel',serif;font-size:30px;letter-spacing:4px;color:#e8c547;text-transform:uppercase;text-shadow:0 2px 24px rgba(201,162,39,.65)}
 #loc-phil-big{font-family:'Cinzel',serif;font-size:13px;letter-spacing:1.5px;color:#e8d4a0;opacity:.8}
-#loc-era-big{display:none}
 #loc-desc-big{font-size:13.5px;color:#e8d4a0;font-style:italic;line-height:1.8;max-width:460px;opacity:.75;margin-top:6px;padding:0 10px}
 #loc-trial-btn{margin-top:20px;font-family:'Cinzel',serif;font-size:13px;letter-spacing:2.5px;color:#1a0a02;background:linear-gradient(135deg,#e8c547,var(--gold));border:none;cursor:pointer;padding:16px 52px;text-transform:uppercase;transition:.25s;box-shadow:0 4px 28px rgba(201,162,39,.55);border-radius:2px}
 #loc-trial-btn:hover{transform:translateY(-2px);box-shadow:0 10px 40px rgba(201,162,39,.75)}
-#loc-back-btn{display:none}
+#loc-back-btn{background:transparent;border:1px solid rgba(201,162,39,.28);color:rgba(201,162,39,.55);font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;cursor:pointer;padding:10px 28px;text-transform:uppercase;transition:.22s;margin-top:6px;border-radius:2px}
+#loc-back-btn:hover{color:#e8c547;border-color:rgba(201,162,39,.7)}
 #loc-screen.trial-mode #loc-content{opacity:0;pointer-events:none;transition:opacity .2s}
 #loc-screen.complete-mode #loc-content{display:none}
-#loc-complete{position:relative;z-index:2;width:100%;max-width:520px;padding:40px 40px 64px;text-align:center;display:none;flex-direction:column;align-items:center;gap:18px;animation:loc-up .5s ease-out both}
-#loc-screen.complete-mode #loc-complete{display:flex}
-#lc-badge{font-size:80px;line-height:1;filter:drop-shadow(0 0 32px rgba(232,197,71,.9));margin-bottom:8px}
+#loc-complete{position:relative;z-index:2;width:100%;max-width:520px;padding:40px 40px 64px;text-align:center;display:none;flex-direction:column;align-items:center;gap:18px;animation:loc-up .5s ease-out both;will-change:transform,opacity}
+#loc-screen.complete-mode #loc-complete{display:flex;animation:loc-up .18s .03s ease-out both}
+#lc-badge{display:none}
 #lc-title{font-family:'Cinzel',serif;font-size:20px;letter-spacing:4px;color:#e8c547;text-transform:uppercase;text-shadow:0 0 20px rgba(232,197,71,.5)}
 #lc-name{font-family:'Cinzel',serif;font-size:13px;color:rgba(232,197,71,.6);letter-spacing:2px;margin-bottom:6px}
 #lc-replay{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2.5px;cursor:pointer;padding:14px 40px;text-transform:uppercase;border-radius:2px;transition:.25s;width:100%;max-width:300px;background:transparent;border:1px solid rgba(201,162,39,.45);color:#c9a227}
@@ -416,8 +436,15 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
     <div class="intro-orn">— ✦ —</div>
     <div class="intro-ttl">Философское путешествие</div>
     <div class="intro-sub">По следам великих мыслителей Древней Греции</div>
-    <p class="intro-desc">Перед тобой карта античного мира. Посети 10 философских школ, ответь на вопросы великих мудрецов и познай истину бытия.</p>
-    <div id="char-preview">
+    <div class="intro-goal">
+      <div class="intro-goal-ttl">Цель игры</div>
+      <div class="intro-goal-list">
+        <div class="intro-goal-item">Исследуй карту и пройди все 10 философских локаций</div>
+        <div class="intro-goal-item">В каждой школе ответь на 3 вопроса великих мыслителей</div>
+        <div class="intro-goal-item">Набери максимум очков и заверши путешествие по античной мысли</div>
+      </div>
+    </div>
+    <div id="char-preview" style="display:none">
       <div id="char-preview-stage"><div id="char-preview-sprite"></div></div>
       <div id="char-preview-nm">Аристон из Коринфа</div>
       <div id="char-preview-sub">странник в поисках мудрости</div>
@@ -443,6 +470,7 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
         <div class="tb-name">Аристон из Коринфа</div>
         <div class="tb-sub">странник в поисках мудрости</div>
       </div>
+      <button id="fs-btn" title="Во весь экран">⛶ Во весь экран</button>
     </div>
     <div class="tb-title">Философское путешествие</div>
     <div class="tb-right">
@@ -478,16 +506,17 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
             <div class="mm" id="m-9"  data-name="Чертог Истока"           style="left:83.0%;top:84%">IX</div>
             <div class="mm" id="m-10" data-name="Круг Сомнений"           style="left:88%;top:63%">X</div>
 
-            <div class="zone-label" style="left:15%;top:93%;transform:translateX(-50%)"><span class="zone-label-icon">🌿</span><span class="zone-label-text">Натуральная философия</span></div>
-            <div class="zone-label" style="left:55%;top:93%;transform:translateX(-50%)"><span class="zone-label-icon">🏛</span><span class="zone-label-text">Классическая философия</span></div>
-            <div class="zone-label" style="left:85%;top:93%;transform:translateX(-50%)"><span class="zone-label-icon">🏺</span><span class="zone-label-text">Эллинистическая философия</span></div>
+
+            <div class="zone-label" style="left:15%;top:93%;transform:translateX(-50%)"><span class="zone-label-icon">🌿</span><span class="zone-label-text">Натурфилософский период</span></div>
+            <div class="zone-label" style="left:55%;top:93%;transform:translateX(-50%)"><span class="zone-label-icon">🏛</span><span class="zone-label-text">Классический период</span></div>
+            <div class="zone-label" style="left:85%;top:93%;transform:translateX(-50%)"><span class="zone-label-icon">🏺</span><span class="zone-label-text">Эллинистический период</span></div>
 
           </div>
         </div>
         <div id="map-vignette"></div>
         <div id="weather-overlay"></div>
         <!-- Hero character — outside map-inner so it's not scaled -->
-        <div id="hero-wrap">
+        <div id="hero-wrap" style="opacity:0">
           <div id="hero-sprite"></div>
           <div id="hero-shadow"></div>
           <div id="hero-hint">[ E ]</div>
@@ -526,6 +555,8 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
           <p class="q-text" id="q-text">Вопрос</p>
           <div class="opts" id="opts"></div>
           <div class="fb" id="fb"></div>
+          <button class="btn-action btn-hint" id="hint-btn">💡 Взять подсказку</button>
+          <div id="hint-box"></div>
           <div id="q-actions">
             <button class="btn-action btn-retry" id="retry-btn">↩ Попробовать снова</button>
           </div>
@@ -616,11 +647,11 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 
 <script>
 const CHARACTERS=[
-  {id:'ariston', name:'Аристон из Коринфа', sub:'странник в поисках мудрости',  icon:'🎓', sprite:'animation.png',        cols:3, rows:4, mapSize:64, previewSize:96, unlocked:true,
+  {id:'ariston', name:'Аристон из Коринфа', sub:'странник в поисках мудрости',  icon:'🎓', sprite:'animation.png',        cols:3, rows:4, mapSize:80, previewSize:96, cardH:56, unlocked:true,
    desc:'Юный философ из Коринфа. Задаёт вопросы и убеждён, что незнание — начало мудрости.'},
-  {id:'kallia',  name:'Каллия Афинская',    sub:'хранительница знаний',         icon:'📜', sprite:'girl.png',             cols:4, rows:4, mapSize:96, previewSize:96, unlocked:true,
+  {id:'kallia',  name:'Каллия Афинская',    sub:'хранительница знаний',         icon:'📜', sprite:'girl.png',             cols:4, rows:4, mapSize:95, previewSize:96, unlocked:true,
    desc:'Учёная из Афин, знаток рукописей. Находит смысл в словах великих мыслителей.'},
-  {id:'pyrr',    name:'Пирр Эпирский',      sub:'воин, познавший тщету побед',  icon:'⚔️', sprite:'character3_sheet.png', cols:3, rows:4, mapSize:96, previewSize:96, dirMap:{down:3,left:1,right:2,up:0}, downRow:3, unlocked:true,
+  {id:'pyrr',    name:'Пирр Эпирский',      sub:'воин, познавший тщету побед',  icon:'⚔️', sprite:'character3_sheet.png', cols:3, rows:4, mapSize:92, previewSize:96, dirMap:{down:3,left:1,right:2,up:0}, downRow:3, unlocked:true,
    desc:'Вернулся с войны. Ищет у философов ответ: ради чего всё это было нужно?'}
 ];
 let selectedChar=CHARACTERS[0];
@@ -631,13 +662,33 @@ var _resetMode=false;
   if(savedId){var sc=CHARACTERS.find(function(c){return c.id===savedId&&c.unlocked;});if(sc)selectedChar=sc;}
   var cs=document.getElementById('char-select');
   if(!cs)return;
+  var _cardAnims=[];
   CHARACTERS.forEach(function(ch){
     var card=document.createElement('div');
     card.className='char-card'+(ch.id===selectedChar.id?' selected':'')+(ch.unlocked?'':' locked');
-    card.innerHTML='<div class="char-av">'+ch.icon+'</div>'
+    var avId='char-av-'+ch.id;
+    card.innerHTML='<div class="char-av-wrap"><div class="char-av" id="'+avId+'"></div></div>'
       +'<div class="char-nm">'+ch.name+'</div>'
       +'<div class="char-cls">'+ch.sub+'</div>'
       +'<div class="char-dsc">'+ch.desc+'</div>';
+    (function(charData){
+      var img=new Image();
+      img.onload=function(){
+        var fw=Math.floor(img.naturalWidth/charData.cols);
+        var fh=Math.floor(img.naturalHeight/charData.rows);
+        var th=charData.cardH||68,w=Math.round(th*fw/fh),h=th;
+        var downRow=charData.downRow||0;
+        var el=document.getElementById('char-av-'+charData.id);
+        if(!el)return;
+        el.style.backgroundImage='url('+charData.sprite+')';
+        el.style.backgroundSize=(w*charData.cols)+'px '+(h*charData.rows)+'px';
+        el.style.backgroundPosition='0px '+(-downRow*h)+'px';
+        el.style.width=w+'px';
+        el.style.height=h+'px';
+        _cardAnims.push({el:el,w:w,h:h,cols:charData.cols,downRow:downRow,frame:0,t:0});
+      };
+      img.src=charData.sprite;
+    })(ch);
     if(ch.unlocked){
       card.addEventListener('click',function(){
         selectedChar=ch;
@@ -648,6 +699,18 @@ var _resetMode=false;
     }
     cs.appendChild(card);
   });
+  (function animCards(){
+    var now=Date.now();
+    _cardAnims.forEach(function(s){
+      if(!s.lastT)s.lastT=now;
+      if(now-s.lastT>140){
+        s.lastT=now;
+        s.frame=(s.frame+1)%s.cols;
+        s.el.style.backgroundPosition=(-s.frame*s.w)+'px '+(-s.downRow*s.h)+'px';
+      }
+    });
+    requestAnimationFrame(animCards);
+  })();
 })();
 
 (function(){
@@ -718,7 +781,10 @@ const LOCS=[
    q3:'Что, согласно Анаксимандру (по Симплицию), происходит со всеми вещами в конечном счёте?',
    opts3:[{t:'Они возвращаются к огню как первоначалу',c:0},{t:'Они растворяются в пустоте',c:0},{t:'Они возвращаются в то, из чего возникли, следуя необходимости, наказывая друг друга за несправедливость',c:1},{t:'Они соединяются в единое неподвижное бытие',c:0}],
    ok3:'Верно! Анаксимандр: «Из чего все вещи получают своё рождение, в то все они и возвращаются, следуя необходимости».',
-   fail3:'Нет. Анаксимандр: вещи «возвращаются» туда, «откуда получают рождение, следуя необходимости», наказывая друг друга.'},
+   fail3:'Нет. Анаксимандр: вещи «возвращаются» туда, «откуда получают рождение, следуя необходимости», наказывая друг друга.',
+   hint1:'Аристотель пишет: Фалес заметил, что всё питается влагой, а тепло рождается из влажного. Что здесь первоначало?',
+   hint2:'Диоген рассказывает о живом мире, полном незримых сущностей. Каким Фалес видел весь мир вокруг?',
+   hint3:'Анаксимандр: вещи «наказывают друг друга за несправедливость» — возвращаясь туда, откуда пришли.'},
 
   {id:'apeiron', nm:'Грот Апейрона', phil:'Анаксимандр, Анаксимен', era:'VI в. до н.э.', icon:'🌊', o:1, desc:'Пещера в скале · беспредельное как начало сущего',
    quote:'«Из чего все вещи рождаются, туда и возвращаются, следуя необходимости» — Анаксимандр',
@@ -734,7 +800,10 @@ const LOCS=[
    q3:'Как Аэций характеризует учение Анаксимена о связи души и мироздания?',
    opts3:[{t:'Душа есть гармония противоположностей в теле',c:0},{t:'Как наша душа, будучи воздухом, скрепляет нас, так воздух объемлет всё мироздание',c:1},{t:'Душа бессмертна и переходит в другие тела',c:0},{t:'Душа есть часть мирового огня',c:0}],
    ok3:'Верно! Аэций: «Как наша душа, будучи воздухом, скрепляет каждого из нас, так и дыхание и воздух объемлют всё мироздание».',
-   fail3:'Нет. Аэций: «как наша душа, будучи воздухом, скрепляет нас — так воздух объемлет всё мироздание».'},
+   fail3:'Нет. Аэций: «как наша душа, будучи воздухом, скрепляет нас — так воздух объемлет всё мироздание».',
+   hint1:'Апейрон — не вода и не огонь. Он беспределен, вечен и не имеет конкретной формы.',
+   hint2:'Вдохни. Что ты вдыхаешь? Анаксимен именно это возвёл в первоначало всего сущего.',
+   hint3:'Если то, что скрепляет тебя изнутри, — то же, что объемлет всё мироздание, что это такое?'},
 
   {id:'heraclitus', nm:'Храм Вечного Огня', phil:'Гераклит Эфесский', era:'V в. до н.э.', icon:'🔥', o:2, desc:'Большой храм · космос как вечно живой огонь',
    quote:'«Этот космос… всегда был, есть и будет вечно живым огнём, мерами разгорающимся и мерами потухающим» — Гераклит',
@@ -750,7 +819,10 @@ const LOCS=[
    q3:'Чем, по Гераклиту (Стобей), является мудрость?',
    opts3:[{t:'Познанием чисел и математических пропорций',c:0},{t:'Воздержанием от суждений',c:0},{t:'Говорить правду и действовать в согласии с природой, ей внимая',c:1},{t:'Созерцанием единого неподвижного бытия',c:0}],
    ok3:'Верно! Стобей: «Мудрость состоит в том, чтобы говорить правду и действовать в согласии с природой, ей внимая».',
-   fail3:'Нет. По Стобею, мудрость у Гераклита — «говорить правду и действовать в согласии с природой, ей внимая».'},
+   fail3:'Нет. По Стобею, мудрость у Гераклита — «говорить правду и действовать в согласии с природой, ей внимая».',
+   hint1:'Никакой демиург его не создавал. Космос был, есть и будет — живым, самовозгорающимся.',
+   hint2:'Войди в реку дважды. Та же вода? Тот же ты? Гераклит: «существуем и не существуем».',
+   hint3:'Гераклит ценил не знание ради знания, а умение жить в согласии с тем, что правит всем.'},
 
   {id:'pythagoras', nm:'Площадь Числа', phil:'Пифагор Самосский', era:'VI–V вв. до н.э.', icon:'🔢', o:3, desc:'Навес с лавками · вся Вселенная — гармония и число',
    quote:'«Всю Вселенную признали гармонией и числом» — Аристотель о пифагорейцах',
@@ -766,7 +838,10 @@ const LOCS=[
    q3:'Почему ученики Пифагора давали обет молчания, по свидетельству источников?',
    opts3:[{t:'Молчание — путь к слиянию с Единым',c:0},{t:'Учение запрещали городские власти',c:0},{t:'Из-за абсолютного авторитета Пифагора и требования приписывать все открытия учителю',c:1},{t:'Чтобы не нарушать гармонию небесных сфер',c:0}],
    ok3:'Верно! Абсолютный авторитет Пифагора в сочетании с требованием приписывать учителю все открытия учеников вынуждал учеников давать строгий обет молчания.',
-   fail3:'Нет. Причина обета — абсолютный авторитет Пифагора и требование приписывать ему все открытия учеников.'},
+   fail3:'Нет. Причина обета — абсолютный авторитет Пифагора и требование приписывать ему все открытия учеников.',
+   hint1:'Пифагорейцы слышали музыку в орбитах планет. Что общее между музыкой и движением небес?',
+   hint2:'Напряги струну — звук. Расслабь — молчание. Если тело — инструмент, что такое душа?',
+   hint3:'Каждое открытие принадлежало учителю. Слова могли это нарушить. Отсюда — строгий обет.'},
 
   {id:'socrates', nm:'Агора Сократа', phil:'Сократ', era:'V в. до н.э.', icon:'🗣️', o:4, desc:'Площадь с компасной розой · диалог как путь к истине',
    quote:'«Незнание самого себя и самозаблуждение — понятия, близкие к безумию» — Ксенофонт о Сократе',
@@ -782,7 +857,10 @@ const LOCS=[
    q3:'Зачем, объясняет Сократ Гиппию, он так дотошно расспрашивает мудрецов?',
    opts3:[{t:'Чтобы победить их в споре и показать свою мудрость',c:0},{t:'Чтобы вдуматься в слова и извлечь полезное знание',c:1},{t:'Чтобы доказать существование богов',c:0},{t:'Чтобы разоблачить ложные ценности',c:0}],
    ok3:'Верно! Сократ: «стараюсь вдуматься в это… выспрашиваю его, чтобы извлечь таким образом полезное знание».',
-   fail3:'Нет. Сократ говорит Гиппию: расспрашиваю «чтобы извлечь таким образом полезное знание».'},
+   fail3:'Нет. Сократ говорит Гиппию: расспрашиваю «чтобы извлечь таким образом полезное знание».',
+   hint1:'Сократ различал два незнания: одно опасно, другое — начало мудрости. Какое именно он осуждал?',
+   hint2:'Сократ не писал, не учил с кафедры. Он задавал вопросы. Что рождается в разговоре двоих?',
+   hint3:'Сократ говорит Гиппию: «Я расспрашиваю не чтобы победить». Зачем же тогда?'},
 
   {id:'platon', nm:'Академия Идей', phil:'Платон', era:'IV в. до н.э.', icon:'💎', o:5, desc:'Большой синий купол · мир идей как истинная реальность',
    quote:'«Свет от огня уподобляется мощи Солнца, а идея Блага — владычица умопостигаемого» — Платон',
@@ -798,7 +876,10 @@ const LOCS=[
    q3:'Согласно Платону, как возникло время?',
    opts3:[{t:'Время существовало всегда вместе с вечностью',c:0},{t:'Творец создал время как «движущееся подобие вечности» вместе с рождением неба',c:1},{t:'Время — иллюзия, порождённая движением атомов',c:0},{t:'Время слагается из отдельных «теперь»',c:0}],
    ok3:'Верно! Платон: «Он замыслил сотворить некое движущее подобие вечности… которое мы назвали временем. Ведь не было ни дней, ни ночей… пока не было рождено небо».',
-   fail3:'Нет. Платон: Творец создал время как «движущееся подобие вечности» вместе с сотворением неба.'},
+   fail3:'Нет. Платон: Творец создал время как «движущееся подобие вечности» вместе с сотворением неба.',
+   hint1:'Узник вышел из пещеры и увидел наконец солнце. Что оно символизирует в мире идей?',
+   hint2:'Платон: государство не избавится от зол, пока им не правит тот, кто познал истину.',
+   hint3:'До неба не было дней и ночей. Значит, время появилось вместе с чем?'},
 
   {id:'aristoteles', nm:'Ликей Причин', phil:'Аристотель Стагирит', era:'IV в. до н.э.', icon:'📐', o:6, desc:'Малый храм · четыре причины и первая энтелехия',
    quote:'«О причинах говорится в четырёх значениях… четвёртая — то, ради чего, или благо» — Аристотель',
@@ -814,7 +895,10 @@ const LOCS=[
    q3:'Что, по Аристотелю, происходит с человеком, неспособным жить в обществе?',
    opts3:[{t:'Он становится мудрейшим из людей',c:0},{t:'Он «уже не составляет элемента государства, становясь либо животным, либо божеством»',c:1},{t:'Он достигает истинной свободы',c:0},{t:'Он превращается в тирана',c:0}],
    ok3:'Верно! Аристотель: «Тот, кто не способен вступить в общение… уже не составляет элемента государства, становясь либо животным, либо божеством».',
-   fail3:'Нет. По Аристотелю, такой человек «становится либо животным, либо божеством».'},
+   fail3:'Нет. По Аристотелю, такой человек «становится либо животным, либо божеством».',
+   hint1:'Стол из дерева, в форме стола, руками мастера — и ради чего? Четвёртая причина отвечает на последний вопрос.',
+   hint2:'Тело обладает возможностью жить. Душа — это первое, что эту возможность реализует.',
+   hint3:'Аристотель: человек — политическое животное. Тот, кто им не является, либо ниже, либо выше человека.'},
 
   {id:'stoics2', nm:'Портик Невозмутимых', phil:'Зенон, Сенека, Марк Аврелий', era:'III в. до н.э. — II в. н.э.', icon:'🏛️', o:7, desc:'Белый храм с колоннами · жизнь сообразно природе',
    quote:'«Живи сообразно с природой вещей… в этом и заключается мудрость» — Сенека',
@@ -830,7 +914,10 @@ const LOCS=[
    q3:'Что одно, по Марку Аврелию (кн. 2.17), способно сопутствовать нам?',
    opts3:[{t:'Добродетель и слава',c:0},{t:'Любовь к родине',c:0},{t:'Одно и единственное — философия',c:1},{t:'Разум богов',c:0}],
    ok3:'Верно! Марк Аврелий, кн. 2.17: «Что способно сопутствовать нам? Одно и единственное — философия».',
-   fail3:'Нет. Марк Аврелий (кн. 2.17): «Одно и единственное — философия».'},
+   fail3:'Нет. Марк Аврелий (кн. 2.17): «Одно и единственное — философия».',
+   hint1:'Стоики видели мир пронизанным разумом. Всё связано причинно. Как они называли эту цепь?',
+   hint2:'Сенека: мудрость не в том, чтобы бежать от природы, а в том, чтобы следовать ей.',
+   hint3:'Марк Аврелий перечисляет всё, что нас покидает. Что остаётся с тобой при любых потерях?'},
 
   {id:'plotinus2', nm:'Чертог Истока', phil:'Плотин, Порфирий', era:'III в. н.э.', icon:'☀️', o:8, desc:'Купол с фиолетовой крышей · Красота и Благо как первоначало',
    quote:'«В качестве первого начала надо полагать Красоту. Она тождественна с Благом» — Плотин',
@@ -846,7 +933,10 @@ const LOCS=[
    q3:'Как, по Плотину, через душу можно познать Бога?',
    opts3:[{t:'Через чувственное созерцание красоты мира',c:0},{t:'Через воздержание от суждений',c:0},{t:'Убедившись в божественной природе души, через неё и ею достигаешь и познаёшь Бога',c:1},{t:'Через математическое созерцание чисел',c:0}],
    ok3:'Верно! Плотин: «Убедившись… в высоком достоинстве, в божественной природе души, ты можешь уверовать, что через неё и ею достигаешь и познаёшь Бога».',
-   fail3:'Нет. Плотин: «через неё [душу] и ею достигаешь и познаёшь Бога».'},
+   fail3:'Нет. Плотин: «через неё [душу] и ею достигаешь и познаёшь Бога».',
+   hint1:'Плотин начинает не с числа и не с материи. Он начинает с того, что делает мир прекрасным.',
+   hint2:'Единое у Плотина не заперто в одном месте. Найди то, что одновременно везде — и нигде.',
+   hint3:'Загляни в себя. Если душа имеет высокую природу, через неё можно достичь чего-то ещё большего.'},
 
   {id:'skeptics2', nm:'Круг Сомнений', phil:'Секст Эмпирик, Протагор', era:'IV в. до н.э. — II в. н.э.', icon:'⚖️', o:9, desc:'Круглый амфитеатр · эпохе и воздержание от суждений',
    quote:'«Человек есть мера всех вещей: существующих, что они существуют» — Протагор',
@@ -862,7 +952,12 @@ const LOCS=[
    q3:'По Сексту Эмпирику, почему невозможно найти надёжный критерий истины?',
    opts3:[{t:'Потому что боги скрывают истину от людей',c:0},{t:'Доказательство нуждается в критерии, а критерий — в доказательстве: оба попадают в порочный круг',c:1},{t:'Потому что мир состоит только из теней, а не из подлинных вещей',c:0},{t:'Потому что душа не помнит истину из прошлых жизней',c:0}],
    ok3:'Верно! Секст: «Доказательство нуждается в критерии, а критерий — в доказательстве, и таким образом оба попадают в заколдованный круг».',
-   fail3:'Нет. Секст: «доказательство и критерий попадают в заколдованный круг, в котором то и другое оказывается недостоверным».'},
+   fail3:'Нет. Секст: «доказательство и критерий попадают в заколдованный круг, в котором то и другое оказывается недостоверным».',
+   hint1:'Скептик не доказывает и не опровергает. Каждому утверждению он противопоставляет равносильное.',
+   hint2:'Двое смотрят на одно — видят разное. Протагор дал краткий ответ: кто решает, что истина?',
+   hint3:'Нужно доказательство? Требуй критерий. Нужен критерий? Требуй доказательство. Куда ведёт этот путь?'},
+
+
 ];
 
 // Порядок прохождения: последовательный от Сада Первоначал
@@ -871,7 +966,7 @@ const ORDER=[0,1,2,3,4,5,6,7,8,9];
 const SK='antiq_v5';
 let state;
 
-function defState(){return{score:0,done:[],half:[],q1:[],attempts:0};}
+function defState(){return{score:0,done:[],half:[],q1:[],hinted:[],attempts:0};}
 function save(){localStorage.setItem(SK,JSON.stringify(state));}
 function load(){
   try{
@@ -879,6 +974,7 @@ function load(){
     if(d&&Array.isArray(d.done)){
       if(!Array.isArray(d.half))d.half=[];
       if(!Array.isArray(d.q1))d.q1=[];
+      if(!Array.isArray(d.hinted))d.hinted=[];
       state=d;
     }
   }catch(e){}
@@ -952,7 +1048,7 @@ function showLocScreen(idx){
   _curLoc=loc;
 
   bgEl.style.animation='none';
-  requestAnimationFrame(()=>{bgEl.style.animation='loc-zoom 12s ease-out forwards';});
+  requestAnimationFrame(()=>{bgEl.style.animation='loc-zoom 5s ease-out forwards';});
 
   const isDone=state.done.includes(loc.id);
   if(isDone){
@@ -984,7 +1080,14 @@ function showLocScreen(idx){
 }
 
 function hideLocScreen(){
-  document.getElementById('loc-screen').classList.remove('show');
+  var ls=document.getElementById('loc-screen');
+  ls.classList.add('hiding');
+  setTimeout(function(){
+    ls.classList.remove('show');
+    ls.classList.remove('hiding');
+    ls.classList.remove('trial-mode');
+    ls.classList.remove('complete-mode');
+  },280);
 }
 
 document.getElementById('enter-yes').addEventListener('click',function(){
@@ -1000,6 +1103,7 @@ document.getElementById('loc-trial-btn').addEventListener('click',function(){
     // Сбрасываем только прогресс вопросов, state.done не трогаем
     state.half=state.half.filter(id=>id!==_curLoc.id);
     state.q1=state.q1.filter(id=>id!==_curLoc.id);
+    state.hinted=state.hinted.filter(id=>id!==_curLoc.id);
     save();updateUI();
     _isReplay=true;
   } else {
@@ -1011,6 +1115,7 @@ document.getElementById('loc-trial-btn').addEventListener('click',function(){
 
 document.addEventListener('keydown',function(e){
   if(e.code==='Escape'){
+    if(document.getElementById('side-panel').classList.contains('modal-open')){closeModal();return;}
     if(document.getElementById('loc-screen').classList.contains('show')){hideLocScreen();return;}
     if(document.getElementById('enter-dialog').classList.contains('show')){hideEnterDialog();return;}
   }
@@ -1020,7 +1125,8 @@ function isAnyModalOpen(){
   return document.getElementById('side-panel').classList.contains('modal-open')
       || document.getElementById('loc-screen').classList.contains('show')
       || document.getElementById('enter-dialog').classList.contains('show')
-      || document.getElementById('zone-popup').classList.contains('show');
+      || document.getElementById('zone-popup').classList.contains('show')
+      || document.getElementById('s-final').classList.contains('show');
 }
 
 function onLocClick(idx){
@@ -1037,9 +1143,12 @@ function closeModal(){
   document.getElementById('side-panel').classList.remove('modal-open');
   document.getElementById('modal-backdrop').classList.remove('show');
   var ls=document.getElementById('loc-screen');
-  ls.classList.remove('show');
-  ls.classList.remove('trial-mode');
-  ls.classList.remove('complete-mode');
+  if(ls.classList.contains('show')){
+    ls.classList.remove('trial-mode');
+    ls.classList.remove('complete-mode');
+  }else{
+    hideLocScreen();
+  }
 }
 function showLocComplete(loc){
   cancelAdvance();
@@ -1060,6 +1169,7 @@ function showIdle(){
 }
 
 var _curLoc=null;
+var _curQNum=1;
 var _isReplay=false;
 var _advanceTimer=null;
 function scheduleAdvance(loc){
@@ -1072,7 +1182,14 @@ function cancelAdvance(){
 function showQuestion(loc){
   _curLoc=loc;
   document.getElementById('q-actions').style.display='none';
+  var hintUsed=state.hinted.includes(loc.id);
+  document.getElementById('hint-btn').disabled=hintUsed;
+  document.getElementById('hint-btn').style.display='';
   document.getElementById('panel-idle').style.display='none';
+  var hintBox=document.getElementById('hint-box');
+  hintBox.textContent='';
+  hintBox.style.animation='none';
+  hintBox.style.display='none';
   document.getElementById('q-block').style.display='flex';
   openModal();
 
@@ -1096,12 +1213,14 @@ function showQuestion(loc){
   if(isDone&&!_isReplay)qNum='done';
   else if(isHalf)qNum=3;
   else if(isQ1)qNum=2;
+  _curQNum=(qNum==='done'?3:qNum);
 
   const lbl=document.getElementById('q-num-lbl');
   if(lbl)lbl.textContent=qNum==='done'?'Пройдено':('Вопрос '+qNum+' / 3');
 
   document.getElementById('replay-btn').style.display='none';
   if(qNum==='done'){
+    document.getElementById('hint-btn').style.display='none';
     document.getElementById('q-text').textContent=loc.q3;
     [...loc.opts3].sort(()=>Math.random()-.5).forEach((o,i)=>{
       const b=document.createElement('button');
@@ -1153,7 +1272,7 @@ function onAns(loc,btn,correct,optsEl,qNum){
       save();updateUI();
       fb.className='fb ok';fb.textContent=loc.ok3;
       showToast(_isReplay?'✓ Тест пройден повторно! Знания закреплены':'+5 · '+loc.nm+' завершено!');
-      var _doneAll=state.done.length===10;
+      var _doneAll=state.done.length===10&&!_isReplay;
       setTimeout(function(){
         showLocComplete(loc);
         if(_doneAll)setTimeout(showFinal,1800);
@@ -1161,7 +1280,7 @@ function onAns(loc,btn,correct,optsEl,qNum){
     }
   }else{
     btn.classList.add('wrong');
-    fb.className='fb fail';fb.textContent=qNum===3?loc.fail3:qNum===2?loc.fail2:loc.fail;
+    fb.className='fb fail';fb.textContent='✗ Неверно';
     document.getElementById('q-actions').style.display='flex';
   }
 }
@@ -1201,19 +1320,19 @@ function showFinal(){
   var ZONES=[
     {
       sel:'.zone-label:nth-of-type(1)',
-      icon:'🌿',title:'Натуральная философия',era:'VII–V вв. до н.э.',
+      icon:'🌿',title:'Натурфилософский период',era:'VII–V вв. до н.э.',
       desc:'Первые греческие мыслители отвергли мифологию и начали искать рациональное объяснение природы. Они задались вопросом: из чего состоит всё сущее? Это положило начало европейской науке и философии.',
       phils:['Фалес','Анаксимандр','Анаксимен','Гераклит','Парменид','Пифагор','Демокрит']
     },
     {
       sel:'.zone-label:nth-of-type(2)',
-      icon:'🏛',title:'Классическая философия',era:'V–IV вв. до н.э.',
+      icon:'🏛',title:'Классический период',era:'V–IV вв. до н.э.',
       desc:'Золотой век греческой мысли. Философия обратилась к человеку, обществу и познанию. Сократ открыл искусство диалога, Платон создал теорию идей, Аристотель систематизировал все науки.',
       phils:['Сократ','Платон','Аристотель','Протагор','Горгий','Ксенофонт']
     },
     {
       sel:'.zone-label:nth-of-type(3)',
-      icon:'🏺',title:'Эллинистическая философия',era:'III–I вв. до н.э.',
+      icon:'🏺',title:'Эллинистический период',era:'III–I вв. до н.э.',
       desc:'После завоеваний Александра греческая мысль соединилась с восточными традициями. Философия стала прежде всего искусством жить — как обрести счастье и душевный покой в изменчивом мире.',
       phils:['Эпикур','Зенон Китийский','Пиррон','Плотин','Диоген','Марк Аврелий']
     }
@@ -1276,22 +1395,40 @@ document.getElementById('retry-btn').addEventListener('click',function(){
   if(_curLoc)showQuestion(_curLoc);
 });
 
+document.getElementById('hint-btn').addEventListener('click',function(){
+  var hintText=_curLoc&&(_curLoc['hint'+_curQNum]||_curLoc.hint);
+  if(!hintText)return;
+  var box=document.getElementById('hint-box');
+  box.textContent=hintText;
+  box.style.animation='none';
+  box.style.display='block';
+  box.offsetHeight;
+  box.style.animation='q-in .25s ease-out both';
+  state.hinted.push(_curLoc.id);
+  save();
+  this.disabled=true;
+});
+
 document.getElementById('replay-btn').addEventListener('click',function(){
   if(!_curLoc)return;
   cancelAdvance();
   state.half=state.half.filter(id=>id!==_curLoc.id);
   state.q1=state.q1.filter(id=>id!==_curLoc.id);
+  state.hinted=state.hinted.filter(id=>id!==_curLoc.id);
   save();updateUI();
   _isReplay=true;
   showQuestion(_curLoc);
 });
 
 document.getElementById('back-map-btn').addEventListener('click',function(){
-  closeModal();
+  cancelAdvance();
+  document.getElementById('side-panel').classList.remove('modal-open');
+  document.getElementById('modal-backdrop').classList.remove('show');
+  hideLocScreen();
 });
 
 document.getElementById('lc-back').addEventListener('click',function(){
-  closeModal();
+  hideLocScreen();
 });
 document.getElementById('lc-replay').addEventListener('click',function(){
   if(!_curLoc)return;
@@ -1299,6 +1436,7 @@ document.getElementById('lc-replay').addEventListener('click',function(){
   // state.done не трогаем — чтобы не блокировать следующие локации
   state.half=state.half.filter(id=>id!==_curLoc.id);
   state.q1=state.q1.filter(id=>id!==_curLoc.id);
+  state.hinted=state.hinted.filter(id=>id!==_curLoc.id);
   save();updateUI();
   _isReplay=true;
   var ls=document.getElementById('loc-screen');
@@ -1323,9 +1461,27 @@ document.getElementById('f-btn').addEventListener('click',()=>{
 
 document.getElementById('rst-btn').addEventListener('click',()=>{
   _resetMode=true;
-  document.getElementById('intro-btn').textContent='⟳ Начать заново';
+  document.getElementById('intro-btn').textContent='⟳ Начать';
   document.getElementById('intro-cancel-btn').style.display='block';
   document.getElementById('s-intro').style.display='flex';
+});
+
+document.getElementById('fs-btn').addEventListener('click',function(){
+  if(!document.fullscreenElement){
+    document.documentElement.requestFullscreen().catch(()=>{});
+    this.textContent='✕ Выйти';
+    this.title='Выйти из полного экрана';
+  }else{
+    document.exitFullscreen().catch(()=>{});
+    this.textContent='⛶ Во весь экран';
+    this.title='Во весь экран';
+  }
+});
+document.addEventListener('fullscreenchange',function(){
+  var btn=document.getElementById('fs-btn');
+  if(!btn)return;
+  btn.textContent=document.fullscreenElement?'✕ Выйти':'⛶ Во весь экран';
+  btn.title=document.fullscreenElement?'Выйти из полного экрана':'Во весь экран';
 });
 
 // Запуск
@@ -1342,6 +1498,102 @@ var BLOCKED_ZONES=[
   {x1:33,y1:25,  x2:37,y2:43},
   {x1:33,y1:47,  x2:37,y2:65},
   {x1:33,y1:70,  x2:37,y2:100},
+  // Метка: left:43%, top:55%
+  {x1:39,y1:50,  x2:47,y2:61},
+  // Метка: left:55%, top:67%
+  {x1:51,y1:62,  x2:59,y2:73},
+  // Метка: left:64%, top:77%
+  {x1:60,y1:72,  x2:68,y2:83},
+  // Метка: left:64%, top:61%
+  {x1:60,y1:56,  x2:68,y2:67},
+  // Метка: left:64%, top:60%
+  {x1:60,y1:55,  x2:68,y2:66},
+  // Метка: left:64%, top:55%
+  {x1:60,y1:50,  x2:68,y2:61},
+  // Метка: left:64%, top:38%
+  {x1:60,y1:33,  x2:68,y2:44},
+  // Метка: left:64%, top:20%
+  {x1:60,y1:15,  x2:68,y2:26},
+  // Метка: left:55%, top:18%
+  {x1:51,y1:13,  x2:59,y2:24},
+  // Метка: left:46%, top:18%
+  {x1:42,y1:13,  x2:50,y2:24},
+  // Метка: left:46%, top:38%
+  {x1:42,y1:33,  x2:50,y2:44},
+  // Метка: left:46%, top:78%
+  {x1:42,y1:73,  x2:50,y2:84},
+  // Метка: left:55%, top:60%
+  {x1:51,y1:55,  x2:59,y2:66},
+  // Метка: left:23%, top:65%
+  {x1:19,y1:60,  x2:27,y2:71},
+  // Метка: left:18%, top:65%
+  {x1:14,y1:60,  x2:22,y2:71},
+  // Метка: left:18%, top:60%
+  {x1:14,y1:55,  x2:22,y2:66},
+  // Метка: left:20%, top:30%
+  {x1:16,y1:25,  x2:24,y2:36},
+  // Метка: left:7%, top:30%
+  {x1:3,y1:25,   x2:11,y2:36},
+  // Метка: left:13.7%, top:18%
+  {x1:10,y1:13,  x2:18,y2:24},
+  // Метка: left:10.7%, top:18%
+  {x1:7,y1:13,   x2:15,y2:24},
+  // Метка: left:16.7%, top:18%
+  {x1:13,y1:13,  x2:21,y2:24},
+  // Метка: left:27.7%, top:18%
+  {x1:24,y1:13,  x2:32,y2:24},
+  // Метка: left:27.2%, top:35%
+  {x1:23,y1:30,  x2:31,y2:41},
+  // Метка: left:21.7%, top:47%
+  {x1:18,y1:42,  x2:26,y2:53},
+  // Метка: left:11.7%, top:42%
+  {x1:8,y1:37,   x2:16,y2:48},
+  // Метка: left:7.7%, top:58%
+  {x1:4,y1:53,   x2:12,y2:64},
+  // Метка: left:8.7%, top:80%
+  {x1:5,y1:75,   x2:13,y2:86},
+  // Метка: left:24%, top:80%
+  {x1:20,y1:75,  x2:28,y2:86},
+  // Метка: left:84%, top:82%
+  {x1:80,y1:77,  x2:88,y2:88},
+  // Метка: left:82%, top:48%
+  {x1:78,y1:43,  x2:86,y2:54},
+  // Метка: left:76%, top:36%
+  {x1:72,y1:31,  x2:80,y2:42},
+  // Метка: left:76%, top:66%
+  {x1:72,y1:61,  x2:80,y2:72},
+  // Метка: left:76%, top:62%
+  {x1:72,y1:57,  x2:80,y2:68},
+  // Метка: left:90%, top:60%
+  {x1:86,y1:55,  x2:94,y2:66},
+  // Метка: left:94%, top:88%
+  {x1:90,y1:83,  x2:98,y2:94},
+  // Метка: left:93%, top:33%
+  {x1:89,y1:28,  x2:97,y2:39},
+  // Метка: left:76%, top:21%
+  {x1:72,y1:16,  x2:80,y2:27},
+  // Метка: left:85%, top:18%
+  {x1:81,y1:13,  x2:89,y2:24},
+  // Метка: left:85%, top:15%
+  {x1:81,y1:10,  x2:89,y2:21},
+  // Метка: left:85%, top:13%
+  {x1:81,y1:8,   x2:89,y2:19},
+  // Метка: left:95%, top:5%
+  {x1:91,y1:1,   x2:99,y2:11},
+  // Стена влево от Метки (95%,5%) до левого края
+  {x1:0,y1:1,    x2:91,y2:11},
+  // Стена вниз от Метки (95%,5%) до нижнего края
+  {x1:91,y1:11,  x2:99,y2:100},
+  // Стена вниз от Метки (4%,5%) до нижнего края
+  {x1:2,y1:11,   x2:6,y2:100},
+  // Стена вправо от Метки (4%,5%) до правого края
+  {x1:6,y1:1,    x2:100,y2:11},
+  // Стена вправо от Метки (4%,95%) до правого края
+  {x1:6,y1:89,   x2:100,y2:100},
+  // Метка: left:36%, top:10%
+  {x1:32,y1:5,   x2:40,y2:16},
+  // Метка: left:37%, top:14%
+  {x1:33,y1:9,   x2:41,y2:20},
 ];
 function isWalkable(px,py){
   for(var i=0;i<BLOCKED_ZONES.length;i++){
@@ -1367,7 +1619,7 @@ let mapT={ox:0,oy:0,s:1,iw:1400,ih:900};
   var spr=new Image();
   var DIR_ROW={down:0,right:2,left:1,up:3};
   var DIR_COL={up:0,left:1,right:2,down:3};
-  var _fw=0,_fh=0,_dw=96,_dh=96,_heroFrames=3,_heroRows=4,_heroDirMode='row',_heroDirMap=null;
+  var _fw=0,_fh=0,_dw=120,_dh=120,_heroFrames=3,_heroRows=4,_heroDirMode='row',_heroDirMap=null;
 
   spr.onload=function(){
     _fw=Math.floor(spr.naturalWidth/_heroFrames);
@@ -1382,7 +1634,8 @@ let mapT={ox:0,oy:0,s:1,iw:1400,ih:900};
   };
   spr.src='animation.png';
 
-  function drawHero(){
+  var _lastBPCol=-1,_lastBPRow=-1;
+  function drawHero(dt){
     if(!heroSprite||!_fw)return;
     var col,row;
     var wc=_heroWalkCycle;
@@ -1391,18 +1644,20 @@ let mapT={ox:0,oy:0,s:1,iw:1400,ih:900};
       var dm=_heroDirMap||{down:0,left:1,right:2,up:3};
       col=dm[lastDir]!==undefined?dm[lastDir]:0;
       col=Math.min(col,_heroFrames-1);
-      if(isMoving){animT++;if(animT>=5){animT=0;animF=(animF+1)%wcLen;}}
+      if(isMoving){animT+=dt;if(animT>=5){animT=0;animF=(animF+1)%wcLen;}}
       else{animF=0;animT=0;}
       row=wc?wc[animF]:animF;
     }else{
       var dm=_heroDirMap||DIR_ROW;
       row=Math.min(dm[lastDir]!==undefined?dm[lastDir]:0, _heroRows-1);
-      if(isMoving){animT++;if(animT>=5){animT=0;animF=(animF+1)%wcLen;}}
+      if(isMoving){animT+=dt;if(animT>=5){animT=0;animF=(animF+1)%wcLen;}}
       else{animF=0;animT=0;}
       col=wc?wc[animF]:animF;
     }
-    heroSprite.style.backgroundPosition=(-col*_dw)+'px '+(-row*_dh)+'px';
-    heroSprite.style.transform='none';
+    if(col!==_lastBPCol||row!==_lastBPRow){
+      _lastBPCol=col;_lastBPRow=row;
+      heroSprite.style.backgroundPosition=(-col*_dw)+'px '+(-row*_dh)+'px';
+    }
   }
 
 
@@ -1422,6 +1677,19 @@ let mapT={ox:0,oy:0,s:1,iw:1400,ih:900};
   }
 
   var _lastTick=0;
+  var _msc=null,_markerEls=null,_mapInner=null;
+  var _markerPos=null;
+  var _vpW=0,_vpH=0;
+  var _hintVis=false;
+  var _heroReady=false;
+
+  function _cacheMarkerPos(){
+    _markerPos=_markerEls.map(function(m){
+      if(!m)return null;
+      return{x:parseFloat(m.style.left)||0,y:parseFloat(m.style.top)||0};
+    });
+  }
+
   function tick(now){
     var dt=_lastTick?Math.min((now-_lastTick)/16.667,3):1;
     _lastTick=now;
@@ -1430,7 +1698,13 @@ let mapT={ox:0,oy:0,s:1,iw:1400,ih:900};
       wrap=document.getElementById('hero-wrap');
       hint=document.getElementById('hero-hint');
       heroSprite=document.getElementById('hero-sprite');
+      _msc=document.getElementById('map-scroll');
+      _mapInner=document.getElementById('map-inner');
+      _markerEls=LOCS.map(function(_,i){return document.getElementById('m-'+(i+1));});
       if(!wrap){requestAnimationFrame(tick);return;}
+      _cacheMarkerPos();
+      _vpW=_msc.clientWidth;_vpH=_msc.clientHeight;
+      window.addEventListener('resize',function(){_vpW=_msc.clientWidth;_vpH=_msc.clientHeight;});
     }
 
     var sp=0.22*dt,dx=0,dy=0;
@@ -1457,40 +1731,41 @@ let mapT={ox:0,oy:0,s:1,iw:1400,ih:900};
     } else {
       isMoving=false;
     }
-    drawHero();
+    drawHero(dt);
 
-    // Камера плавно следует за героем (lerp)
-    var msc=document.getElementById('map-scroll');
-    var cw=msc.clientWidth,ch=msc.clientHeight;
+    var cw=_vpW,ch=_vpH;
     var s2=mapT.s,iw2=mapT.iw,ih2=mapT.ih;
     var tox=Math.min(0,Math.max(cw-iw2*s2, cw/2-(hs.x/100)*iw2*s2));
     var toy=Math.min(0,Math.max(ch-ih2*s2, ch/2-(hs.y/100)*ih2*s2));
-    mapT.ox+=(tox-mapT.ox)*0.22;
-    mapT.oy+=(toy-mapT.oy)*0.22;
-    document.getElementById('map-inner').style.transform=
-      'translate('+mapT.ox+'px,'+mapT.oy+'px) scale('+s2+')';
-    // Герой позиционируется через toScreen — при clamping движется по экрану
+    var lf=1-Math.pow(0.78,dt);
+    mapT.ox+=(tox-mapT.ox)*lf;
+    mapT.oy+=(toy-mapT.oy)*lf;
+    _mapInner.style.transform='translate('+mapT.ox+'px,'+mapT.oy+'px) scale('+s2+')';
     var sc=toScreen(hs.x,hs.y);
-    wrap.style.left=sc.x+'px';
-    wrap.style.top=sc.y+'px';
+    wrap.style.transform='translate('+sc.x+'px,'+sc.y+'px) translate(-50%,-90%) translateZ(0)';
+    if(!_heroReady){_heroReady=true;wrap.style.opacity='1';}
+    window._heroSX=sc.x; window._heroSY=sc.y;
 
     near=null;
-    LOCS.forEach(function(loc,i){
-      var m=document.getElementById('m-'+(i+1));
-      if(!m)return;
-      var dist=Math.hypot(hs.x-parseFloat(m.style.left),hs.y-parseFloat(m.style.top));
-      if(dist<7){
+    var _mp=_markerPos;
+    _markerEls.forEach(function(m,i){
+      if(!m||!_mp[i])return;
+      var p=_mp[i];
+      var dist=Math.hypot(hs.x-p.x,hs.y-p.y);
+      if(dist<12){
         m.classList.add('nearby');
-        if(getStat(loc)!=='locked'&&dist<5)near=i;
+        if(getStat(LOCS[i])!=='locked'&&dist<9)near=i;
       }else{
         m.classList.remove('nearby');
       }
     });
-    if(hint)hint.style.display=near!==null?'block':'none';
+    var wantHint=near!==null;
+    if(hint&&wantHint!==_hintVis){_hintVis=wantHint;hint.style.display=wantHint?'block':'none';}
 
     requestAnimationFrame(tick);
   }
   requestAnimationFrame(tick);
+  window._recacheMarkers=_cacheMarkerPos;
 
   window._heroReset=function(){
     hs.x=SPAWN.x; hs.y=SPAWN.y;
@@ -1511,16 +1786,17 @@ let mapT={ox:0,oy:0,s:1,iw:1400,ih:900};
       _fh=spr.naturalHeight/_heroRows;
       _dw=mapSize||96;
       _dh=Math.floor(_dw*_fh/_fw);
-      if(heroSprite){
-        heroSprite.style.backgroundImage='url('+src+')';
-        heroSprite.style.backgroundSize=(_dw*_heroFrames)+'px '+(_dh*_heroRows)+'px';
-        heroSprite.style.width=_dw+'px';
-        heroSprite.style.height=_dh+'px';
-        heroSprite.style.backgroundPosition='0 0';
-        heroSprite.style.clipPath='inset(0)';
-        heroSprite.style.overflow='hidden';
-        heroSprite.style.opacity='1';
-      }
+      var el=heroSprite||document.getElementById('hero-sprite');
+      if(!el)return;
+      heroSprite=el;
+      el.style.backgroundImage='url('+src+')';
+      el.style.backgroundSize=(_dw*_heroFrames)+'px '+(_dh*_heroRows)+'px';
+      el.style.width=_dw+'px';
+      el.style.height=_dh+'px';
+      el.style.backgroundPosition='0 0';
+      el.style.clipPath='inset(0)';
+      el.style.overflow='hidden';
+      el.style.opacity='1';
     };
     spr.src=src;
   };
@@ -1546,6 +1822,7 @@ let fitMap=function(){};
     oy=Math.min(0,Math.max(ch-ih*s, ch/2-(SPAWN.y/100)*ih*s));
     mapT={ox,oy,s,iw,ih};
     apply();
+    wrap.style.opacity='1';
   };
 
   img.complete&&img.naturalWidth?fitMap():img.addEventListener('load',fitMap);
@@ -1651,24 +1928,25 @@ showFinal=function(){
 // ── HERO DUST TRAIL ──
 (function(){
   var scroll=document.getElementById('map-scroll');
-  var hw=document.getElementById('hero-wrap');
-  if(!scroll||!hw)return;
+  if(!scroll)return;
   var px=-1,py=-1;
-  new MutationObserver(function(){
-    var x=parseFloat(hw.style.left),y=parseFloat(hw.style.top);
-    if(isNaN(x)||isNaN(y)||Math.hypot(x-px,y-py)<3)return;
-    if(Math.random()<.42){
-      var d=document.createElement('div');
-      d.className='hero-dust';
-      var sz=3+Math.random()*5;
-      d.style.cssText='left:'+(x-sz/2+(Math.random()-.5)*10)+'px;'
-        +'top:'+(y-sz/2+(Math.random()-.5)*6)+'px;'
-        +'width:'+sz+'px;height:'+sz+'px;';
-      scroll.appendChild(d);
-      setTimeout(function(){d.remove();},850);
+  (function dustLoop(){
+    var x=window._heroSX||0,y=window._heroSY||0;
+    if(Math.hypot(x-px,y-py)>=3){
+      if(Math.random()<.42){
+        var d=document.createElement('div');
+        d.className='hero-dust';
+        var sz=3+Math.random()*5;
+        d.style.cssText='left:'+(x-sz/2+(Math.random()-.5)*10)+'px;'
+          +'top:'+(y-sz/2+(Math.random()-.5)*6)+'px;'
+          +'width:'+sz+'px;height:'+sz+'px;';
+        scroll.appendChild(d);
+        setTimeout(function(){d.remove();},850);
+      }
+      px=x;py=y;
     }
-    px=x;py=y;
-  }).observe(hw,{attributes:true,attributeFilter:['style']});
+    requestAnimationFrame(dustLoop);
+  })();
 })();
 
 // ── WEATHER SYSTEM ──
@@ -1788,17 +2066,18 @@ showFinal=function(){
     overlay.style.background=isNight?'rgba(6,14,45,.65)':'rgba(18,38,68,.30)';
     overlay.style.opacity='1';
     rainActive=true;
-    var delay=280;
+    var delay=320;
     function drop(){
       if(!rainActive)return;
       var d=document.createElement('div');
       d.className='raindrop';
-      var dur=0.5+Math.random()*0.4;
+      var dur=0.55+Math.random()*0.4;
       d.style.cssText='left:'+(Math.random()*100)+'%;height:'+(11+Math.random()*12)+'px;animation-duration:'+dur+'s;';
       scroll.appendChild(d);weatherEls.push(d);
-      setTimeout(function(){removeEl(d);var i=weatherEls.indexOf(d);if(i>-1)weatherEls.splice(i,1);},(dur+.1)*1000);
-      delay=Math.max(40,delay-6);
-      setTimeout(drop,delay+Math.random()*18);
+      var _d=d;
+      setTimeout(function(){removeEl(_d);var i=weatherEls.indexOf(_d);if(i>-1)weatherEls.splice(i,1);},(dur+.15)*1000);
+      delay=Math.max(70,delay-4);
+      setTimeout(drop,delay+Math.random()*20);
     }
     setTimeout(drop,800);
     function lightning(){
@@ -1929,14 +2208,13 @@ window._mistEnabled=true;
     var m=document.createElement('div');
     m.className='map-mist';
     var sz=300+Math.random()*400;
-    var op=(0.25+Math.random()*0.25).toFixed(2);
+    var op=(0.18+Math.random()*0.18).toFixed(2);
     var dur=14+Math.random()*12;
     m.style.cssText=
-      'width:'+sz+'px;height:'+(sz*0.5)+'px;'
+      'width:'+sz+'px;height:'+(sz*0.55)+'px;'
       +'top:'+(Math.random()*90)+'%;left:0;'
-      +'background:radial-gradient(ellipse,rgba(230,220,200,'+op+') 20%,rgba(210,200,175,'+(op*0.4).toFixed(2)+') 55%,transparent 75%);'
-      +'animation-duration:'+dur+'s;'
-      +'filter:blur(18px);';
+      +'background:radial-gradient(ellipse,rgba(230,220,200,'+op+') 0%,rgba(215,205,180,'+(op*0.5).toFixed(2)+') 40%,transparent 70%);'
+      +'animation-duration:'+dur+'s;';
     scroll.appendChild(m);
     setTimeout(function(){m.remove();},(dur+2)*1000);
     setTimeout(spawnMist,3000+Math.random()*5000);
