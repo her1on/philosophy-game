@@ -15,10 +15,11 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 
 /* ── Topbar ── */
 #topbar{background:linear-gradient(135deg,#1a0a05,#2c1810);padding:8px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--gold);flex-shrink:0;box-shadow:0 2px 20px rgba(0,0,0,.6);gap:10px;position:relative}
-.tb-char{display:flex;align-items:center;gap:9px;min-width:0}
+.tb-char{display:flex;align-items:center;gap:9px;min-width:0;max-width:220px;overflow:hidden;margin-left:3.5cm}
 .tb-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#4a1208,#8a2e12);border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;box-shadow:0 0 10px rgba(201,162,39,.3)}
-.tb-name{font-family:'Cinzel',serif;font-size:11px;color:#e8c547;letter-spacing:.5px;line-height:1.3}
-.tb-sub{font-size:10px;color:#e8d4a0;opacity:.55;font-style:italic}
+.tb-char>div{min-width:0;overflow:hidden}
+.tb-name{font-family:'Cinzel',serif;font-size:11px;color:#e8c547;letter-spacing:.5px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-sub{font-size:10px;color:#e8d4a0;opacity:.55;font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tb-title{font-family:'Cinzel',serif;font-size:13px;letter-spacing:3px;color:#c9a227;text-transform:uppercase;text-shadow:0 1px 10px rgba(201,162,39,.5);text-align:center;position:absolute;left:50%;transform:translateX(-50%);pointer-events:none;white-space:nowrap}
 .tb-right{display:flex;align-items:center;gap:16px;flex-shrink:0}
 .score-box{text-align:center}
