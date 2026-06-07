@@ -51,7 +51,7 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 .mm{position:absolute;width:102px;height:102px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0;transform:translate(-50%,-50%) translateZ(0);transition:transform .2s;will-change:transform;backface-visibility:hidden}
 .mm::before{content:attr(data-name);position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);background:rgba(8,4,2,.97);color:#e8c547;font-family:'Cinzel',serif;font-size:13px;letter-spacing:1.5px;padding:6px 14px;white-space:nowrap;border:1px solid rgba(201,162,39,.6);pointer-events:none;opacity:0;transition:opacity .22s,font-size .22s,padding .22s;z-index:100;box-shadow:0 4px 12px rgba(0,0,0,.85)}
 .mm.nearby::before,.mm:hover::before{opacity:1}
-.mm.nearby::before{font-size:32px;padding:13px 28px;letter-spacing:2.5px}
+.mm.nearby::before{font-size:44px;padding:16px 36px;letter-spacing:3px}
 .mm.nearby{box-shadow:0 0 0 4px rgba(255,230,100,.6),0 0 22px 10px rgba(255,200,0,.55),0 0 44px 16px rgba(255,150,0,.25)!important;transform:translate(-50%,-50%) scale(1.12) translateZ(0)!important;transition:transform .25s}
 .mm.active{
   background:radial-gradient(circle at 32% 28%,rgba(255,255,220,.7) 6%,transparent 40%),radial-gradient(circle at 38% 30%,#fffce0,#ffd020 35%,#c9900a 62%,#7a5200);
