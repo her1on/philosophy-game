@@ -319,10 +319,10 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 .night-mode .mm.half{box-shadow:0 0 28px 12px rgba(255,165,0,1),0 0 60px 24px rgba(240,80,0,.6),inset 0 0 0 3px rgba(255,170,0,.9)!important}
 
 /* ── Zone labels ── */
-.zone-label{position:absolute;display:flex;align-items:center;gap:10px;background:rgba(12,7,2,.82);border:1.5px solid rgba(201,162,39,.65);border-radius:999px;padding:14px 32px 14px 24px;font-family:'Cinzel',serif;font-size:28px;letter-spacing:3px;color:#c9a227;text-transform:uppercase;cursor:pointer;z-index:20;white-space:nowrap;backdrop-filter:blur(4px);box-shadow:0 4px 20px rgba(0,0,0,.7);transition:all .2s ease}
-.zone-label:hover{background:rgba(20,12,3,.92);border-color:rgba(201,162,39,1);color:#e8c547;box-shadow:0 4px 24px rgba(0,0,0,.8),0 0 16px rgba(201,162,39,.3);transform:translateX(-50%) scale(1.04)}
-.zone-label-icon{line-height:1}
-.zone-label-text{line-height:1}
+.zone-label{position:absolute;display:flex;align-items:center;gap:10px;background:rgba(6,3,1,.92);border:2px solid rgba(201,162,39,.85);border-radius:999px;padding:14px 32px 14px 24px;font-family:'Cinzel',serif;font-size:46px;letter-spacing:3px;color:#f0d060;text-transform:uppercase;cursor:pointer;z-index:20;white-space:nowrap;backdrop-filter:blur(6px);box-shadow:0 4px 24px rgba(0,0,0,.85),0 0 12px rgba(201,162,39,.2);transition:all .2s ease}
+.zone-label:hover{background:rgba(14,8,2,.97);border-color:#e8c547;color:#ffe880;box-shadow:0 4px 28px rgba(0,0,0,.9),0 0 20px rgba(201,162,39,.4);transform:translateX(-50%) scale(1.05)}
+.zone-label-icon{line-height:1;font-size:26px}
+.zone-label-text{line-height:1;text-shadow:0 1px 8px rgba(0,0,0,.95)}
 #zone-popup{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.9);z-index:9500;width:420px;max-width:92vw;background:linear-gradient(160deg,#f5e8ca,#e8d49e);border:2px solid var(--gold);border-radius:3px;box-shadow:0 24px 80px rgba(0,0,0,.9),0 0 60px rgba(201,162,39,.2);opacity:0;pointer-events:none;transition:opacity .22s cubic-bezier(.22,1,.36,1),transform .25s cubic-bezier(.22,1,.36,1);will-change:transform,opacity}
 #zone-popup.show{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
 .zp-header{background:linear-gradient(135deg,#5a1508,#9b3a1a);padding:14px 18px;display:flex;align-items:center;gap:14px;border-bottom:2px solid var(--gold)}
@@ -336,7 +336,7 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 .zp-phil{font-family:'Cinzel',serif;font-size:10px;color:#5a3020;background:rgba(155,58,26,.1);border:1px solid rgba(155,58,26,.3);padding:4px 10px;border-radius:12px}
 .zp-close{position:absolute;right:10px;top:12px;background:transparent;border:1px solid rgba(232,197,71,.35);color:rgba(232,197,71,.7);width:24px;height:24px;border-radius:50%;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
 .zp-close:hover{border-color:var(--gold);color:var(--gold)}
-.zone-label-icon{font-size:128px;opacity:.95;line-height:1}
+.zone-label-icon{font-size:50px;opacity:.95;line-height:1}
 
 /* ── Day/Night banner ── */
 #phase-banner{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.82) translateZ(0);z-index:10000;text-align:center;pointer-events:none;opacity:0;transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1);will-change:transform,opacity;backface-visibility:hidden}
