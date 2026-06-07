@@ -434,7 +434,7 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
     <div class="intro-goal">
       <div class="intro-goal-ttl">Цель игры</div>
       <div class="intro-goal-list">
-        <div class="intro-goal-item">Исследуй карту и найди 10 философских школ</div>
+        <div class="intro-goal-item">Исследуй карту и пройди все 10 философских локаций</div>
         <div class="intro-goal-item">В каждой школе ответь на 3 вопроса великих мыслителей</div>
         <div class="intro-goal-item">Набери максимум очков и заверши путешествие по античной мысли</div>
       </div>
@@ -1431,7 +1431,7 @@ document.getElementById('f-btn').addEventListener('click',()=>{
 
 document.getElementById('rst-btn').addEventListener('click',()=>{
   _resetMode=true;
-  document.getElementById('intro-btn').textContent='⟳ Начать заново';
+  document.getElementById('intro-btn').textContent='⟳ Начать';
   document.getElementById('intro-cancel-btn').style.display='block';
   document.getElementById('s-intro').style.display='flex';
 });
