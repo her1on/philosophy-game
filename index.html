@@ -85,7 +85,7 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 
 /* ── Hero ── */
 /* ── Hero ── */
-#hero-wrap{position:absolute;left:0;top:0;z-index:100;pointer-events:none;text-align:center;will-change:transform;backface-visibility:hidden}
+#hero-wrap{position:absolute;left:0;top:0;z-index:100;pointer-events:none;text-align:center;opacity:0;transition:opacity .2s ease;will-change:transform;backface-visibility:hidden}
 #hero-sprite{display:block;width:96px;height:96px;overflow:hidden;clip-path:inset(0);background:url('animation.png') no-repeat 0 0;background-size:auto;image-rendering:pixelated;image-rendering:crisp-edges;margin:0 auto;transform-origin:center;will-change:background-position}
 #hero-shadow{display:none}
 #hero-hint{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1a0a03,#2c1508);color:#e8c547;font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;padding:5px 14px;border:1px solid var(--gold);white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.9);animation:hintPulse 1s ease-in-out infinite}
@@ -1584,6 +1584,7 @@ let mapT={ox:0,oy:0,s:1,iw:1400,ih:900};
   var _markerPos=null;
   var _vpW=0,_vpH=0;
   var _hintVis=false;
+  var _heroReady=false;
 
   function _cacheMarkerPos(){
     _markerPos=_markerEls.map(function(m){
@@ -1645,6 +1646,7 @@ let mapT={ox:0,oy:0,s:1,iw:1400,ih:900};
     _mapInner.style.transform='translate('+mapT.ox+'px,'+mapT.oy+'px) scale('+s2+')';
     var sc=toScreen(hs.x,hs.y);
     wrap.style.transform='translate('+sc.x+'px,'+sc.y+'px) translate(-50%,-90%) translateZ(0)';
+    if(!_heroReady){_heroReady=true;wrap.style.opacity='1';}
     window._heroSX=sc.x; window._heroSY=sc.y;
 
     near=null;
