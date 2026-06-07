@@ -351,11 +351,11 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 .char-sel-lbl{font-family:'Cinzel',serif;font-size:12px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;opacity:.9;margin:0 0 14px;display:flex;align-items:center;gap:12px}
 .char-sel-lbl::before,.char-sel-lbl::after{content:'';flex:1;height:1px;background:linear-gradient(to right,transparent,rgba(201,162,39,.5));opacity:1}
 .char-sel-lbl::after{background:linear-gradient(to left,transparent,rgba(201,162,39,.5))}
-.char-select{display:flex;gap:10px;margin-bottom:22px}
-.char-card{flex:1;padding:14px 9px 12px;border:1.5px solid rgba(201,162,39,.28);background:rgba(0,0,0,.3);cursor:pointer;text-align:center;transition:.2s;border-radius:6px;user-select:none}
+.char-select{display:flex;gap:10px;margin-bottom:14px}
+.char-card{flex:1;padding:10px 8px 10px;border:1.5px solid rgba(201,162,39,.28);background:rgba(0,0,0,.3);cursor:pointer;text-align:center;transition:.2s;border-radius:6px;user-select:none}
 .char-card:hover{border-color:rgba(201,162,39,.7);background:rgba(201,162,39,.09);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.4)}
 .char-card.selected{border-color:var(--gold);background:rgba(201,162,39,.14);box-shadow:0 0 22px rgba(201,162,39,.32),inset 0 0 14px rgba(201,162,39,.08)}
-.char-av{font-size:34px;margin-bottom:8px;line-height:1}
+.char-av{font-size:28px;margin-bottom:5px;line-height:1}
 .char-nm{font-family:'Cinzel',serif;font-size:11px;color:#e8c547;letter-spacing:.6px;margin-bottom:4px;line-height:1.35}
 .char-cls{font-size:10px;color:#c9a227;opacity:.75;font-style:italic;margin-bottom:6px;line-height:1.4}
 .char-dsc{font-size:10px;color:#e8d4a0;opacity:.65;line-height:1.6}
@@ -430,7 +430,6 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
     <div class="intro-orn">— ✦ —</div>
     <div class="intro-ttl">Философское путешествие</div>
     <div class="intro-sub">По следам великих мыслителей Древней Греции</div>
-    <p class="intro-desc">Перед тобой карта античного мира. Посети 10 философских школ, ответь на вопросы великих мудрецов и познай истину бытия.</p>
     <div class="intro-goal">
       <div class="intro-goal-ttl">Цель игры</div>
       <div class="intro-goal-list">
@@ -439,7 +438,7 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
         <div class="intro-goal-item">Набери максимум очков и заверши путешествие по античной мысли</div>
       </div>
     </div>
-    <div id="char-preview">
+    <div id="char-preview" style="display:none">
       <div id="char-preview-stage"><div id="char-preview-sprite"></div></div>
       <div id="char-preview-nm">Аристон из Коринфа</div>
       <div id="char-preview-sub">странник в поисках мудрости</div>
