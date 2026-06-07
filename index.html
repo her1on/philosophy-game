@@ -249,7 +249,7 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 .btn-hint{background:rgba(60,40,10,.07);border-color:rgba(140,100,30,.5);color:#8a6820;margin-top:2px}
 .btn-hint:hover:not(:disabled){background:rgba(140,100,30,.15);border-color:rgba(180,130,40,.8);color:#b08a2a}
 .btn-hint:disabled{opacity:.45;cursor:default}
-#hint-box{display:none;background:rgba(60,35,5,.09);border:1px solid rgba(180,130,40,.4);border-radius:4px;padding:10px 14px;font-family:'Crimson Text',serif;font-style:italic;font-size:13px;color:#6b4c10;line-height:1.6;margin-top:2px;animation:q-in .25s ease-out both}
+#hint-box{display:none;background:rgba(60,35,5,.09);border:1px solid rgba(180,130,40,.4);border-radius:4px;padding:10px 14px;font-family:'Crimson Text',serif;font-style:italic;font-size:13px;color:#6b4c10;line-height:1.6;margin-top:2px}
 #hint-box::before{content:'💡 ';font-style:normal}
 .btn-replay{background:rgba(45,122,45,.08);border-color:rgba(45,122,45,.5);color:#2d7a2d;margin-top:2px}
 .btn-replay:hover{background:rgba(45,122,45,.18);border-color:var(--green);color:#1a5a1a}
@@ -1112,11 +1112,11 @@ function showQuestion(loc){
   var hintUsed=state.hinted.includes(loc.id);
   document.getElementById('hint-btn').disabled=hintUsed;
   document.getElementById('hint-btn').style.display='';
+  document.getElementById('panel-idle').style.display='none';
+  document.getElementById('q-block').style.display='flex';
   var hintBox=document.getElementById('hint-box');
   hintBox.textContent='';
   hintBox.style.display='none';
-  document.getElementById('panel-idle').style.display='none';
-  document.getElementById('q-block').style.display='flex';
   openModal();
 
   document.getElementById('phil-icon').textContent=loc.icon;
@@ -1324,7 +1324,10 @@ document.getElementById('hint-btn').addEventListener('click',function(){
   if(!_curLoc||!_curLoc.hint)return;
   var box=document.getElementById('hint-box');
   box.textContent=_curLoc.hint;
+  box.style.animation='none';
   box.style.display='block';
+  box.offsetHeight;
+  box.style.animation='q-in .25s ease-out both';
   state.hinted.push(_curLoc.id);
   save();
   this.disabled=true;
