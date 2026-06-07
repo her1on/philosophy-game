@@ -1205,7 +1205,7 @@ function onAns(loc,btn,correct,optsEl,qNum){
     }
   }else{
     btn.classList.add('wrong');
-    fb.className='fb fail';fb.textContent=qNum===3?loc.fail3:qNum===2?loc.fail2:loc.fail;
+    fb.className='fb fail';fb.textContent='✗ Неверно';
     document.getElementById('q-actions').style.display='flex';
   }
 }
