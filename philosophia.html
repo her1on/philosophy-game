@@ -288,17 +288,27 @@ body {
 #screen-done {
   min-height:100vh; display:flex; flex-direction:column;
   align-items:center; justify-content:center;
-  padding:40px 24px; text-align:center;
-  background-color:#e8dfc0;
-  background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,rgba(0,0,0,.018) 28px,rgba(0,0,0,.018) 29px);
+  padding:36px 24px; text-align:center;
+  background-color:#0a140d;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 50% 38%, rgba(60,105,50,.25), transparent 70%),
+    radial-gradient(ellipse 60% 60% at 50% 100%, rgba(40,70,120,.12), transparent 60%);
+  color:#e8d9b0;
 }
-.done-rule     { width:200px; height:2px; background:#9a7040; margin:16px auto; }
-.done-label    { font-size:.65em; letter-spacing:5px; color:#7a5020; }
-.done-headline { font-size:2.2em; color:#1a1208; margin:14px 0 10px; line-height:1.2; max-width:600px; }
-.done-sub      { font-size:.85em; color:#5a3a18; line-height:1.7; max-width:480px; margin-bottom:28px; }
-.done-score    { font-size:1.1em; color:#3a5a20; margin-bottom:24px; }
-.done-btn      { background:#2a4a20; border:none; color:#d8f0c0; padding:12px 32px; font-size:.85em; letter-spacing:2px; transition:background .2s; }
-.done-btn:hover { background:#3a6030; }
+.done-label    { font-size:.62em; letter-spacing:6px; color:rgba(200,168,90,.6); text-transform:uppercase; margin-bottom:6px; }
+.done-headline { font-size:2.1em; color:#c8a84b; margin:8px 0 6px; line-height:1.15; max-width:640px; font-weight:bold; text-shadow:0 0 40px rgba(180,130,40,.4); }
+.done-sub      { font-size:.84em; color:rgba(220,205,160,.75); line-height:1.7; max-width:500px; margin-bottom:8px; font-style:italic; }
+/* небо с созвездием */
+#pleiades-sky { width:100%; max-width:1080px; height:640px; display:block; margin:4px auto; }
+.done-legend {
+  display:grid; grid-template-columns:repeat(3, 1fr); gap:5px 18px;
+  max-width:620px; margin:6px auto 22px; padding:0 10px;
+  font-size:.64em; color:rgba(210,190,140,.7); text-align:left;
+}
+.done-legend span b { color:#c8a84b; font-weight:bold; }
+.done-btn      { background:rgba(200,168,75,.14); border:1px solid rgba(200,168,75,.5); color:#e8d9b0; padding:12px 32px; font-size:.82em; letter-spacing:2px; transition:all .2s; }
+.done-btn:hover { background:#c8a84b; color:#0a140d; }
+@media(max-width:640px){ .done-legend{ grid-template-columns:repeat(2,1fr); font-size:.6em; } #pleiades-sky{ height:360px; } }
 
 .mt16 { margin-top:16px; }
 
@@ -440,12 +450,11 @@ body {
 
 <!-- ═══════════════════════ ФИНАЛ ═══════════════════════ -->
 <div id="screen-done" class="screen hidden">
-  <div class="done-label">Специальный репортаж завершён</div>
-  <div class="done-rule"></div>
-  <div class="done-headline">Все направления изучены. Репортёрская книжка заполнена.</div>
-  <div class="done-rule"></div>
-  <div class="done-sub">Вы исследовали все девять направлений Новейшей западной философии и выслушали их ключевые вопросы.</div>
-  <div class="done-score" id="done-score">Направлений изучено: 0 / 9</div>
+  <div class="done-label">Созвездие мысли собрано</div>
+  <div class="done-headline">Зажёгся Лев</div>
+  <div class="done-sub">Девять путей Новейшей философии — девять звёзд созвездия Льва. Серп — шесть антисциентистских направлений, треугольник — три сциентистских.</div>
+  <canvas id="pleiades-sky"></canvas>
+  <div class="done-legend" id="done-legend"></div>
   <button class="done-btn" onclick="startExplore()">← Вернуться к прогулке</button>
 </div>
 
@@ -1700,11 +1709,133 @@ function completeEncounter() {
   setDone(_dir.id);
   const total = doneCount();
   if (total === ALL_DIRS.length) {
-    document.getElementById('done-score').textContent = `Направлений изучено: ${total} / ${ALL_DIRS.length}`;
+    buildPleiadesLegend();
     show('screen-done');
+    startPleiades();
   } else {
     startExplore();
   }
+}
+
+/* ── Финал: созвездие Плеяд (9 звёзд = 9 направлений) ── */
+// Созвездие Льва (канонический астеризм): «Серп» (голова/грива, 6 звёзд) = антисциентисты,
+// «Треугольник» (задняя часть, 3 звезды) = сциентисты. lp — сторона подписи (l/r/t/b).
+// Созвездие Льва: «Серп» (6, справа) = антисциентисты, «Треугольник» (3, слева) = сциентисты.
+const PLEIADES = [
+  { id:'life',    star:'Регул',     x:0.62, y:0.72, big:true, lp:'b' },
+  { id:'psycho',  star:'Эта',       x:0.64, y:0.60, lp:'r' },
+  { id:'exist',   star:'Альгиеба',  x:0.62, y:0.49, lp:'r' },
+  { id:'phenom',  star:'Адхафера',  x:0.67, y:0.39, lp:'r' },
+  { id:'herm',    star:'Расалас',   x:0.73, y:0.31, lp:'r' },
+  { id:'postmod', star:'Эпсилон',   x:0.80, y:0.34, lp:'r' },
+  { id:'posit',   star:'Зосма',     x:0.38, y:0.45, lp:'t' },
+  { id:'pragma',  star:'Хорт',      x:0.40, y:0.64, lp:'b' },
+  { id:'analyt',  star:'Денебола',  x:0.20, y:0.56, big:true, lp:'b' },
+];
+// Серп (цепь Эпсилон→…→Регул) + спина (Альгиеба→Зосма) + треугольник (Зосма·Денебола·Хорт) + живот
+const PLEIADES_EDGES = [[5,4],[4,3],[3,2],[2,1],[1,0],[2,6],[6,8],[8,7],[7,6],[0,7]];
+
+function buildPleiadesLegend() {
+  const el = document.getElementById('done-legend');
+  el.innerHTML = PLEIADES.map(p => {
+    const dir = ALL_DIRS.find(d => d.id === p.id);
+    return `<span>★ <b>${p.star}</b> — ${dir ? dir.name : ''}</span>`;
+  }).join('');
+}
+
+let _plRaf = 0;
+function startPleiades() {
+  const cv = document.getElementById('pleiades-sky');
+  const ctx = cv.getContext('2d');
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  let W = 0, H = 0;
+  function size() {
+    W = cv.clientWidth; H = cv.clientHeight;
+    cv.width = W * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  size();
+  // раздвигаем созвездие от центра, чтобы заняло больше неба
+  const CX = 0.49, CY = 0.52, SC = 1.22;
+  const pts = PLEIADES.map(p => ({
+    ...p,
+    px: (CX + (p.x - CX) * SC) * W,
+    py: (CY + (p.y - CY) * SC) * H
+  }));
+  const start = performance.now();
+  const STAR_GAP = 240, STAR_FADE = 650;
+  const linesStart = (pts.length - 1) * STAR_GAP + STAR_FADE;
+
+  cancelAnimationFrame(_plRaf);
+  function frame(now) {
+    const t = now - start;
+    ctx.clearRect(0, 0, W, H);
+
+    // линии-созвездие — прорастают от звезды к звезде, со свечением и градиентом
+    ctx.save();
+    ctx.lineCap = 'round';
+    ctx.shadowColor = 'rgba(210,178,90,.85)';
+    for (const [a, b] of PLEIADES_EDGES) {
+      const appear = Math.max(a, b) * STAR_GAP + STAR_FADE + 120;
+      const lp = Math.max(0, Math.min(1, (t - appear) / 520));
+      if (lp <= 0) continue;
+      const ex = pts[a].px + (pts[b].px - pts[a].px) * lp;
+      const ey = pts[a].py + (pts[b].py - pts[a].py) * lp;
+      const grad = ctx.createLinearGradient(pts[a].px, pts[a].py, pts[b].px, pts[b].py);
+      grad.addColorStop(0,   `rgba(235,205,120,${0.7})`);
+      grad.addColorStop(0.5, `rgba(255,242,180,${0.95})`);
+      grad.addColorStop(1,   `rgba(235,205,120,${0.7})`);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 2.4;
+      ctx.shadowBlur = 11;
+      ctx.beginPath(); ctx.moveTo(pts[a].px, pts[a].py); ctx.lineTo(ex, ey); ctx.stroke();
+    }
+    ctx.restore();
+
+    // звёзды (зажигаются по очереди, со вспышкой и лучиками)
+    pts.forEach((p, i) => {
+      const since = t - i * STAR_GAP;
+      const ap = Math.max(0, Math.min(1, since / STAR_FADE));
+      if (ap <= 0) return;
+      const flash = since < 420 ? (1 - since / 420) : 0;          // всплеск при зажигании
+      const tw = 0.7 + 0.3 * Math.sin(now / 600 + i);
+      const r = (p.big ? 4 : 2.8);
+      const a = ap * tw;
+      const gr = r * 6 * (1 + flash * 1.4);
+      const glow = ctx.createRadialGradient(p.px, p.py, 0, p.px, p.py, gr);
+      glow.addColorStop(0, `rgba(255,242,205,${Math.min(1, a + flash * 0.6)})`);
+      glow.addColorStop(0.5, `rgba(245,210,120,${a * 0.4})`);
+      glow.addColorStop(1, 'rgba(245,210,120,0)');
+      ctx.fillStyle = glow;
+      ctx.beginPath(); ctx.arc(p.px, p.py, gr, 0, 7); ctx.fill();
+      // лучики-сияние
+      const ray = r * (3 + flash * 6) * (0.7 + 0.3 * Math.sin(now / 500 + i));
+      ctx.strokeStyle = `rgba(255,240,200,${a * 0.5})`;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(p.px - ray, p.py); ctx.lineTo(p.px + ray, p.py);
+      ctx.moveTo(p.px, p.py - ray); ctx.lineTo(p.px, p.py + ray);
+      ctx.stroke();
+      // ядро
+      ctx.fillStyle = `rgba(255,252,235,${Math.min(1, a + flash)})`;
+      ctx.beginPath(); ctx.arc(p.px, p.py, r * (1 + flash * 0.5), 0, 7); ctx.fill();
+      // подпись = название этапа
+      const dir = ALL_DIRS.find(d => d.id === p.id);
+      const label = dir ? dir.name : p.star;
+      ctx.fillStyle = `rgba(225,200,135,${ap * 0.92})`;
+      ctx.font = (p.big ? 'bold ' : '') + '12px Georgia, serif';
+      const off = r + 9;
+      if (p.lp === 'l')      { ctx.textAlign = 'right';  ctx.fillText(label, p.px - off, p.py + 4); }
+      else if (p.lp === 'r') { ctx.textAlign = 'left';   ctx.fillText(label, p.px + off, p.py + 4); }
+      else if (p.lp === 'b') { ctx.textAlign = 'center'; ctx.fillText(label, p.px, p.py + off + 10); }
+      else                   { ctx.textAlign = 'center'; ctx.fillText(label, p.px, p.py - off); }
+    });
+
+    if (!document.getElementById('screen-done').classList.contains('hidden')) {
+      _plRaf = requestAnimationFrame(frame);
+    }
+  }
+  _plRaf = requestAnimationFrame(frame);
 }
 
 /* ═══════════════════════ РЕЖИМ ПРОГУЛКИ (ХОДИЛКА) ═══════════════════════
