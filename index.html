@@ -38,7 +38,7 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 
 /* ── Map ── */
 #map-wrap{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden;background:#1a0e06}
-#map-scroll{flex:1;min-height:0;overflow:hidden;position:relative;cursor:default;background:#0a0401}
+#map-scroll{flex:1;min-height:0;overflow:hidden;position:relative;cursor:default;background:#0a0401;opacity:0;transition:opacity .35s ease}
 #map-scroll::before,#map-scroll::after{content:'✦';position:absolute;font-size:22px;color:rgba(201,162,39,.35);z-index:10;pointer-events:none;line-height:1}
 #map-scroll::before{top:10px;left:10px}
 #map-scroll::after{bottom:10px;right:10px}
@@ -48,45 +48,45 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 #map-status{flex-shrink:0;background:rgba(26,8,2,.95);color:#c9a227;font-size:11px;padding:7px 18px;font-family:'Cinzel',serif;letter-spacing:1px;border-top:1px solid rgba(201,162,39,.35);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0}
 
 /* ── Markers ── */
-.mm{position:absolute;width:76px;height:76px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0;transform:translate(-50%,-50%) translateZ(0);transition:transform .2s;will-change:transform;backface-visibility:hidden}
-.mm::before{content:attr(data-name);position:absolute;bottom:calc(100% + 12px);left:50%;transform:translateX(-50%);background:rgba(8,4,2,.97);color:#e8c547;font-family:'Cinzel',serif;font-size:24px;letter-spacing:1.5px;padding:12px 24px;white-space:nowrap;border:1px solid rgba(201,162,39,.6);pointer-events:none;opacity:0;transition:opacity .22s,font-size .22s,padding .22s;z-index:100;box-shadow:0 6px 20px rgba(0,0,0,.85),0 0 12px rgba(201,162,39,.15)}
-.mm.nearby::before{font-size:42px;padding:16px 32px}
-.mm:hover::before,.mm.nearby::before{opacity:1}
-.mm.nearby{box-shadow:0 0 0 4px rgba(255,230,100,.6),0 0 22px 8px rgba(255,200,0,.55),0 0 44px 14px rgba(255,150,0,.25)!important;transform:translate(-50%,-50%) scale(1.12) translateZ(0)!important;transition:transform .25s}
+.mm{position:absolute;width:102px;height:102px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0;transform:translate(-50%,-50%) translateZ(0);transition:transform .2s;will-change:transform;backface-visibility:hidden}
+.mm::before{content:attr(data-name);position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);background:rgba(8,4,2,.97);color:#e8c547;font-family:'Cinzel',serif;font-size:13px;letter-spacing:1.5px;padding:6px 14px;white-space:nowrap;border:1px solid rgba(201,162,39,.6);pointer-events:none;opacity:0;transition:opacity .22s,font-size .22s,padding .22s;z-index:100;box-shadow:0 4px 12px rgba(0,0,0,.85)}
+.mm.nearby::before,.mm:hover::before{opacity:1}
+.mm.nearby::before{font-size:22px;padding:10px 22px;letter-spacing:2px}
+.mm.nearby{box-shadow:0 0 0 4px rgba(255,230,100,.6),0 0 22px 10px rgba(255,200,0,.55),0 0 44px 16px rgba(255,150,0,.25)!important;transform:translate(-50%,-50%) scale(1.12) translateZ(0)!important;transition:transform .25s}
 .mm.active{
   background:radial-gradient(circle at 32% 28%,rgba(255,255,220,.7) 6%,transparent 40%),radial-gradient(circle at 38% 30%,#fffce0,#ffd020 35%,#c9900a 62%,#7a5200);
-  border:4px solid rgba(255,220,60,.9);color:#4a2800;text-shadow:0 1px 3px rgba(255,200,0,.4);cursor:pointer;
-  box-shadow:0 0 10px 4px rgba(255,210,0,.95),0 0 44px 14px rgba(255,120,0,.35),inset 0 0 0 4px rgba(200,150,0,.2);
+  border:4px solid rgba(255,220,60,.9);color:#4a2800;cursor:pointer;
+  box-shadow:0 0 10px 5px rgba(255,210,0,.95),0 0 38px 14px rgba(255,120,0,.35),inset 0 0 0 3px rgba(200,150,0,.2);
   animation:mpulse 2s ease-in-out infinite}
 .mm.active:hover{transform:translate(-50%,-50%) scale(1.3) translateZ(0);animation:none}
 .mm.done{
   background:radial-gradient(circle at 32% 28%,rgba(210,255,210,.6) 6%,transparent 40%),radial-gradient(circle at 38% 30%,#d8ffd8,#38d038 38%,#145014);
-  border:4px solid rgba(70,210,70,.85);color:#062808;text-shadow:0 1px 2px rgba(0,100,0,.4);cursor:pointer;
-  box-shadow:0 0 10px 4px rgba(60,210,60,.9),0 0 44px 14px rgba(20,140,20,.3),inset 0 0 0 4px rgba(0,150,0,.18)}
+  border:4px solid rgba(70,210,70,.85);color:#062808;cursor:pointer;
+  box-shadow:0 0 10px 5px rgba(60,210,60,.9),0 0 38px 14px rgba(20,140,20,.3),inset 0 0 0 3px rgba(0,150,0,.18)}
 .mm.done:hover{transform:translate(-50%,-50%) scale(1.2) translateZ(0)}
 .mm.locked{
   background:radial-gradient(circle at 32% 28%,rgba(255,210,210,.5) 6%,transparent 40%),radial-gradient(circle at 38% 30%,#ffb0b0,#c0392b 38%,#7b1010);
-  border:3px solid rgba(200,50,50,.75);color:#ffe0e0;text-shadow:0 1px 3px rgba(0,0,0,.7);
-  box-shadow:0 0 10px 4px rgba(180,30,30,.8),0 0 22px 7px rgba(150,20,20,.5),inset 0 0 0 4px rgba(160,0,0,.2)}
+  border:3px solid rgba(200,50,50,.75);color:#ffe0e0;
+  box-shadow:0 0 10px 5px rgba(180,30,30,.8),0 0 28px 10px rgba(150,20,20,.5),inset 0 0 0 3px rgba(160,0,0,.2)}
 .mm.half{
   background:radial-gradient(circle at 32% 28%,rgba(255,245,200,.6) 6%,transparent 40%),radial-gradient(circle at 38% 30%,#fff0c0,#ff9900 38%,#b05000);
-  border:4px solid rgba(255,160,0,.85);color:#4a2000;text-shadow:0 1px 3px rgba(180,80,0,.4);cursor:pointer;
-  box-shadow:0 0 10px 4px rgba(255,150,0,.9),0 0 44px 14px rgba(220,70,0,.3),inset 0 0 0 4px rgba(200,100,0,.2);
+  border:4px solid rgba(255,160,0,.85);color:#4a2000;cursor:pointer;
+  box-shadow:0 0 10px 5px rgba(255,150,0,.9),0 0 38px 14px rgba(220,70,0,.3),inset 0 0 0 3px rgba(200,100,0,.2);
   animation:hpulse 2s ease-in-out infinite}
 .mm.half:hover{transform:translate(-50%,-50%) scale(1.25) translateZ(0);animation:none}
 @keyframes hpulse{
   0%,100%{transform:translate(-50%,-50%) translateZ(0) scale(1)}
-  50%{transform:translate(-50%,-50%) translateZ(0) scale(1.07)}
+  50%{transform:translate(-50%,-50%) translateZ(0) scale(1.1)}
 }
 @keyframes mpulse{
   0%,100%{transform:translate(-50%,-50%) translateZ(0) scale(1)}
-  50%{transform:translate(-50%,-50%) translateZ(0) scale(1.08)}
+  50%{transform:translate(-50%,-50%) translateZ(0) scale(1.12)}
 }
 
 /* ── Hero ── */
 /* ── Hero ── */
 #hero-wrap{position:absolute;left:0;top:0;z-index:100;pointer-events:none;text-align:center;will-change:transform;backface-visibility:hidden}
-#hero-sprite{display:block;width:96px;height:96px;overflow:hidden;clip-path:inset(0);background:url('animation.png') no-repeat 0 0;background-size:auto;image-rendering:pixelated;image-rendering:crisp-edges;margin:0 auto;transform-origin:center}
+#hero-sprite{display:block;width:96px;height:96px;overflow:hidden;clip-path:inset(0);background:url('animation.png') no-repeat 0 0;background-size:auto;image-rendering:pixelated;image-rendering:crisp-edges;margin:0 auto;transform-origin:center;will-change:background-position}
 #hero-shadow{display:none}
 #hero-hint{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1a0a03,#2c1508);color:#e8c547;font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;padding:5px 14px;border:1px solid var(--gold);white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.9);animation:hintPulse 1s ease-in-out infinite}
 #hero-hint::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--gold)}
@@ -246,6 +246,11 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 .btn-retry:hover{background:rgba(155,58,26,.2);color:#c04a20;border-color:#c04a20}
 .btn-back-map{background:rgba(201,162,39,.06);border-color:rgba(201,162,39,.45);color:#c9a227;margin-top:2px}
 .btn-back-map:hover{background:rgba(201,162,39,.16);border-color:var(--gold);color:#e8c547}
+.btn-hint{background:rgba(60,40,10,.07);border-color:rgba(140,100,30,.5);color:#8a6820;margin-top:2px}
+.btn-hint:hover:not(:disabled){background:rgba(140,100,30,.15);border-color:rgba(180,130,40,.8);color:#b08a2a}
+.btn-hint:disabled{opacity:.45;cursor:default}
+#hint-box{display:none;background:rgba(60,35,5,.09);border:1px solid rgba(180,130,40,.4);border-radius:4px;padding:10px 14px;font-family:'Crimson Text',serif;font-style:italic;font-size:13px;color:#6b4c10;line-height:1.6;margin-top:2px;animation:q-in .25s ease-out both}
+#hint-box::before{content:'💡 ';font-style:normal}
 .btn-replay{background:rgba(45,122,45,.08);border-color:rgba(45,122,45,.5);color:#2d7a2d;margin-top:2px}
 .btn-replay:hover{background:rgba(45,122,45,.18);border-color:var(--green);color:#1a5a1a}
 
@@ -300,10 +305,10 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 .night-torch{position:absolute;border-radius:50%;pointer-events:none;z-index:6;transform:translate(-50%,-50%) translateZ(0);animation:torch-flicker ease-in-out infinite;will-change:transform,opacity;backface-visibility:hidden}
 @keyframes torch-flicker{0%,100%{opacity:.8;transform:translate(-50%,-50%) translateZ(0) scale(1)}30%{opacity:1;transform:translate(-50%,-50%) translateZ(0) scale(1.25)}60%{opacity:.65;transform:translate(-50%,-50%) translateZ(0) scale(.85)}}
 .night-mode .mm{will-change:transform}
-.night-mode .mm.active{box-shadow:0 0 44px 16px rgba(255,220,0,1),0 0 90px 40px rgba(255,160,0,.6),inset 0 0 0 4px rgba(255,230,0,.9)!important}
-.night-mode .mm.done{box-shadow:0 0 44px 16px rgba(50,255,50,1),0 0 90px 40px rgba(20,200,20,.6),inset 0 0 0 4px rgba(50,255,50,.9)!important}
-.night-mode .mm.locked{box-shadow:0 0 44px 16px rgba(255,40,40,1),0 0 90px 40px rgba(190,10,10,.6),inset 0 0 0 4px rgba(255,40,40,.9)!important}
-.night-mode .mm.half{box-shadow:0 0 44px 16px rgba(255,165,0,1),0 0 90px 40px rgba(240,80,0,.6),inset 0 0 0 4px rgba(255,170,0,.9)!important}
+.night-mode .mm.active{box-shadow:0 0 28px 12px rgba(255,220,0,1),0 0 60px 24px rgba(255,160,0,.6),inset 0 0 0 3px rgba(255,230,0,.9)!important}
+.night-mode .mm.done{box-shadow:0 0 28px 12px rgba(50,255,50,1),0 0 60px 24px rgba(20,200,20,.6),inset 0 0 0 3px rgba(50,255,50,.9)!important}
+.night-mode .mm.locked{box-shadow:0 0 28px 12px rgba(255,40,40,1),0 0 60px 24px rgba(190,10,10,.6),inset 0 0 0 3px rgba(255,40,40,.9)!important}
+.night-mode .mm.half{box-shadow:0 0 28px 12px rgba(255,165,0,1),0 0 60px 24px rgba(240,80,0,.6),inset 0 0 0 3px rgba(255,170,0,.9)!important}
 
 /* ── Zone labels ── */
 .zone-label{position:absolute;display:flex;align-items:center;gap:10px;background:rgba(12,7,2,.82);border:1.5px solid rgba(201,162,39,.65);border-radius:999px;padding:14px 32px 14px 24px;font-family:'Cinzel',serif;font-size:28px;letter-spacing:3px;color:#c9a227;text-transform:uppercase;cursor:pointer;z-index:20;white-space:nowrap;backdrop-filter:blur(4px);box-shadow:0 4px 20px rgba(0,0,0,.7);transition:all .2s ease}
@@ -531,6 +536,8 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
           <p class="q-text" id="q-text">Вопрос</p>
           <div class="opts" id="opts"></div>
           <div class="fb" id="fb"></div>
+          <button class="btn-action btn-hint" id="hint-btn">💡 Взять подсказку</button>
+          <div id="hint-box"></div>
           <div id="q-actions">
             <button class="btn-action btn-retry" id="retry-btn">↩ Попробовать снова</button>
           </div>
@@ -623,9 +630,9 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 const CHARACTERS=[
   {id:'ariston', name:'Аристон из Коринфа', sub:'странник в поисках мудрости',  icon:'🎓', sprite:'animation.png',        cols:3, rows:4, mapSize:80, previewSize:96, unlocked:true,
    desc:'Юный философ из Коринфа. Задаёт вопросы и убеждён, что незнание — начало мудрости.'},
-  {id:'kallia',  name:'Каллия Афинская',    sub:'хранительница знаний',         icon:'📜', sprite:'girl.png',             cols:4, rows:4, mapSize:120, previewSize:96, unlocked:true,
+  {id:'kallia',  name:'Каллия Афинская',    sub:'хранительница знаний',         icon:'📜', sprite:'girl.png',             cols:4, rows:4, mapSize:95, previewSize:96, unlocked:true,
    desc:'Учёная из Афин, знаток рукописей. Находит смысл в словах великих мыслителей.'},
-  {id:'pyrr',    name:'Пирр Эпирский',      sub:'воин, познавший тщету побед',  icon:'⚔️', sprite:'character3_sheet.png', cols:3, rows:4, mapSize:120, previewSize:96, dirMap:{down:3,left:1,right:2,up:0}, downRow:3, unlocked:true,
+  {id:'pyrr',    name:'Пирр Эпирский',      sub:'воин, познавший тщету побед',  icon:'⚔️', sprite:'character3_sheet.png', cols:3, rows:4, mapSize:92, previewSize:96, dirMap:{down:3,left:1,right:2,up:0}, downRow:3, unlocked:true,
    desc:'Вернулся с войны. Ищет у философов ответ: ради чего всё это было нужно?'}
 ];
 let selectedChar=CHARACTERS[0];
@@ -723,7 +730,10 @@ const LOCS=[
    q3:'Что, согласно Анаксимандру (по Симплицию), происходит со всеми вещами в конечном счёте?',
    opts3:[{t:'Они возвращаются к огню как первоначалу',c:0},{t:'Они растворяются в пустоте',c:0},{t:'Они возвращаются в то, из чего возникли, следуя необходимости, наказывая друг друга за несправедливость',c:1},{t:'Они соединяются в единое неподвижное бытие',c:0}],
    ok3:'Верно! Анаксимандр: «Из чего все вещи получают своё рождение, в то все они и возвращаются, следуя необходимости».',
-   fail3:'Нет. Анаксимандр: вещи «возвращаются» туда, «откуда получают рождение, следуя необходимости», наказывая друг друга.'},
+   fail3:'Нет. Анаксимандр: вещи «возвращаются» туда, «откуда получают рождение, следуя необходимости», наказывая друг друга.',
+   hint:'Аристотель наблюдал, что всё живое нуждается во влаге и тепло связано с влажным — что из этого могло быть «первым»?',
+   hint2:'Диоген Лаэртский сочетал учение о первоначале с представлением о живом мире — мир не просто из воды, он ещё и...',
+   hint3:'Анаксимандр говорил о справедливости как законе мира — вещи «платят» за своё существование, возвращаясь туда, откуда пришли.'},
 
   {id:'apeiron', nm:'Грот Апейрона', phil:'Анаксимандр, Анаксимен', era:'VI в. до н.э.', icon:'🌊', o:1, desc:'Пещера в скале · беспредельное как начало сущего',
    quote:'«Из чего все вещи рождаются, туда и возвращаются, следуя необходимости» — Анаксимандр',
@@ -739,7 +749,10 @@ const LOCS=[
    q3:'Как Аэций характеризует учение Анаксимена о связи души и мироздания?',
    opts3:[{t:'Душа есть гармония противоположностей в теле',c:0},{t:'Как наша душа, будучи воздухом, скрепляет нас, так воздух объемлет всё мироздание',c:1},{t:'Душа бессмертна и переходит в другие тела',c:0},{t:'Душа есть часть мирового огня',c:0}],
    ok3:'Верно! Аэций: «Как наша душа, будучи воздухом, скрепляет каждого из нас, так и дыхание и воздух объемлют всё мироздание».',
-   fail3:'Нет. Аэций: «как наша душа, будучи воздухом, скрепляет нас — так воздух объемлет всё мироздание».'},
+   fail3:'Нет. Аэций: «как наша душа, будучи воздухом, скрепляет нас — так воздух объемлет всё мироздание».',
+   hint:'Само слово «апейрон» означает «беспредельное» — что из перечисленных вариантов звучит как «нечто без предела»?',
+   hint2:'Анаксимен наблюдал дыхание как основу жизни — что сгущается, становится туманом, водой, землёй; что разрежается — огнём.',
+   hint3:'Аэций проводил аналогию: то, что скрепляет наше тело изнутри, и то, что удерживает весь мир — одно и то же.'},
 
   {id:'heraclitus', nm:'Храм Вечного Огня', phil:'Гераклит Эфесский', era:'V в. до н.э.', icon:'🔥', o:2, desc:'Большой храм · космос как вечно живой огонь',
    quote:'«Этот космос… всегда был, есть и будет вечно живым огнём, мерами разгорающимся и мерами потухающим» — Гераклит',
@@ -755,7 +768,10 @@ const LOCS=[
    q3:'Чем, по Гераклиту (Стобей), является мудрость?',
    opts3:[{t:'Познанием чисел и математических пропорций',c:0},{t:'Воздержанием от суждений',c:0},{t:'Говорить правду и действовать в согласии с природой, ей внимая',c:1},{t:'Созерцанием единого неподвижного бытия',c:0}],
    ok3:'Верно! Стобей: «Мудрость состоит в том, чтобы говорить правду и действовать в согласии с природой, ей внимая».',
-   fail3:'Нет. По Стобею, мудрость у Гераклита — «говорить правду и действовать в согласии с природой, ей внимая».'},
+   fail3:'Нет. По Стобею, мудрость у Гераклита — «говорить правду и действовать в согласии с природой, ей внимая».',
+   hint:'Гераклит не признавал сотворения мира — для него мир вечен и непрерывно меняется. Какой образ лучше всего передаёт вечное движение?',
+   hint2:'Гераклит говорил: «Мы входим и не входим в одну реку, мы те же и не те же» — что объединяет существование и несуществование?',
+   hint3:'Для Гераклита мудрость — не отвлечённое знание, а жизнь в согласии с тем логосом, что управляет миром. Истина — это действие.'},
 
   {id:'pythagoras', nm:'Площадь Числа', phil:'Пифагор Самосский', era:'VI–V вв. до н.э.', icon:'🔢', o:3, desc:'Навес с лавками · вся Вселенная — гармония и число',
    quote:'«Всю Вселенную признали гармонией и числом» — Аристотель о пифагорейцах',
@@ -771,7 +787,10 @@ const LOCS=[
    q3:'Почему ученики Пифагора давали обет молчания, по свидетельству источников?',
    opts3:[{t:'Молчание — путь к слиянию с Единым',c:0},{t:'Учение запрещали городские власти',c:0},{t:'Из-за абсолютного авторитета Пифагора и требования приписывать все открытия учителю',c:1},{t:'Чтобы не нарушать гармонию небесных сфер',c:0}],
    ok3:'Верно! Абсолютный авторитет Пифагора в сочетании с требованием приписывать учителю все открытия учеников вынуждал учеников давать строгий обет молчания.',
-   fail3:'Нет. Причина обета — абсолютный авторитет Пифагора и требование приписывать ему все открытия учеников.'},
+   fail3:'Нет. Причина обета — абсолютный авторитет Пифагора и требование приписывать ему все открытия учеников.',
+   hint:'Аристотель прямо цитирует пифагорейцев — обратите внимание на слова в цитате над вопросом.',
+   hint2:'Аристотель проводил аналогию с музыкальным инструментом: если тело — это инструмент, то душа — его настройка, его...',
+   hint3:'Подумайте: зачем давать обет молчания? Кому это выгодно, если все открытия приписываются одному человеку?'},
 
   {id:'socrates', nm:'Агора Сократа', phil:'Сократ', era:'V в. до н.э.', icon:'🗣️', o:4, desc:'Площадь с компасной розой · диалог как путь к истине',
    quote:'«Незнание самого себя и самозаблуждение — понятия, близкие к безумию» — Ксенофонт о Сократе',
@@ -787,7 +806,10 @@ const LOCS=[
    q3:'Зачем, объясняет Сократ Гиппию, он так дотошно расспрашивает мудрецов?',
    opts3:[{t:'Чтобы победить их в споре и показать свою мудрость',c:0},{t:'Чтобы вдуматься в слова и извлечь полезное знание',c:1},{t:'Чтобы доказать существование богов',c:0},{t:'Чтобы разоблачить ложные ценности',c:0}],
    ok3:'Верно! Сократ: «стараюсь вдуматься в это… выспрашиваю его, чтобы извлечь таким образом полезное знание».',
-   fail3:'Нет. Сократ говорит Гиппию: расспрашиваю «чтобы извлечь таким образом полезное знание».'},
+   fail3:'Нет. Сократ говорит Гиппию: расспрашиваю «чтобы извлечь таким образом полезное знание».',
+   hint:'Сократ прославился фразой «Я знаю, что ничего не знаю» — каково же самое опасное незнание, если не знать даже себя?',
+   hint2:'Сократ не писал книг, а ходил по агоре и беседовал. Что он делал снова и снова, встречая каждого нового собеседника?',
+   hint3:'Сократ сам признавал своё незнание — зачем же ему победа в споре? Он искал нечто полезное для ума.'},
 
   {id:'platon', nm:'Академия Идей', phil:'Платон', era:'IV в. до н.э.', icon:'💎', o:5, desc:'Большой синий купол · мир идей как истинная реальность',
    quote:'«Свет от огня уподобляется мощи Солнца, а идея Блага — владычица умопостигаемого» — Платон',
@@ -803,7 +825,10 @@ const LOCS=[
    q3:'Согласно Платону, как возникло время?',
    opts3:[{t:'Время существовало всегда вместе с вечностью',c:0},{t:'Творец создал время как «движущееся подобие вечности» вместе с рождением неба',c:1},{t:'Время — иллюзия, порождённая движением атомов',c:0},{t:'Время слагается из отдельных «теперь»',c:0}],
    ok3:'Верно! Платон: «Он замыслил сотворить некое движущее подобие вечности… которое мы назвали временем. Ведь не было ни дней, ни ночей… пока не было рождено небо».',
-   fail3:'Нет. Платон: Творец создал время как «движущееся подобие вечности» вместе с сотворением неба.'},
+   fail3:'Нет. Платон: Творец создал время как «движущееся подобие вечности» вместе с сотворением неба.',
+   hint:'В аллегории пещеры выход на свет — восхождение к высшему знанию. Солнце — источник всего видимого. Что является источником всего умопостигаемого?',
+   hint2:'Платон был убеждён: правильное правление требует знания о подлинном Благе. Кто обладает этим знанием по определению?',
+   hint3:'Платон говорил: вечность неподвижна, а время — её «движущееся подобие». Когда же появилось движение?'},
 
   {id:'aristoteles', nm:'Ликей Причин', phil:'Аристотель Стагирит', era:'IV в. до н.э.', icon:'📐', o:6, desc:'Малый храм · четыре причины и первая энтелехия',
    quote:'«О причинах говорится в четырёх значениях… четвёртая — то, ради чего, или благо» — Аристотель',
@@ -819,7 +844,10 @@ const LOCS=[
    q3:'Что, по Аристотелю, происходит с человеком, неспособным жить в обществе?',
    opts3:[{t:'Он становится мудрейшим из людей',c:0},{t:'Он «уже не составляет элемента государства, становясь либо животным, либо божеством»',c:1},{t:'Он достигает истинной свободы',c:0},{t:'Он превращается в тирана',c:0}],
    ok3:'Верно! Аристотель: «Тот, кто не способен вступить в общение… уже не составляет элемента государства, становясь либо животным, либо божеством».',
-   fail3:'Нет. По Аристотелю, такой человек «становится либо животным, либо божеством».'},
+   fail3:'Нет. По Аристотелю, такой человек «становится либо животным, либо божеством».',
+   hint:'Прочитайте вопрос внимательно: «то, ради чего» — это цель. Аристотель называл её четвёртой причиной.',
+   hint2:'Аристотель критиковал отрыв формы от материи — душа не отдельна от тела, она его осуществлённость, его первая...',
+   hint3:'Аристотель называл человека «политическим животным». Что происходит с животным, которое не может быть тем, чем оно является?'},
 
   {id:'stoics2', nm:'Портик Невозмутимых', phil:'Зенон, Сенека, Марк Аврелий', era:'III в. до н.э. — II в. н.э.', icon:'🏛️', o:7, desc:'Белый храм с колоннами · жизнь сообразно природе',
    quote:'«Живи сообразно с природой вещей… в этом и заключается мудрость» — Сенека',
@@ -835,7 +863,10 @@ const LOCS=[
    q3:'Что одно, по Марку Аврелию (кн. 2.17), способно сопутствовать нам?',
    opts3:[{t:'Добродетель и слава',c:0},{t:'Любовь к родине',c:0},{t:'Одно и единственное — философия',c:1},{t:'Разум богов',c:0}],
    ok3:'Верно! Марк Аврелий, кн. 2.17: «Что способно сопутствовать нам? Одно и единственное — философия».',
-   fail3:'Нет. Марк Аврелий (кн. 2.17): «Одно и единственное — философия».'},
+   fail3:'Нет. Марк Аврелий (кн. 2.17): «Одно и единственное — философия».',
+   hint:'Стоики видели в мироздании единый разум-логос. Судьба — это не произвол, а закономерность. Как её описать через причины?',
+   hint2:'Сенека искал счастье не во внешнем богатстве или удовольствии, а во внутреннем согласии с тем, что неизменно в природе.',
+   hint3:'Марк Аврелий был императором, воином, мужем — всё это могло быть отнято. Что остаётся с человеком в любых обстоятельствах?'},
 
   {id:'plotinus2', nm:'Чертог Истока', phil:'Плотин, Порфирий', era:'III в. н.э.', icon:'☀️', o:8, desc:'Купол с фиолетовой крышей · Красота и Благо как первоначало',
    quote:'«В качестве первого начала надо полагать Красоту. Она тождественна с Благом» — Плотин',
@@ -851,7 +882,10 @@ const LOCS=[
    q3:'Как, по Плотину, через душу можно познать Бога?',
    opts3:[{t:'Через чувственное созерцание красоты мира',c:0},{t:'Через воздержание от суждений',c:0},{t:'Убедившись в божественной природе души, через неё и ею достигаешь и познаёшь Бога',c:1},{t:'Через математическое созерцание чисел',c:0}],
    ok3:'Верно! Плотин: «Убедившись… в высоком достоинстве, в божественной природе души, ты можешь уверовать, что через неё и ею достигаешь и познаёшь Бога».',
-   fail3:'Нет. Плотин: «через неё [душу] и ею достигаешь и познаёшь Бога».'},
+   fail3:'Нет. Плотин: «через неё [душу] и ею достигаешь и познаёшь Бога».',
+   hint:'У Плотина из первоначала «изливается» всё остальное — вспомните иерархию: Красота-Благо → Ум → ...',
+   hint2:'Единое у Плотина выше любых ограничений — оно не ограничено ни присутствием в одном месте, ни отсутствием в другом.',
+   hint3:'Плотин считал: познание Бога — не внешний поиск, а внутреннее восхождение. Что является ступенью к Богу внутри нас?'},
 
   {id:'skeptics2', nm:'Круг Сомнений', phil:'Секст Эмпирик, Протагор', era:'IV в. до н.э. — II в. н.э.', icon:'⚖️', o:9, desc:'Круглый амфитеатр · эпохе и воздержание от суждений',
    quote:'«Человек есть мера всех вещей: существующих, что они существуют» — Протагор',
@@ -867,7 +901,10 @@ const LOCS=[
    q3:'По Сексту Эмпирику, почему невозможно найти надёжный критерий истины?',
    opts3:[{t:'Потому что боги скрывают истину от людей',c:0},{t:'Доказательство нуждается в критерии, а критерий — в доказательстве: оба попадают в порочный круг',c:1},{t:'Потому что мир состоит только из теней, а не из подлинных вещей',c:0},{t:'Потому что душа не помнит истину из прошлых жизней',c:0}],
    ok3:'Верно! Секст: «Доказательство нуждается в критерии, а критерий — в доказательстве, и таким образом оба попадают в заколдованный круг».',
-   fail3:'Нет. Секст: «доказательство и критерий попадают в заколдованный круг, в котором то и другое оказывается недостоверным».'},
+   fail3:'Нет. Секст: «доказательство и критерий попадают в заколдованный круг, в котором то и другое оказывается недостоверным».',
+   hint:'Секст — скептик. Его метод: каждому утверждению можно противопоставить равносильное. Как это называется?',
+   hint2:'Протагор — релятивист. Если всё относительно и нет объективной истины, то единственная точка отсчёта — это сам...',
+   hint3:'Секст показывал замкнутый круг: чтобы доказать А, нужен критерий; чтобы обосновать критерий, нужно доказательство. Что это за логическая ловушка?'},
 
   {id:'metka', nm:'Метка', phil:'', era:'', icon:'✦', o:10, desc:'', quote:'', tip:'', q:'', opts:[], ok:'', fail:'', q2:'', opts2:[], ok2:'', fail2:'', q3:'', opts3:[], ok3:'', fail3:''},
 ];
@@ -1025,6 +1062,7 @@ document.getElementById('loc-trial-btn').addEventListener('click',function(){
 
 document.addEventListener('keydown',function(e){
   if(e.code==='Escape'){
+    if(document.getElementById('side-panel').classList.contains('modal-open')){closeModal();return;}
     if(document.getElementById('loc-screen').classList.contains('show')){hideLocScreen();return;}
     if(document.getElementById('enter-dialog').classList.contains('show')){hideEnterDialog();return;}
   }
@@ -1050,7 +1088,13 @@ function closeModal(){
   cancelAdvance();
   document.getElementById('side-panel').classList.remove('modal-open');
   document.getElementById('modal-backdrop').classList.remove('show');
-  hideLocScreen();
+  var ls=document.getElementById('loc-screen');
+  if(ls.classList.contains('show')){
+    ls.classList.remove('trial-mode');
+    ls.classList.remove('complete-mode');
+  }else{
+    hideLocScreen();
+  }
 }
 function showLocComplete(loc){
   cancelAdvance();
@@ -1083,6 +1127,10 @@ function cancelAdvance(){
 function showQuestion(loc){
   _curLoc=loc;
   document.getElementById('q-actions').style.display='none';
+  document.getElementById('hint-btn').disabled=false;
+  document.getElementById('hint-btn').style.display='';
+  document.getElementById('hint-box').style.display='none';
+  document.getElementById('hint-box').textContent='';
   document.getElementById('panel-idle').style.display='none';
   document.getElementById('q-block').style.display='flex';
   openModal();
@@ -1113,6 +1161,7 @@ function showQuestion(loc){
 
   document.getElementById('replay-btn').style.display='none';
   if(qNum==='done'){
+    document.getElementById('hint-btn').style.display='none';
     document.getElementById('q-text').textContent=loc.q3;
     [...loc.opts3].sort(()=>Math.random()-.5).forEach((o,i)=>{
       const b=document.createElement('button');
@@ -1287,6 +1336,19 @@ document.getElementById('retry-btn').addEventListener('click',function(){
   if(_curLoc)showQuestion(_curLoc);
 });
 
+document.getElementById('hint-btn').addEventListener('click',function(){
+  if(!_curLoc)return;
+  var isHalf=state.half.includes(_curLoc.id);
+  var isQ1=state.q1.includes(_curLoc.id);
+  var qNum=isHalf?3:isQ1?2:1;
+  var hintText=qNum===3?_curLoc.hint3:qNum===2?_curLoc.hint2:_curLoc.hint;
+  if(!hintText)return;
+  var box=document.getElementById('hint-box');
+  box.textContent=hintText;
+  box.style.display='block';
+  this.disabled=true;
+});
+
 document.getElementById('replay-btn').addEventListener('click',function(){
   if(!_curLoc)return;
   cancelAdvance();
@@ -1298,11 +1360,14 @@ document.getElementById('replay-btn').addEventListener('click',function(){
 });
 
 document.getElementById('back-map-btn').addEventListener('click',function(){
-  closeModal();
+  cancelAdvance();
+  document.getElementById('side-panel').classList.remove('modal-open');
+  document.getElementById('modal-backdrop').classList.remove('show');
+  hideLocScreen();
 });
 
 document.getElementById('lc-back').addEventListener('click',function(){
-  closeModal();
+  hideLocScreen();
 });
 document.getElementById('lc-replay').addEventListener('click',function(){
   if(!_curLoc)return;
@@ -1489,6 +1554,7 @@ let mapT={ox:0,oy:0,s:1,iw:1400,ih:900};
   };
   spr.src='animation.png';
 
+  var _lastBPCol=-1,_lastBPRow=-1;
   function drawHero(dt){
     if(!heroSprite||!_fw)return;
     var col,row;
@@ -1508,8 +1574,10 @@ let mapT={ox:0,oy:0,s:1,iw:1400,ih:900};
       else{animF=0;animT=0;}
       col=wc?wc[animF]:animF;
     }
-    heroSprite.style.backgroundPosition=(-col*_dw)+'px '+(-row*_dh)+'px';
-    heroSprite.style.transform='none';
+    if(col!==_lastBPCol||row!==_lastBPRow){
+      _lastBPCol=col;_lastBPRow=row;
+      heroSprite.style.backgroundPosition=(-col*_dw)+'px '+(-row*_dh)+'px';
+    }
   }
 
 
@@ -1529,7 +1597,18 @@ let mapT={ox:0,oy:0,s:1,iw:1400,ih:900};
   }
 
   var _lastTick=0;
-  var _msc=null,_markerEls=null;
+  var _msc=null,_markerEls=null,_mapInner=null;
+  var _markerPos=null;
+  var _vpW=0,_vpH=0;
+  var _hintVis=false;
+
+  function _cacheMarkerPos(){
+    _markerPos=_markerEls.map(function(m){
+      if(!m)return null;
+      return{x:parseFloat(m.style.left)||0,y:parseFloat(m.style.top)||0};
+    });
+  }
+
   function tick(now){
     var dt=_lastTick?Math.min((now-_lastTick)/16.667,3):1;
     _lastTick=now;
@@ -1539,8 +1618,12 @@ let mapT={ox:0,oy:0,s:1,iw:1400,ih:900};
       hint=document.getElementById('hero-hint');
       heroSprite=document.getElementById('hero-sprite');
       _msc=document.getElementById('map-scroll');
+      _mapInner=document.getElementById('map-inner');
       _markerEls=LOCS.map(function(_,i){return document.getElementById('m-'+(i+1));});
       if(!wrap){requestAnimationFrame(tick);return;}
+      _cacheMarkerPos();
+      _vpW=_msc.clientWidth;_vpH=_msc.clientHeight;
+      window.addEventListener('resize',function(){_vpW=_msc.clientWidth;_vpH=_msc.clientHeight;});
     }
 
     var sp=0.22*dt,dx=0,dy=0;
@@ -1569,25 +1652,24 @@ let mapT={ox:0,oy:0,s:1,iw:1400,ih:900};
     }
     drawHero(dt);
 
-    // Камера плавно следует за героем (lerp, frame-rate independent)
-    var cw=_msc.clientWidth,ch=_msc.clientHeight;
+    var cw=_vpW,ch=_vpH;
     var s2=mapT.s,iw2=mapT.iw,ih2=mapT.ih;
     var tox=Math.min(0,Math.max(cw-iw2*s2, cw/2-(hs.x/100)*iw2*s2));
     var toy=Math.min(0,Math.max(ch-ih2*s2, ch/2-(hs.y/100)*ih2*s2));
     var lf=1-Math.pow(0.78,dt);
     mapT.ox+=(tox-mapT.ox)*lf;
     mapT.oy+=(toy-mapT.oy)*lf;
-    document.getElementById('map-inner').style.transform=
-      'translate('+mapT.ox+'px,'+mapT.oy+'px) scale('+s2+')';
-    // Позиция героя только через transform — никакого layout recalculation
+    _mapInner.style.transform='translate('+mapT.ox+'px,'+mapT.oy+'px) scale('+s2+')';
     var sc=toScreen(hs.x,hs.y);
     wrap.style.transform='translate('+sc.x+'px,'+sc.y+'px) translate(-50%,-90%) translateZ(0)';
     window._heroSX=sc.x; window._heroSY=sc.y;
 
     near=null;
+    var _mp=_markerPos;
     _markerEls.forEach(function(m,i){
-      if(!m)return;
-      var dist=Math.hypot(hs.x-parseFloat(m.style.left),hs.y-parseFloat(m.style.top));
+      if(!m||!_mp[i])return;
+      var p=_mp[i];
+      var dist=Math.hypot(hs.x-p.x,hs.y-p.y);
       if(dist<12){
         m.classList.add('nearby');
         if(getStat(LOCS[i])!=='locked'&&dist<9)near=i;
@@ -1595,11 +1677,13 @@ let mapT={ox:0,oy:0,s:1,iw:1400,ih:900};
         m.classList.remove('nearby');
       }
     });
-    if(hint)hint.style.display=near!==null?'block':'none';
+    var wantHint=near!==null;
+    if(hint&&wantHint!==_hintVis){_hintVis=wantHint;hint.style.display=wantHint?'block':'none';}
 
     requestAnimationFrame(tick);
   }
   requestAnimationFrame(tick);
+  window._recacheMarkers=_cacheMarkerPos;
 
   window._heroReset=function(){
     hs.x=SPAWN.x; hs.y=SPAWN.y;
@@ -1655,6 +1739,7 @@ let fitMap=function(){};
     oy=Math.min(0,Math.max(ch-ih*s, ch/2-(SPAWN.y/100)*ih*s));
     mapT={ox,oy,s,iw,ih};
     apply();
+    wrap.style.opacity='1';
   };
 
   img.complete&&img.naturalWidth?fitMap():img.addEventListener('load',fitMap);
