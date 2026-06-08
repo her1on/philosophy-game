@@ -1,3647 +1,939 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Средневековая философия</title>
-<style>
-:root {
-  --ink: #2d2419;
-  --muted: #6d5d48;
-  --paper: #f7efd9;
-  --paper-deep: #ead8ad;
-  --line: #c8ae72;
-  --gold: #9a6c18;
-  --brown: #583a22;
-  --green: #2f5d50;
-  --blue: #344f6b;
-  --red: #8a372f;
-  --white: #fffaf0;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  color: var(--ink);
-  font-family: Georgia, "Times New Roman", serif;
-  background:
-    linear-gradient(rgba(45, 36, 25, 0.08), rgba(45, 36, 25, 0.08)),
-    repeating-linear-gradient(90deg, rgba(88, 58, 34, 0.06) 0 1px, transparent 1px 16px),
-    var(--paper);
-}
-
-a {
-  color: inherit;
-}
-
-.topbar,
-.footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 14px clamp(16px, 4vw, 48px);
-  background: rgba(45, 36, 25, 0.92);
-  color: var(--white);
-}
-
-.brand,
-.topnav {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.brand,
-.topnav a,
-.text-button {
-  text-decoration: none;
-}
-
-.brand-mark {
-  display: inline-grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  border: 1px solid var(--line);
-  color: var(--paper-deep);
-  font-weight: 700;
-}
-
-.topnav a {
-  padding: 7px 10px;
-  border-bottom: 2px solid transparent;
-}
-
-.topnav a:hover {
-  border-color: var(--paper-deep);
-}
-
-.nav-reset-form {
-  margin: 0;
-}
-
-.nav-reset-button {
-  min-height: 34px;
-  padding: 7px 12px;
-  border: 1px solid rgba(234, 216, 173, 0.7);
-  border-radius: 6px;
-  color: var(--paper-deep);
-  background: rgba(255, 250, 240, 0.08);
-  font-family: Arial, sans-serif;
-  font-size: 0.9rem;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.nav-reset-button:hover {
-  color: var(--ink);
-  background: var(--paper-deep);
-}
-
-.page {
-  width: min(1120px, calc(100% - 32px));
-  flex: 1;
-  margin: 0 auto;
-  padding: clamp(24px, 5vw, 48px) 0;
-}
-
-.intro {
-  display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.8fr);
-  gap: 28px;
-  align-items: stretch;
-}
-
-.intro-text,
-.rules-panel,
-.walk-board,
-.speaker-panel,
-.question-card,
-.result-panel {
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: rgba(255, 250, 240, 0.84);
-  box-shadow: 0 12px 24px rgba(45, 36, 25, 0.12);
-}
-
-.intro-text {
-  min-height: 430px;
-  padding: clamp(28px, 6vw, 64px);
-  background:
-    linear-gradient(135deg, rgba(255, 250, 240, 0.92), rgba(234, 216, 173, 0.76)),
-    radial-gradient(circle at 18% 18%, rgba(154, 108, 24, 0.18), transparent 30%);
-}
-
-.rules-panel {
-  padding: 28px;
-  border-left: 6px solid var(--gold);
-}
-
-.eyebrow,
-.small-note {
-  margin: 0 0 10px;
-  color: var(--gold);
-  font-family: Arial, sans-serif;
-  font-size: 0.85rem;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-h1,
-h2,
-p {
-  margin-top: 0;
-}
-
-h1 {
-  max-width: 820px;
-  font-size: clamp(2rem, 4.6vw, 4rem);
-  line-height: 1.05;
-}
-
-h2 {
-  font-size: 1.45rem;
-}
-
-p,
-li,
-textarea,
-label {
-  font-size: 1.04rem;
-  line-height: 1.58;
-}
-
-.primary-button,
-.secondary-button,
-.ghost-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  padding: 11px 18px;
-  border-radius: 6px;
-  border: 1px solid transparent;
-  font-family: Arial, sans-serif;
-  font-size: 0.95rem;
-  font-weight: 700;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.primary-button {
-  color: var(--white);
-  background: var(--brown);
-}
-
-.primary-button:hover {
-  background: #422a18;
-}
-
-.secondary-button {
-  color: var(--white);
-  background: var(--green);
-}
-
-.secondary-button:hover {
-  background: #24483e;
-}
-
-.ghost-button {
-  color: var(--brown);
-  background: transparent;
-  border-color: var(--line);
-}
-
-.ghost-button:hover {
-  background: rgba(154, 108, 24, 0.1);
-}
-
-.section-heading {
-  margin-bottom: 20px;
-}
-
-.section-heading h1 {
-  margin-bottom: 10px;
-}
-
-.walk-board {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(120px, 1fr));
-  gap: 0;
-  margin-bottom: 22px;
-  overflow: hidden;
-}
-
-.path-stop {
-  position: relative;
-  min-height: 146px;
-  padding: 18px 14px;
-  border-right: 1px solid rgba(200, 174, 114, 0.7);
-  background: rgba(255, 250, 240, 0.5);
-}
-
-.path-stop::after {
-  content: "";
-  position: absolute;
-  right: -16px;
-  bottom: 22px;
-  width: 32px;
-  height: 4px;
-  background: var(--line);
-  z-index: 1;
-}
-
-.path-stop:last-child::after {
-  display: none;
-}
-
-.path-stop p,
-.path-stop strong {
-  position: relative;
-  z-index: 2;
-}
-
-.path-stop p {
-  margin-bottom: 6px;
-  color: var(--muted);
-  font-size: 0.88rem;
-}
-
-.path-stop strong {
-  display: block;
-  font-size: 0.95rem;
-}
-
-.mini-character,
-.character {
-  --robe: #583a22;
-  --trim: #9a6c18;
-  --accent: #344f6b;
-}
-
-.mini-character {
-  position: relative;
-  width: 52px;
-  height: 58px;
-  margin-bottom: 10px;
-}
-
-.mini-head,
-.mini-body {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.mini-head {
-  top: 4px;
-  width: 28px;
-  height: 28px;
-  border: 2px solid var(--line);
-  border-radius: 50%;
-  background: #ead0a0;
-  z-index: 2;
-}
-
-.mini-head::before,
-.mini-head::after {
-  content: "";
-  position: absolute;
-  top: 10px;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--ink);
-}
-
-.mini-head::before {
-  left: 7px;
-}
-
-.mini-head::after {
-  right: 7px;
-}
-
-.mini-body {
-  bottom: 0;
-  width: 44px;
-  height: 34px;
-  border: 2px solid var(--line);
-  border-radius: 20px 20px 6px 6px;
-  background: var(--robe);
-}
-
-.character {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 170px;
-  height: 220px;
-  margin-bottom: 18px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background:
-    linear-gradient(180deg, rgba(255, 250, 240, 0.78), rgba(234, 216, 173, 0.8)),
-    repeating-linear-gradient(90deg, rgba(88, 58, 34, 0.05) 0 1px, transparent 1px 16px);
-  overflow: hidden;
-}
-
-.character .halo,
-.character .hood,
-.character .head,
-.character .beard,
-.character .body,
-.character .book,
-.character .quill {
-  position: absolute;
-}
-
-.character .halo {
-  top: 20px;
-  width: 96px;
-  height: 96px;
-  border: 3px solid rgba(154, 108, 24, 0.35);
-  border-radius: 50%;
-}
-
-.character .hood {
-  top: 38px;
-  width: 92px;
-  height: 100px;
-  border-radius: 48px 48px 22px 22px;
-  background: var(--robe);
-  box-shadow: inset 0 -10px 0 rgba(45, 36, 25, 0.18);
-  z-index: 1;
-}
-
-.character .head {
-  top: 54px;
-  width: 56px;
-  height: 62px;
-  border: 2px solid rgba(88, 58, 34, 0.35);
-  border-radius: 45% 45% 48% 48%;
-  background: #ead0a0;
-  z-index: 2;
-}
-
-.character .head::before,
-.character .head::after {
-  content: "";
-  position: absolute;
-  top: 25px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--ink);
-}
-
-.character .head::before {
-  left: 15px;
-}
-
-.character .head::after {
-  right: 15px;
-}
-
-.character .beard {
-  top: 94px;
-  width: 46px;
-  height: 34px;
-  border-radius: 6px 6px 24px 24px;
-  background: #efe6d0;
-  z-index: 3;
-}
-
-.character .body {
-  bottom: 18px;
-  width: 126px;
-  height: 96px;
-  border: 2px solid rgba(88, 58, 34, 0.25);
-  border-radius: 54px 54px 10px 10px;
-  background:
-    linear-gradient(90deg, transparent 48%, rgba(255, 250, 240, 0.35) 49% 51%, transparent 52%),
-    var(--robe);
-  z-index: 1;
-}
-
-.character .book {
-  right: 30px;
-  bottom: 40px;
-  width: 48px;
-  height: 34px;
-  border: 2px solid rgba(88, 58, 34, 0.45);
-  border-radius: 4px;
-  background:
-    linear-gradient(90deg, rgba(255, 250, 240, 0.9) 0 48%, rgba(88, 58, 34, 0.35) 49% 51%, rgba(255, 250, 240, 0.9) 52%),
-    var(--paper);
-  transform: rotate(-5deg);
-  z-index: 4;
-}
-
-.character .quill {
-  left: 30px;
-  bottom: 55px;
-  width: 6px;
-  height: 46px;
-  border-radius: 6px;
-  background: var(--accent);
-  transform: rotate(35deg);
-  z-index: 4;
-}
-
-.character .quill::before {
-  content: "";
-  position: absolute;
-  left: -11px;
-  top: -18px;
-  width: 22px;
-  height: 34px;
-  border-radius: 100% 0 100% 0;
-  background: var(--accent);
-}
-
-.mentor,
-.mini-character.mentor {
-  --robe: #4b3726;
-  --trim: #9a6c18;
-  --accent: #2f5d50;
-}
-
-.augustine,
-.mini-character.augustine {
-  --robe: #6b3f35;
-  --trim: #9a6c18;
-  --accent: #344f6b;
-}
-
-.augustine-dark,
-.mini-character.augustine-dark {
-  --robe: #463326;
-  --trim: #c8ae72;
-  --accent: #6b3f35;
-}
-
-.augustine-red,
-.mini-character.augustine-red {
-  --robe: #8a4a35;
-  --trim: #d8c68f;
-  --accent: #344f6b;
-}
-
-.anselm,
-.mini-character.anselm {
-  --robe: #38495c;
-  --trim: #c8ae72;
-  --accent: #8a372f;
-}
-
-.abelard,
-.mini-character.abelard {
-  --robe: #2f5d50;
-  --trim: #c8ae72;
-  --accent: #9a6c18;
-}
-
-.aquinas,
-.mini-character.aquinas {
-  --robe: #f1e7cf;
-  --trim: #583a22;
-  --accent: #344f6b;
-}
-
-.aquinas-light,
-.mini-character.aquinas-light {
-  --robe: #eadfcb;
-  --trim: #2d2419;
-  --accent: #9a6c18;
-}
-
-.aquinas-gold,
-.mini-character.aquinas-gold {
-  --robe: #d8c68f;
-  --trim: #563720;
-  --accent: #2f5d50;
-}
-
-.aquinas .hood,
-.aquinas .body,
-.aquinas-light .hood,
-.aquinas-light .body,
-.aquinas-gold .hood,
-.aquinas-gold .body {
-  border-color: rgba(88, 58, 34, 0.4);
-  color: var(--ink);
-}
-
-.ockham,
-.mini-character.ockham {
-  --robe: #3d352f;
-  --trim: #c8ae72;
-  --accent: #8a372f;
-}
-
-.boethius-ockham,
-.mini-character.boethius-ockham {
-  --robe: #4c3a2b;
-  --trim: #d8c68f;
-  --accent: #2f5d50;
-}
-
-.anselm .book {
-  width: 20px;
-  height: 58px;
-  border-radius: 12px 12px 4px 4px;
-  background: var(--paper);
-}
-
-.abelard .quill {
-  transform: rotate(-35deg);
-}
-
-.path-stop.done .mini-body {
-  background: var(--green);
-}
-
-.path-stop.active .mini-body {
-  background: var(--gold);
-}
-
-.path-stop.done {
-  background: rgba(47, 93, 80, 0.12);
-}
-
-.path-stop.active {
-  background: rgba(154, 108, 24, 0.18);
-}
-
-.path-stop.locked {
-  opacity: 0.72;
-}
-
-.status-label {
-  display: inline-flex;
-  margin-top: 10px;
-  color: var(--muted);
-  font-family: Arial, sans-serif;
-  font-size: 0.82rem;
-  font-weight: 700;
-}
-
-.approach-form {
-  margin-top: 12px;
-}
-
-.approach-button {
-  min-height: 34px;
-  padding: 7px 12px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  color: var(--white);
-  background: var(--brown);
-  font-family: Arial, sans-serif;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.approach-button:hover {
-  background: #422a18;
-}
-
-.encounter-layout {
-  display: grid;
-  grid-template-columns: minmax(240px, 0.45fr) minmax(0, 1fr);
-  gap: 20px;
-  align-items: start;
-}
-
-.speaker-panel,
-.question-card {
-  padding: clamp(20px, 3vw, 30px);
-}
-
-.speaker-panel {
-  position: sticky;
-  top: 16px;
-}
-
-.question-meta {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 18px;
-  color: var(--muted);
-  font-family: Arial, sans-serif;
-  font-size: 0.92rem;
-}
-
-.question-card h1 {
-  font-size: clamp(1.55rem, 3vw, 2.5rem);
-  line-height: 1.2;
-}
-
-.dialogue-closed,
-.speech-bubble {
-  padding: 18px;
-  border-radius: 8px;
-  background: rgba(255, 250, 240, 0.78);
-  border: 1px solid rgba(88, 58, 34, 0.18);
-}
-
-.dialogue-closed h1 {
-  margin-bottom: 12px;
-}
-
-.speech-bubble {
-  position: relative;
-  border-left: 6px solid var(--gold);
-}
-
-.speech-bubble::before {
-  content: "";
-  position: absolute;
-  left: -16px;
-  top: 28px;
-  border-top: 10px solid transparent;
-  border-right: 10px solid var(--gold);
-  border-bottom: 10px solid transparent;
-}
-
-.speech-bubble p {
-  margin-bottom: 8px;
-  color: var(--gold);
-  font-family: Arial, sans-serif;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.answer-form {
-  display: grid;
-  gap: 12px;
-}
-
-.answer-form label {
-  font-weight: 700;
-}
-
-textarea {
-  width: 100%;
-  min-height: 180px;
-  resize: vertical;
-  padding: 14px;
-  border: 1px solid rgba(88, 58, 34, 0.35);
-  border-radius: 6px;
-  color: var(--ink);
-  background: rgba(255, 250, 240, 0.9);
-  font-family: Georgia, "Times New Roman", serif;
-}
-
-textarea:focus {
-  outline: 3px solid rgba(154, 108, 24, 0.22);
-  border-color: var(--gold);
-}
-
-.form-error,
-.student-answer,
-.feedback {
-  margin-top: 18px;
-  padding: 16px;
-  border-radius: 6px;
-}
-
-.form-error {
-  border: 1px solid var(--red);
-  background: rgba(138, 55, 47, 0.12);
-  color: var(--red);
-  font-family: Arial, sans-serif;
-  font-weight: 700;
-}
-
-.student-answer {
-  border: 1px solid rgba(88, 58, 34, 0.18);
-  background: rgba(255, 250, 240, 0.75);
-}
-
-.feedback {
-  border-left: 6px solid var(--blue);
-  background: rgba(52, 79, 107, 0.1);
-}
-
-.feedback h2,
-.student-answer h2 {
-  margin-bottom: 6px;
-  font-size: 1.25rem;
-}
-
-.feedback-correct {
-  border-left-color: var(--green);
-  background: rgba(47, 93, 80, 0.1);
-}
-
-.feedback-wrong {
-  border-left-color: var(--red);
-  background: rgba(138, 55, 47, 0.1);
-}
-
-.next-form {
-  margin-top: 18px;
-}
-
-.result-panel {
-  width: min(820px, 100%);
-  margin: 0 auto;
-  padding: clamp(28px, 5vw, 48px);
-  text-align: center;
-}
-
-.result-panel h1 {
-  margin-inline: auto;
-  font-size: clamp(2rem, 4vw, 3.2rem);
-}
-
-.result-score {
-  margin: 20px auto 6px;
-  color: var(--brown);
-  font-size: clamp(3.5rem, 10vw, 6rem);
-  line-height: 1;
-  font-weight: 700;
-}
-
-.recommendations,
-.answer-log {
-  margin-top: 28px;
-  text-align: left;
-}
-
-.recommendations h2,
-.answer-log h2 {
-  text-align: center;
-}
-
-.log-item {
-  padding: 12px 0;
-  border-top: 1px solid rgba(88, 58, 34, 0.18);
-}
-
-.log-item p {
-  margin-bottom: 0;
-  color: var(--muted);
-}
-
-.actions-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-top: 24px;
-  flex-wrap: wrap;
-}
-
-.centered {
-  justify-content: center;
-}
-
-.footer {
-  justify-content: center;
-  font-family: Arial, sans-serif;
-  font-size: 0.9rem;
-  flex-wrap: wrap;
-}
-
-.game-screen {
-  display: grid;
-  grid-template-columns: minmax(0, 1.45fr) minmax(260px, 0.55fr);
-  gap: 18px;
-  align-items: stretch;
-}
-
-.campus-map,
-.quest-panel,
-.dialogue-card {
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: rgba(255, 250, 240, 0.84);
-  box-shadow: 0 12px 24px rgba(45, 36, 25, 0.12);
-}
-
-.campus-map {
-  position: relative;
-  min-height: 520px;
-  overflow: hidden;
-  background:
-    linear-gradient(rgba(247, 239, 217, 0.64), rgba(247, 239, 217, 0.64)),
-    repeating-linear-gradient(0deg, rgba(88, 58, 34, 0.05) 0 1px, transparent 1px 28px),
-    repeating-linear-gradient(90deg, rgba(88, 58, 34, 0.05) 0 1px, transparent 1px 28px),
-    #d9c88f;
-}
-
-.map-ground {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 32% 42%, rgba(47, 93, 80, 0.2), transparent 18%),
-    radial-gradient(circle at 72% 58%, rgba(52, 79, 107, 0.14), transparent 20%);
-}
-
-.map-road {
-  position: absolute;
-  border-radius: 999px;
-  background: rgba(234, 216, 173, 0.88);
-  border: 1px solid rgba(154, 108, 24, 0.28);
-}
-
-.road-main {
-  left: 7%;
-  right: 6%;
-  top: 48%;
-  height: 38px;
-}
-
-.road-top {
-  left: 19%;
-  top: 26%;
-  width: 68%;
-  height: 28px;
-  transform: rotate(-10deg);
-}
-
-.road-bottom {
-  left: 12%;
-  top: 68%;
-  width: 70%;
-  height: 28px;
-  transform: rotate(8deg);
-}
-
-.campus-building {
-  position: absolute;
-  display: grid;
-  place-items: center;
-  width: 126px;
-  height: 82px;
-  border: 2px solid rgba(88, 58, 34, 0.35);
-  border-radius: 6px;
-  color: var(--white);
-  background: var(--brown);
-  box-shadow: inset 0 -12px 0 rgba(45, 36, 25, 0.18);
-  font-family: Arial, sans-serif;
-  font-size: 0.78rem;
-  font-weight: 700;
-  text-align: center;
-}
-
-.campus-building::before {
-  content: "";
-  position: absolute;
-  top: -22px;
-  left: 10px;
-  right: 10px;
-  height: 38px;
-  transform: skewX(-18deg);
-  border: 2px solid rgba(88, 58, 34, 0.35);
-  border-bottom: 0;
-  border-radius: 6px 6px 0 0;
-  background: var(--gold);
-}
-
-.campus-building span {
-  position: relative;
-  z-index: 1;
-  padding-top: 16px;
-}
-
-.building-gate {
-  left: 4%;
-  bottom: 7%;
-}
-
-.building-monastery {
-  left: 15%;
-  top: 12%;
-  background: #6b3f35;
-}
-
-.building-auditorium {
-  left: 36%;
-  bottom: 8%;
-  background: #38495c;
-}
-
-.building-debate {
-  left: 45%;
-  top: 12%;
-  background: #2f5d50;
-}
-
-.building-library {
-  right: 12%;
-  bottom: 12%;
-  background: #6f5737;
-}
-
-.building-scriptorium {
-  right: 5%;
-  top: 11%;
-  background: #3d352f;
-}
-
-.student-token {
-  position: absolute;
-  left: var(--student-x);
-  top: var(--student-y);
-  width: 54px;
-  height: 72px;
-  transform: translate(-50%, -50%);
-  transition: left 650ms ease, top 650ms ease;
-  z-index: 8;
-}
-
-.student-token::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 1px;
-  width: 30px;
-  height: 18px;
-  transform: translateX(-50%);
-  border: 2px solid rgba(88, 58, 34, 0.42);
-  border-bottom: 0;
-  border-radius: 18px 18px 4px 4px;
-  background: #d9d0bb;
-  z-index: 3;
-}
-
-.student-token.walking {
-  animation: student-bob 0.36s ease-in-out infinite alternate;
-}
-
-.student-head,
-.student-body {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.student-head {
-  top: 9px;
-  width: 28px;
-  height: 28px;
-  border: 2px solid rgba(88, 58, 34, 0.45);
-  border-radius: 50%;
-  background: #edd4a5;
-  z-index: 2;
-}
-
-.student-head::before,
-.student-head::after {
-  content: "";
-  position: absolute;
-  top: 10px;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--ink);
-}
-
-.student-head::before {
-  left: 7px;
-}
-
-.student-head::after {
-  right: 7px;
-}
-
-.student-body {
-  bottom: 0;
-  width: 48px;
-  height: 48px;
-  border: 2px solid rgba(88, 58, 34, 0.35);
-  border-radius: 22px 22px 8px 8px;
-  background:
-    linear-gradient(90deg, transparent 0 43%, rgba(234, 216, 173, 0.8) 44% 56%, transparent 57%),
-    linear-gradient(0deg, #2b4058 0 24%, transparent 25%),
-    var(--blue);
-}
-
-.student-body::after {
-  content: "";
-  position: absolute;
-  right: -7px;
-  top: 18px;
-  width: 12px;
-  height: 19px;
-  border: 2px solid rgba(88, 58, 34, 0.4);
-  border-radius: 2px;
-  background: #d8c68f;
-}
-
-@keyframes student-bob {
-  from {
-    transform: translate(-50%, -50%);
-  }
-  to {
-    transform: translate(-50%, -56%);
-  }
-}
-
-.map-character-form {
-  position: absolute;
-  left: var(--char-x);
-  top: var(--char-y);
-  z-index: 7;
-  transform: translate(-50%, -50%);
-  pointer-events: auto;
-}
-
-.map-character {
-  --skin: #ead0a0;
-  --hair: #6c5a44;
-  --beard: #d8c68f;
-  --robe: #563720;
-  --trim: #9a6c18;
-  position: relative;
-  display: block;
-  width: 64px;
-  height: 82px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--ink);
-  font-family: Georgia, "Times New Roman", serif;
-}
-
-.map-character:not(:disabled) {
-  cursor: pointer;
-}
-
-.map-character::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 3px;
-  width: 38px;
-  height: 30px;
-  transform: translateX(-50%);
-  border-radius: 50% 50% 34% 34%;
-  background: var(--hair);
-  box-shadow:
-    -10px 8px 0 -4px var(--hair),
-    10px 8px 0 -4px var(--hair);
-  z-index: 1;
-}
-
-.map-character::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 27px;
-  width: 24px;
-  height: 20px;
-  transform: translateX(-50%);
-  border-radius: 0 0 16px 16px;
-  background: var(--beard);
-  z-index: 3;
-}
-
-.map-character .mini-head {
-  top: 8px;
-  width: 32px;
-  height: 32px;
-  border-width: 2px;
-  border-color: rgba(88, 58, 34, 0.45);
-  background: var(--skin);
-  z-index: 2;
-}
-
-.map-character .mini-body {
-  bottom: 2px;
-  width: 52px;
-  height: 42px;
-  border-color: rgba(88, 58, 34, 0.38);
-  border-radius: 26px 26px 8px 8px;
-  background:
-    linear-gradient(90deg, transparent 0 42%, var(--trim) 43% 57%, transparent 58%),
-    linear-gradient(0deg, rgba(45, 36, 25, 0.2) 0 19%, transparent 20%),
-    var(--robe);
-  z-index: 1;
-}
-
-.map-character.active .mini-head,
-.map-character-form.active .mini-head {
-  box-shadow: 0 0 0 5px rgba(154, 108, 24, 0.26);
-}
-
-.map-character-form.active .map-character {
-  animation: active-pulse 1.2s ease-in-out infinite alternate;
-}
-
-.map-character-form.selected .mini-head {
-  box-shadow: 0 0 0 6px rgba(154, 108, 24, 0.35);
-}
-
-.map-character-form.locked {
-  opacity: 0.55;
-}
-
-.map-character-form.done .mini-body {
-  background: var(--green);
-}
-
-.map-character-form .map-character:hover .mini-head,
-.map-character.selected .mini-head,
-.map-character-form.selected .mini-head {
-  box-shadow: 0 0 0 6px rgba(154, 108, 24, 0.35);
-}
-
-.character-name,
-.talk-hint {
-  position: absolute;
-  left: 50%;
-  width: 132px;
-  transform: translateX(-50%);
-  text-align: center;
-  text-shadow: 0 1px 0 var(--paper);
-  pointer-events: none;
-}
-
-.character-name {
-  top: 78px;
-  padding: 3px 5px;
-  border-radius: 5px;
-  background: rgba(255, 250, 240, 0.78);
-  font-size: 0.83rem;
-  font-weight: 700;
-  line-height: 1.1;
-}
-
-.talk-hint {
-  top: 49px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: 24px;
-  min-width: 24px;
-  height: 24px;
-  padding: 0;
-  border-radius: 999px;
-  color: var(--white);
-  background: var(--gold);
-  font-family: Arial, sans-serif;
-  font-size: 0.82rem;
-  font-weight: 700;
-}
-
-.map-character.augustine,
-.map-character.augustine-dark,
-.map-character.augustine-red {
-  --hair: #8d806d;
-  --beard: #d7c9a5;
-}
-
-.map-character.aquinas,
-.map-character.aquinas-light,
-.map-character.aquinas-gold {
-  --hair: #4a3829;
-  --beard: #c5b28c;
-}
-
-.map-character.ockham,
-.map-character.boethius-ockham {
-  --hair: #5a4a38;
-  --beard: #b9aa8d;
-}
-
-.map-character.boethius-ockham::before {
-  box-shadow:
-    -17px 8px 0 -4px var(--hair),
-    17px 8px 0 -4px #7b6a53;
-}
-
-.map-character.boethius-ockham .mini-head {
-  box-shadow: 18px 3px 0 -5px var(--skin);
-}
-
-.map-character-form.locked .character-name {
-  opacity: 0;
-}
-
-.map-character-form.locked:hover .character-name {
-  opacity: 1;
-}
-
-@keyframes active-pulse {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(-4px);
-  }
-}
-
-.map-status {
-  position: absolute;
-  left: 18px;
-  right: 18px;
-  bottom: 14px;
-  z-index: 10;
-  padding: 10px 12px;
-  border: 1px solid rgba(88, 58, 34, 0.22);
-  border-radius: 6px;
-  color: var(--ink);
-  background: rgba(255, 250, 240, 0.88);
-  font-family: Arial, sans-serif;
-  font-size: 0.9rem;
-  font-weight: 700;
-}
-
-.map-choice-card {
-  position: absolute;
-  right: 16px;
-  bottom: 62px;
-  z-index: 12;
-  width: min(280px, calc(100% - 32px));
-  padding: 14px;
-  border: 1px solid rgba(88, 58, 34, 0.25);
-  border-radius: 8px;
-  background: rgba(255, 250, 240, 0.94);
-  box-shadow: 0 12px 24px rgba(45, 36, 25, 0.18);
-}
-
-.map-choice-card.card-left {
-  right: auto;
-  left: 16px;
-}
-
-.map-choice-card h2 {
-  margin-bottom: 6px;
-  font-size: 1.25rem;
-}
-
-.map-choice-card p {
-  margin-bottom: 8px;
-}
-
-.map-choice-card .primary-button {
-  width: 100%;
-}
-
-.quest-panel {
-  padding: 22px;
-}
-
-.quest-panel .character {
-  width: 150px;
-  height: 190px;
-  margin-inline: auto;
-}
-
-.quest-panel h2 {
-  margin-bottom: 10px;
-}
-
-.dialogue-card {
-  margin-top: 20px;
-  padding: clamp(20px, 3vw, 30px);
-}
-
-.free-map-screen {
-  grid-template-columns: 1fr;
-}
-
-.illustrated-map {
-  min-height: 0;
-  width: 100%;
-  aspect-ratio: 1672 / 941;
-  background:
-    linear-gradient(rgba(247, 239, 217, 0.08), rgba(247, 239, 217, 0.08)),
-    var(--map-image) center / cover no-repeat,
-    var(--paper-deep);
-}
-
-.illustrated-map::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 50% 50%, transparent 60%, rgba(45, 36, 25, 0.12)),
-    repeating-linear-gradient(0deg, rgba(45, 36, 25, 0.04) 0 1px, transparent 1px 26px);
-}
-
-.illustrated-map .map-character-form,
-.illustrated-map .student-token,
-.illustrated-map .map-status,
-.illustrated-map .map-location-label,
-.illustrated-map .map-location-hotspot {
-  z-index: 3;
-}
-
-.map-character-form.free-choice.done .map-character {
-  filter: saturate(0.85);
-}
-
-.map-character-form.free-choice.done .talk-hint {
-  color: var(--green);
-}
-
-.map-character-form.free-choice.active .talk-hint {
-  color: var(--brown);
-}
-
-.map-location-label {
-  position: absolute;
-  z-index: 2;
-  padding: 3px 7px;
-  border: 1px solid rgba(88, 58, 34, 0.25);
-  border-radius: 999px;
-  color: var(--brown);
-  background: rgba(255, 250, 240, 0.72);
-  font-family: Arial, sans-serif;
-  font-size: 0.72rem;
-  font-weight: 700;
-  pointer-events: none;
-}
-
-.map-location-hotspot {
-  position: absolute;
-  left: var(--entry-x);
-  top: var(--entry-y);
-  z-index: 9;
-  display: inline-flex;
-  align-items: center;
-  flex-direction: column;
-  gap: 1px;
-  min-width: 82px;
-  padding: 4px 9px;
-  transform: translate(-50%, -50%);
-  border: 1px solid rgba(88, 58, 34, 0.32);
-  border-radius: 999px;
-  color: var(--brown);
-  background: rgba(255, 250, 240, 0.82);
-  box-shadow: 0 4px 10px rgba(45, 36, 25, 0.12);
-  font-family: Arial, sans-serif;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.map-location-hotspot span {
-  font-size: 0.78rem;
-  line-height: 1;
-}
-
-.map-location-hotspot small {
-  color: var(--gold);
-  font-size: 0.62rem;
-  line-height: 1;
-  text-transform: uppercase;
-}
-
-.map-location-hotspot:hover,
-.map-location-hotspot.selected,
-.map-location-hotspot.active {
-  color: var(--white);
-  background: var(--brown);
-  border-color: var(--paper-deep);
-}
-
-.map-location-hotspot:hover small,
-.map-location-hotspot.selected small,
-.map-location-hotspot.active small {
-  color: var(--paper-deep);
-}
-
-.map-location-hotspot.done {
-  background: rgba(47, 93, 80, 0.9);
-  color: var(--white);
-}
-
-.label-gate {
-  left: 5%;
-  top: 74%;
-}
-
-.label-monastery {
-  left: 16%;
-  top: 21%;
-}
-
-.label-auditorium {
-  left: 37%;
-  top: 75%;
-}
-
-.label-debate {
-  left: 49%;
-  top: 22%;
-}
-
-.label-library {
-  left: 73%;
-  top: 71%;
-}
-
-.label-scriptorium {
-  left: 83%;
-  top: 20%;
-}
-
-.map-journal {
-  align-self: stretch;
-}
-
-.map-journal .journal-list {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.journal-list {
-  display: grid;
-  gap: 8px;
-  margin-top: 16px;
-}
-
-.journal-row {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 9px 0;
-  border-top: 1px solid rgba(88, 58, 34, 0.18);
-  font-family: Arial, sans-serif;
-  font-size: 0.9rem;
-}
-
-.journal-row strong {
-  color: var(--gold);
-}
-
-.journal-row.done strong {
-  color: var(--green);
-}
-
-.hint-counter {
-  display: inline-flex;
-  width: fit-content;
-  margin-bottom: 8px;
-  padding: 6px 10px;
-  border: 1px solid rgba(154, 108, 24, 0.28);
-  border-radius: 999px;
-  color: var(--brown);
-  background: rgba(154, 108, 24, 0.1);
-  font-family: Arial, sans-serif;
-  font-size: 0.9rem;
-  font-weight: 700;
-}
-
-.journal-badges {
-  display: flex;
-  align-items: flex-end;
-  flex-direction: column;
-  gap: 3px;
-  min-width: 106px;
-  text-align: right;
-}
-
-.journal-badges em {
-  color: var(--muted);
-  font-family: Arial, sans-serif;
-  font-size: 0.78rem;
-  font-style: normal;
-}
-
-.scene-card {
-  position: relative;
-  min-height: 0;
-  aspect-ratio: 597 / 512;
-  margin-bottom: 18px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  overflow: hidden;
-  background-image: url("static/img/dialogue-scenes.png");
-  background-repeat: no-repeat;
-  background-size: 300% 200%;
-  background-color: var(--paper-deep);
-}
-
-.scene-card.hint-mode::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background: rgba(45, 36, 25, 0.08);
-}
-
-.scene-gate {
-  background-position: 0% 0%;
-}
-
-.scene-chapel {
-  background-position: 50% 0%;
-}
-
-.scene-courtyard {
-  background-position: 100% 0%;
-}
-
-.scene-debate {
-  background-position: 0% 100%;
-}
-
-.scene-library {
-  background-position: 50% 100%;
-}
-
-.scene-scriptorium {
-  background-position: 100% 100%;
-}
-
-.hint-room-card {
-  aspect-ratio: 16 / 9;
-  background-image: url("static/img/hint-room.png");
-  background-position: center;
-  background-size: cover;
-}
-
-.scene-dialogue-box {
-  position: absolute;
-  left: 4.8%;
-  right: 4.8%;
-  bottom: 5.2%;
-  z-index: 4;
-  min-height: 28%;
-  padding: clamp(14px, 2.4vw, 24px);
-  border: 1px solid rgba(88, 58, 34, 0.2);
-  border-radius: 8px;
-  background: rgba(255, 250, 240, 0.82);
-  backdrop-filter: blur(1px);
-}
-
-.scene-card.hint-mode .scene-dialogue-box {
-  left: 4%;
-  right: auto;
-  bottom: 4%;
-  width: min(470px, 58%);
-  min-height: 0;
-  padding: clamp(10px, 1.5vw, 15px);
-}
-
-.scene-card.hint-mode .scene-dialogue-box h1 {
-  margin-bottom: 6px;
-  font-size: clamp(1.3rem, 2.4vw, 2rem);
-}
-
-.scene-card.hint-mode .dialogue-line {
-  max-width: 42rem;
-  font-size: 0.9rem;
-}
-
-.hidden-object-layer {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-}
-
-.hidden-object {
-  position: absolute;
-  left: var(--item-x);
-  top: var(--item-y);
-  width: clamp(28px, calc(var(--item-size) * 0.58px), 58px);
-  transform: translate(-50%, -50%) rotate(var(--item-rotate));
-  margin: 0;
-}
-
-.hidden-object button {
-  display: block;
-  width: 100%;
-  min-width: 0;
-  min-height: 0;
-  padding: 0;
-  border: 0;
-  color: inherit;
-  background: transparent;
-  cursor: default;
-}
-
-.hidden-object button:hover {
-  outline: 0;
-}
-
-.hidden-object img {
-  display: block;
-  width: 100%;
-  height: auto;
-  filter: sepia(0.95) saturate(0.28) brightness(0.52) contrast(0.72);
-  mix-blend-mode: multiply;
-  opacity: 0.46;
-  transition: opacity 160ms ease, filter 160ms ease;
-}
-
-.hidden-object button:focus-visible {
-  outline: 2px solid rgba(234, 216, 173, 0.72);
-  outline-offset: 3px;
-}
-
-.hidden-object.object-key img,
-.hidden-object.object-astrolabe img,
-.hidden-object.object-hourglass img,
-.hidden-object.object-lantern img {
-  filter: sepia(1) saturate(0.2) brightness(0.44) contrast(0.66);
-  opacity: 0.38;
-}
-
-.hidden-object.object-seal img,
-.hidden-object.object-ring img {
-  filter: sepia(1) saturate(0.18) brightness(0.42) contrast(0.62);
-  opacity: 0.36;
-}
-
-.hidden-object.object-quill img,
-.hidden-object.object-scroll img {
-  filter: sepia(1) saturate(0.18) brightness(0.58) contrast(0.62);
-  opacity: 0.42;
-}
-
-.hidden-object.object-book img {
-  filter: sepia(1) saturate(0.24) brightness(0.46) contrast(0.64);
-  opacity: 0.34;
-}
-
-.hidden-object.found button {
-  cursor: default;
-}
-
-.hidden-object.found img {
-  opacity: 0.25;
-  filter: grayscale(1) drop-shadow(0 3px 5px rgba(20, 14, 9, 0.25));
-}
-
-.scene-meta,
-.dialogue-speaker {
-  font-family: Arial, sans-serif;
-  color: var(--gold);
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.scene-meta {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 8px;
-  font-size: 0.78rem;
-}
-
-.dialogue-speaker {
-  margin-bottom: 4px;
-  font-size: 0.86rem;
-}
-
-.scene-dialogue-box h1 {
-  margin-bottom: 8px;
-  font-size: clamp(1.45rem, 3.3vw, 2.6rem);
-  line-height: 1.08;
-}
-
-.dialogue-line {
-  color: var(--ink) !important;
-  font-family: Georgia, "Times New Roman", serif !important;
-  font-weight: 400 !important;
-  text-transform: none !important;
-  line-height: 1.45;
-}
-
-.verdict-card {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 10px 0 12px;
-  padding: 12px 14px;
-  border: 1px solid rgba(88, 58, 34, 0.2);
-  border-radius: 8px;
-  background: rgba(255, 250, 240, 0.76);
-  box-shadow: inset 0 0 0 1px rgba(255, 250, 240, 0.55);
-}
-
-.verdict-success,
-.verdict-correct {
-  border-left: 6px solid var(--green);
-}
-
-.verdict-retry,
-.verdict-partial {
-  border-left: 6px solid var(--gold);
-}
-
-.verdict-wrong {
-  border-left: 6px solid var(--red);
-}
-
-.verdict-seal {
-  display: grid;
-  flex: 0 0 auto;
-  place-items: center;
-  width: 54px;
-  height: 54px;
-  border: 2px solid rgba(88, 58, 34, 0.28);
-  border-radius: 50%;
-  color: var(--white);
-  background:
-    radial-gradient(circle at 34% 30%, rgba(255, 250, 240, 0.24), transparent 28%),
-    var(--brown);
-  box-shadow: 0 6px 12px rgba(45, 36, 25, 0.22);
-  font-family: Arial, sans-serif;
-  font-size: 1.55rem;
-  font-weight: 800;
-  transform: rotate(-8deg);
-  animation: verdict-stamp 380ms ease-out;
-}
-
-.verdict-card p {
-  margin-bottom: 0;
-  line-height: 1.35;
-}
-
-.verdict-card .eyebrow {
-  margin-bottom: 4px;
-}
-
-.idea-strip,
-.margin-note {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 10px 0;
-  padding: 9px 10px;
-  border-radius: 6px;
-  background: rgba(255, 250, 240, 0.62);
-}
-
-.idea-strip strong,
-.margin-note strong {
-  color: var(--gold);
-  font-family: Arial, sans-serif;
-  font-size: 0.82rem;
-  text-transform: uppercase;
-}
-
-.idea-strip span,
-.margin-note span {
-  display: inline-flex;
-  padding: 4px 8px;
-  border-radius: 999px;
-  color: var(--brown);
-  background: rgba(234, 216, 173, 0.72);
-  font-family: Arial, sans-serif;
-  font-size: 0.82rem;
-  font-weight: 700;
-}
-
-.margin-note span {
-  background: rgba(154, 108, 24, 0.16);
-}
-
-@keyframes verdict-stamp {
-  from {
-    opacity: 0;
-    transform: scale(1.55) rotate(-18deg);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) rotate(-8deg);
-  }
-}
-
-.dialogue-actions {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 12px;
-}
-
-.hidden-progress {
-  display: inline-flex;
-  margin-bottom: 0;
-  padding: 6px 10px;
-  border-radius: 999px;
-  color: var(--white);
-  background: var(--brown);
-  font-family: Arial, sans-serif;
-  font-size: 0.9rem;
-  font-weight: 700;
-}
-
-.hidden-targets {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 10px 0;
-  padding: 8px 10px;
-  border: 1px solid rgba(154, 108, 24, 0.22);
-  border-radius: 6px;
-  background: rgba(255, 250, 240, 0.72);
-}
-
-.hidden-targets strong {
-  color: var(--gold);
-  font-family: Arial, sans-serif;
-  font-size: 0.82rem;
-  text-transform: uppercase;
-}
-
-.hidden-targets ul {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-
-.hidden-targets li {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 3px 7px 3px 4px;
-  border-radius: 999px;
-  color: var(--brown);
-  background: rgba(234, 216, 173, 0.72);
-  font-family: Arial, sans-serif;
-  font-size: 0.82rem;
-  font-weight: 700;
-}
-
-.hidden-targets li.found {
-  color: var(--white);
-  background: var(--green);
-}
-
-.hidden-targets img {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
-}
-
-.hint-box,
-.hint-request {
-  margin: 10px 0 12px;
-  padding: 10px 12px;
-  border-left: 5px solid var(--gold);
-  border-radius: 6px;
-  background: rgba(154, 108, 24, 0.12);
-}
-
-.hint-box strong {
-  display: block;
-  margin-bottom: 4px;
-  color: var(--gold);
-  font-family: Arial, sans-serif;
-  font-size: 0.82rem;
-  text-transform: uppercase;
-}
-
-.hint-box p,
-.hint-request p {
-  margin-bottom: 0;
-  line-height: 1.38;
-}
-
-.hint-request {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.hint-request p {
-  color: var(--ink);
-  font-size: 0.95rem;
-}
-
-.inline-note {
-  max-width: 420px;
-  margin: 0;
-  align-self: center;
-  color: var(--muted);
-}
-
-.scene-answer-form {
-  display: grid;
-  gap: 8px;
-}
-
-.scene-answer-form textarea {
-  min-height: 94px;
-  background: rgba(255, 250, 240, 0.88);
-}
-
-.compact-error {
-  margin: 0 0 8px;
-  padding: 8px 10px;
-  font-size: 0.9rem;
-}
-
-.compact-form {
-  margin-top: 8px;
-}
-
-@media (max-width: 980px) {
-  .game-screen {
-    grid-template-columns: 1fr;
-  }
-
-  .campus-map {
-    min-height: 470px;
-  }
-
-  .quest-panel {
-    display: grid;
-    grid-template-columns: 170px 1fr;
-    column-gap: 18px;
-    align-items: center;
-  }
-
-  .quest-panel .character {
-    grid-row: 1 / span 4;
-    margin-inline: 0;
-  }
-
-  .walk-board {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .path-stop:nth-child(3)::after {
-    display: none;
-  }
-
-  .encounter-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .speaker-panel {
-    position: static;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    column-gap: 18px;
-  }
-
-  .speaker-panel .eyebrow,
-  .speaker-panel h2,
-  .speaker-panel p {
-    grid-column: 2;
-  }
-
-  .character {
-    grid-row: 1 / span 4;
-  }
-}
-
-@media (max-width: 760px) {
-  .topbar {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .section-heading {
-    margin-bottom: 14px;
-  }
-
-  .section-heading h1 {
-    font-size: 2rem;
-  }
-
-  .intro {
-    grid-template-columns: 1fr;
-  }
-
-  .intro-text {
-    min-height: auto;
-  }
-
-  .campus-map {
-    min-height: 0;
-  }
-
-  .illustrated-map {
-    width: 100%;
-    aspect-ratio: 1672 / 941;
-  }
-
-  .campus-building {
-    width: 96px;
-    height: 64px;
-    font-size: 0.68rem;
-  }
-
-  .campus-building::before {
-    top: -17px;
-    height: 28px;
-  }
-
-  .map-character {
-    width: 48px;
-    height: 68px;
-  }
-
-  .map-character .mini-head {
-    width: 26px;
-    height: 26px;
-  }
-
-  .map-character .mini-body {
-    width: 40px;
-    height: 34px;
-  }
-
-  .character-name {
-    top: 70px;
-    width: 112px;
-    font-size: 0.76rem;
-  }
-
-  .talk-hint {
-    top: 39px;
-  }
-
-  .map-choice-card {
-    right: 10px;
-    bottom: 58px;
-    width: min(250px, calc(100% - 20px));
-  }
-
-  .scene-card {
-    aspect-ratio: 597 / 560;
-  }
-
-  .scene-card.hint-mode .scene-dialogue-box {
-    left: 4%;
-    right: 4%;
-    bottom: 4%;
-    width: auto;
-    padding: 12px;
-  }
-
-  .scene-card.hint-mode .dialogue-line {
-    font-size: 0.88rem;
-    line-height: 1.32;
-  }
-
-  .hidden-object {
-    width: clamp(30px, calc(var(--item-size) * 0.62px), 58px);
-  }
-
-  .hidden-targets {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .hint-request {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .student-token {
-    width: 40px;
-    height: 54px;
-  }
-
-  .student-body {
-    width: 36px;
-    height: 36px;
-  }
-
-  .quest-panel {
-    grid-template-columns: 78px 1fr;
-    padding: 16px;
-  }
-
-  .map-journal .journal-list {
-    grid-template-columns: 1fr;
-  }
-
-  .quest-panel .character {
-    width: 78px;
-    height: 78px;
-    margin-bottom: 0;
-  }
-
-  .walk-board {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x proximity;
-    margin-bottom: 16px;
-  }
-
-  .path-stop {
-    min-width: 190px;
-    min-height: 126px;
-    flex: 0 0 190px;
-    padding: 12px;
-    border-right: 1px solid rgba(200, 174, 114, 0.7);
-    border-bottom: 0;
-    scroll-snap-align: start;
-  }
-
-  .encounter-layout {
-    gap: 12px;
-  }
-
-  .speaker-panel {
-    grid-template-columns: 78px 1fr;
-    padding: 16px;
-  }
-
-  .speaker-panel .small-note {
-    grid-column: 1 / 3;
-    margin-top: 8px;
-  }
-
-  .character {
-    width: 78px;
-    height: 78px;
-    margin-bottom: 0;
-  }
-
-  .character .halo,
-  .character .quill,
-  .character .book {
-    display: none;
-  }
-
-  .character .hood {
-    top: 13px;
-    width: 54px;
-    height: 52px;
-  }
-
-  .character .head {
-    top: 21px;
-    width: 34px;
-    height: 36px;
-  }
-
-  .character .head::before,
-  .character .head::after {
-    top: 15px;
-    width: 4px;
-    height: 4px;
-  }
-
-  .character .head::before {
-    left: 9px;
-  }
-
-  .character .head::after {
-    right: 9px;
-  }
-
-  .character .beard {
-    top: 45px;
-    width: 26px;
-    height: 18px;
-  }
-
-  .character .body {
-    display: none;
-  }
-
-  .question-card {
-    padding: 18px;
-  }
-
-  .path-stop::after {
-    display: block;
-  }
-
-  .question-meta,
-  .actions-row {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .primary-button,
-  .secondary-button,
-  .ghost-button {
-    width: 100%;
-  }
-}
-
-@media (max-width: 520px) {
-  .page {
-    width: min(100% - 20px, 1120px);
-  }
-
-  .speaker-panel {
-    display: block;
-  }
-
-  .character {
-    width: 96px;
-    height: 96px;
-  }
-
-  .character .hood {
-    top: 18px;
-  }
-
-  .character .head {
-    top: 27px;
-  }
-
-  .character .beard {
-    top: 51px;
-  }
-}
-
-
-/* SPA-переключение экранов (нет в исходном Flask CSS) */
-.screen { display: none; }
-.screen.active { display: block; }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Средневековая философия</title>
+  <style>
+    :root {
+      --ink: #2f261d;
+      --muted: #6e5b47;
+      --paper: #fff8e7;
+      --paper-deep: #ead8ad;
+      --brown: #5f371f;
+      --brown-dark: #3f2517;
+      --gold: #9a6c18;
+      --green: #2f5d50;
+      --blue: #344f6b;
+      --line: rgba(88, 58, 34, 0.25);
+      --shadow: rgba(34, 23, 14, 0.28);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; }
+    body {
+      overflow: hidden;
+      color: var(--ink);
+      background:
+        repeating-linear-gradient(90deg, rgba(88,58,34,.05) 0 1px, transparent 1px 28px),
+        #e8dbc0;
+      font-family: Georgia, "Times New Roman", serif;
+    }
+    button, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    .hidden { display: none !important; }
+
+    .intro {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+      background:
+        linear-gradient(rgba(255,248,231,.82), rgba(255,248,231,.76)),
+        url("static/img/philosophy-map.jpg") center / cover no-repeat;
+    }
+    .intro-card {
+      width: min(820px, 100%);
+      padding: clamp(24px, 5vw, 48px);
+      border: 1px solid rgba(154,108,24,.42);
+      border-radius: 10px;
+      background: rgba(255,250,240,.9);
+      box-shadow: 0 20px 46px rgba(45,36,25,.22);
+    }
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--gold);
+      font-family: Arial, sans-serif;
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    h1, h2, p { margin-top: 0; }
+    h1 { font-size: clamp(2.2rem, 6vw, 5rem); line-height: .98; margin-bottom: 18px; }
+    h2 { font-size: clamp(1.35rem, 3vw, 2rem); line-height: 1.08; }
+    p { line-height: 1.5; }
+    .primary-btn, .secondary-btn, .ghost-btn {
+      min-height: 44px;
+      padding: 10px 18px;
+      border: 0;
+      border-radius: 7px;
+      font-family: Arial, sans-serif;
+      font-weight: 800;
+    }
+    .primary-btn { color: #fffaf0; background: var(--brown); }
+    .secondary-btn { color: var(--brown); background: var(--paper-deep); }
+    .ghost-btn { color: var(--brown); background: rgba(255,250,240,.86); border: 1px solid var(--line); }
+
+    .game {
+      height: 100vh;
+      display: grid;
+      grid-template-rows: 64px 1fr;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 10px 16px;
+      border-bottom: 3px solid rgba(88,58,34,.24);
+      background: rgba(255,250,240,.94);
+      box-shadow: 0 4px 14px rgba(45,36,25,.08);
+      font-family: Arial, sans-serif;
+      z-index: 20;
+    }
+    .brand { font-weight: 900; color: var(--brown); }
+    .hud {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+      color: var(--muted);
+      font-size: .88rem;
+      font-weight: 800;
+    }
+    .hud span {
+      padding: 6px 9px;
+      border: 1px solid rgba(154,108,24,.2);
+      border-radius: 999px;
+      background: rgba(234,216,173,.34);
+    }
+
+    .viewport {
+      position: relative;
+      overflow: hidden;
+      background: #22180f;
+      outline: none;
+      user-select: none;
+    }
+    .world {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2400px;
+      height: 1352px;
+      transform-origin: 0 0;
+      will-change: transform;
+    }
+    .map-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+    }
+    .world-shade {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 50%, transparent 68%, rgba(45,36,25,.16)),
+        repeating-linear-gradient(0deg, rgba(45,36,25,.035) 0 1px, transparent 1px 26px);
+      z-index: 1;
+    }
+
+    .entity {
+      position: absolute;
+      transform: translate(-50%, -100%);
+      z-index: 3;
+      text-align: center;
+      pointer-events: none;
+    }
+    .npc-sprite, .player-sprite {
+      position: relative;
+      width: 70px;
+      height: 88px;
+      margin-inline: auto;
+      filter: drop-shadow(0 7px 4px rgba(35,25,15,.28));
+    }
+    .npc-sprite { --robe: #59331f; --trim: #a1711b; --hair: #6c5a44; --beard: #d8c68f; }
+    .npc-sprite.augustine, .npc-sprite.augustine-dark, .npc-sprite.augustine-red { --hair:#8d806d; --beard:#d7c9a5; --robe:#5b3421; }
+    .npc-sprite.aquinas, .npc-sprite.aquinas-light, .npc-sprite.aquinas-gold { --hair:#3e3026; --beard:#c5b28c; --robe:#2e2a25; --trim:#c49a3a; }
+    .npc-sprite.ockham, .npc-sprite.boethius-ockham { --hair:#57483a; --beard:#b9aa8d; --robe:#4f3826; }
+    .npc-head, .npc-body, .player-head, .player-body { position: absolute; left: 50%; transform: translateX(-50%); }
+    .npc-head {
+      top: 8px; width: 34px; height: 34px; border-radius: 50%;
+      border: 2px solid rgba(88,58,34,.45); background: #ead0a0; z-index: 3;
+    }
+    .npc-head::before, .npc-head::after, .player-head::before, .player-head::after {
+      content:""; position:absolute; top: 12px; width: 4px; height: 4px; border-radius: 50%; background: var(--ink);
+    }
+    .npc-head::before, .player-head::before { left: 8px; }
+    .npc-head::after, .player-head::after { right: 8px; }
+    .npc-sprite::before {
+      content:""; position:absolute; left:50%; top: 2px; width: 42px; height: 34px;
+      transform: translateX(-50%); border-radius: 50% 50% 35% 35%;
+      background: var(--hair); box-shadow: -12px 10px 0 -5px var(--hair), 12px 10px 0 -5px var(--hair);
+      z-index: 2;
+    }
+    .npc-sprite::after {
+      content:""; position:absolute; left:50%; top: 34px; width: 25px; height: 22px;
+      transform: translateX(-50%); border-radius: 0 0 16px 16px; background: var(--beard); z-index: 4;
+    }
+    .npc-sprite.boethius-ockham .npc-head { box-shadow: 18px 3px 0 -5px #ead0a0; }
+    .npc-body {
+      bottom: 0; width: 58px; height: 48px; border-radius: 28px 28px 8px 8px;
+      border: 2px solid rgba(88,58,34,.36);
+      background:
+        linear-gradient(90deg, transparent 0 42%, var(--trim) 43% 57%, transparent 58%),
+        linear-gradient(0deg, rgba(45,36,25,.18) 0 19%, transparent 20%),
+        var(--robe);
+      z-index: 1;
+    }
+    .entity.done .npc-body { background: var(--green); }
+    .entity.near .npc-sprite, .hint-entity.near .hint-marker { animation: pulse 900ms ease-in-out infinite alternate; }
+
+    .hint-entity {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      z-index: 4;
+      pointer-events: none;
+      text-align: center;
+    }
+    .hint-marker {
+      display: grid;
+      gap: 0;
+      min-width: 116px;
+      padding: 8px 12px;
+      border: 1px solid rgba(154,108,24,.34);
+      border-radius: 999px;
+      color: var(--brown);
+      background: rgba(255,250,240,.9);
+      box-shadow: 0 5px 11px rgba(45,36,25,.12);
+      font-family: Arial, sans-serif;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .hint-marker small { color: var(--gold); font-size: .66rem; text-transform: uppercase; margin-top: 2px; }
+    .hint-entity.done .hint-marker { color: #fffaf0; background: rgba(47,93,80,.95); }
+
+    .player {
+      position: absolute;
+      transform: translate(-50%, -100%);
+      z-index: 8;
+      will-change: left, top;
+      pointer-events: none;
+    }
+    .player-sprite { width: 62px; height: 86px; }
+    .player-sprite::before {
+      content:""; position:absolute; left:50%; top: 0; width: 34px; height: 19px;
+      transform: translateX(-50%); border: 2px solid rgba(88,58,34,.42); border-bottom:0;
+      border-radius: 18px 18px 4px 4px; background:#d9d0bb; z-index:4;
+    }
+    .player-head {
+      top: 9px; width: 30px; height: 30px; border-radius:50%;
+      border: 2px solid rgba(88,58,34,.45); background: #edd4a5; z-index: 3;
+    }
+    .player-body {
+      bottom: 0; width: 50px; height: 51px; border-radius: 22px 22px 8px 8px;
+      border: 2px solid rgba(88,58,34,.35);
+      background:
+        linear-gradient(90deg, transparent 0 43%, rgba(234,216,173,.8) 44% 56%, transparent 57%),
+        linear-gradient(0deg, #2b4058 0 24%, transparent 25%),
+        var(--blue);
+    }
+    .player-body::after {
+      content:""; position:absolute; right:-8px; top:18px; width:12px; height:20px;
+      border: 2px solid rgba(88,58,34,.4); border-radius:2px; background:#d8c68f;
+    }
+    .player.walking .player-sprite { animation: walkbob .32s ease-in-out infinite alternate; }
+
+    .prompt {
+      position: absolute;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      z-index: 12;
+      width: min(720px, calc(100% - 34px));
+      padding: 12px 16px;
+      border: 1px solid rgba(88,58,34,.25);
+      border-radius: 8px;
+      background: rgba(255,250,240,.92);
+      box-shadow: 0 10px 24px rgba(45,36,25,.18);
+      font-family: Arial, sans-serif;
+      font-weight: 800;
+      text-align: center;
+    }
+    .controls {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      z-index: 12;
+      max-width: 360px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      color: var(--brown);
+      background: rgba(255,250,240,.86);
+      font-family: Arial, sans-serif;
+      font-size: .86rem;
+      font-weight: 800;
+      box-shadow: 0 6px 16px rgba(45,36,25,.14);
+    }
+    .minimap {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 12;
+      width: 180px;
+      height: 102px;
+      border: 2px solid rgba(88,58,34,.32);
+      border-radius: 8px;
+      overflow: hidden;
+      background: url("static/img/philosophy-map.jpg") center / cover no-repeat;
+      box-shadow: 0 6px 16px rgba(45,36,25,.18);
+    }
+    .mini-dot {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      transform: translate(-50%, -50%);
+    }
+    .mini-player {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border: 2px solid #fffaf0;
+      border-radius: 50%;
+      background: var(--blue);
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 0 2px rgba(45,36,25,.55);
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: rgba(31,22,13,.58);
+    }
+    .modal-card {
+      width: min(1080px, 100%);
+      max-height: min(92vh, 900px);
+      overflow: auto;
+      border: 1px solid rgba(154,108,24,.42);
+      border-radius: 10px;
+      background: var(--paper);
+      box-shadow: 0 25px 70px rgba(0,0,0,.36);
+    }
+    .scene {
+      position: relative;
+      aspect-ratio: 597 / 512;
+      min-height: 520px;
+      overflow: hidden;
+      border-radius: 10px 10px 0 0;
+      background-image: url("static/img/dialogue-scenes.jpg");
+      background-repeat: no-repeat;
+      background-size: 300% 200%;
+      background-color: var(--paper-deep);
+    }
+    .scene-gate { background-position: 0% 0%; }
+    .scene-chapel { background-position: 50% 0%; }
+    .scene-courtyard { background-position: 100% 0%; }
+    .scene-debate { background-position: 0% 100%; }
+    .scene-library { background-position: 50% 100%; }
+    .scene-scriptorium { background-position: 100% 100%; }
+    .scene-box {
+      position: absolute;
+      left: 4.8%;
+      right: 4.8%;
+      bottom: 5.2%;
+      padding: clamp(14px, 2.4vw, 24px);
+      border: 1px solid rgba(88,58,34,.2);
+      border-radius: 8px;
+      background: rgba(255,250,240,.84);
+      backdrop-filter: blur(1px);
+    }
+    .scene-box h2 { margin-bottom: 8px; }
+    .dialogue-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+    textarea {
+      display: block;
+      width: 100%;
+      min-height: 120px;
+      resize: vertical;
+      margin-top: 10px;
+      padding: 12px;
+      border: 1px solid rgba(88,58,34,.25);
+      border-radius: 8px;
+      color: var(--ink);
+      background: rgba(255,250,240,.9);
+      font-size: 1rem;
+      line-height: 1.45;
+    }
+    .hint-box, .verdict {
+      margin-top: 10px;
+      padding: 12px;
+      border: 1px solid rgba(88,58,34,.18);
+      border-radius: 8px;
+      background: rgba(234,216,173,.28);
+    }
+    .verdict.correct { border-color: rgba(47,93,80,.4); background: rgba(47,93,80,.12); }
+    .verdict.partial { border-color: rgba(154,108,24,.4); background: rgba(154,108,24,.12); }
+    .verdict.wrong { border-color: rgba(111,55,43,.36); background: rgba(111,55,43,.12); }
+
+    .hint-room {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      min-height: 540px;
+      overflow: hidden;
+      border-radius: 10px 10px 0 0;
+      background: url("static/img/hint-room.jpg") center / cover no-repeat;
+    }
+    .hint-room::after {
+      content:"";
+      position:absolute; inset:0;
+      pointer-events:none;
+      background: rgba(45,36,25,.06);
+    }
+    .hint-panel {
+      position: absolute;
+      left: 22px;
+      bottom: 22px;
+      z-index: 5;
+      width: min(420px, 46%);
+      padding: 14px;
+      border: 1px solid rgba(88,58,34,.2);
+      border-radius: 8px;
+      background: rgba(255,250,240,.86);
+    }
+    .object-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+      font-family: Arial, sans-serif;
+      font-weight: 800;
+    }
+    .object-list span {
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: rgba(234,216,173,.6);
+    }
+    .object-list span.found { color: #fffaf0; background: var(--green); }
+    .hidden-object {
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      z-index: 4;
+      width: clamp(30px, calc(var(--size) * .72px), 72px);
+      transform: translate(-50%, -50%) rotate(var(--rotate));
+      border: 0;
+      padding: 0;
+      background: transparent;
+    }
+    .hidden-object img {
+      width: 100%;
+      display: block;
+      filter: sepia(1) saturate(.2) brightness(.46) contrast(.64);
+      mix-blend-mode: multiply;
+      opacity: .38;
+    }
+    .hidden-object:hover img { opacity: .5; }
+    .hidden-object.found img { opacity: .16; filter: grayscale(1); }
+    .modal-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 14px 18px 18px;
+      background: var(--paper);
+    }
+
+    @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.06); } }
+    @keyframes walkbob { from { transform: translateY(0); } to { transform: translateY(-6px); } }
+
+    @media (max-width: 760px) {
+      .topbar { min-height: 72px; align-items: flex-start; flex-direction: column; }
+      .game { grid-template-rows: 112px 1fr; }
+      .controls { left: 10px; right: 10px; max-width: none; }
+      .minimap { display: none; }
+      .scene, .hint-room { min-height: 430px; }
+      .hint-panel { width: calc(100% - 36px); }
+    }
+  </style>
 </head>
 <body>
-<header class="topbar">
-  <a class="brand" href="#" data-go="index">
-    <span class="brand-mark">M</span>
-    <span>Средневековый университет</span>
-  </a>
-  <nav class="topnav" aria-label="Главная навигация">
-    <a href="../index.html">← В меню</a>
-    <a href="#" data-go="game">Маршрут</a>
-    <a href="#" data-go="final">Финал</a>
-    <form class="nav-reset-form" data-reset>
-      <button class="nav-reset-button" type="submit">Начать заново</button>
-    </form>
-  </nav>
-</header>
+  <a href="../index.html" style="position:fixed;top:12px;left:14px;z-index:9999;font-family:Arial,sans-serif;font-size:13px;font-weight:800;letter-spacing:.02em;color:#5f371f;text-decoration:none;border:1px solid rgba(154,108,24,.45);padding:7px 13px;border-radius:7px;background:rgba(255,250,240,.94);box-shadow:0 3px 10px rgba(45,36,25,.15);">← В меню</a>
+  <section class="intro" id="intro">
+    <div class="intro-card">
+      <p class="eyebrow">Учебная бродилка</p>
+      <h1>Средневековая философия</h1>
+      <p>Ходите по большой карте университета, подходите к философам и местам подсказок. Рядом с объектом нажмите <b>E</b>, чтобы начать диалог или войти в комнату подсказки.</p>
+      <button class="primary-btn" id="startBtn" type="button">Начать</button>
+    </div>
+  </section>
 
-<main class="page">
-  <section id="screen-index" class="screen"></section>
-  <section id="screen-game" class="screen"></section>
-  <section id="screen-final" class="screen"></section>
-</main>
+  <section class="game hidden" id="game">
+    <header class="topbar">
+      <div class="brand">Средневековый университет</div>
+      <div class="hud">
+        <span id="scoreHud">Очки: 0</span>
+        <span id="progressHud">Ответы: 0 / 9</span>
+        <span id="hintHud">Подсказки: 0 / 9</span>
+        <button class="ghost-btn" id="resetBtn" type="button">Начать заново</button>
+      </div>
+    </header>
 
-<footer class="footer" data-footer></footer>
+    <main class="viewport" id="viewport" tabindex="0" aria-label="Карта">
+      <div class="world" id="world">
+        <img class="map-image" src="static/img/philosophy-map.jpg" alt="">
+        <div class="world-shade"></div>
+        <div id="entities"></div>
+        <div class="player" id="player" aria-label="Ученик">
+          <div class="player-sprite">
+            <span class="player-head"></span>
+            <span class="player-body"></span>
+          </div>
+        </div>
+      </div>
+      <div class="controls">WASD / стрелки — ходить. Клик по земле — идти к точке. E или Enter — взаимодействовать рядом.</div>
+      <div class="minimap" id="minimap"><div class="mini-player" id="miniPlayer"></div></div>
+      <div class="prompt" id="prompt">Идите к философу или месту подсказки.</div>
+    </main>
+  </section>
 
-<script>
-const ENCOUNTERS = [
-  {
-    "id": "route-1",
-    "order": 1,
-    "speaker": "Августин Блаженный",
-    "role": "Учитель христианской философии",
-    "avatar_class": "augustine",
-    "look": "Философ в темной мантии с книгой у ворот университета.",
-    "scene_class": "scene-gate",
-    "greeting": "Привет, ученик. Перед входом в университет нужно понять, чем средневековая философия отличается от античной и новоевропейской мысли.",
-    "building": "Ворота",
-    "map_x": 13,
-    "map_y": 55,
-    "entry_x": 8,
-    "entry_y": 74,
-    "entry_target_x": 13,
-    "entry_target_y": 63,
-    "location": "Ворота средневекового университета",
-    "topic": "Характерные особенности и проблемы Средневековой философии",
-    "question": "Каковы характерные особенности философии Средневековья?",
-    "model_answer": "Средневековая философия теоцентрична, связана с христианской теологией, обсуждает Бога, творение, душу, спасение, добро и зло, веру и разум. Для нее важны патристика, схоластика и университетский диспут.",
-    "semantic_rubric": {
-      "correct_min": 4,
-      "partial_min": 2,
-      "points": [
-        {
-          "label": "Бог в центре философии",
-          "signals": [
-            "теоцентр",
-            "бог в центре",
-            "в центре бог",
-            "бог главный",
-            "все объясняли через бога",
-            "религиозная картина мира"
-          ]
-        },
-        {
-          "label": "Связь с христианством и теологией",
-          "signals": [
-            "христиан",
-            "теолог",
-            "богослов",
-            "церковь",
-            "религи",
-            "учение церкви"
-          ]
-        },
-        {
-          "label": "Проблемы веры и разума",
-          "signals": [
-            "вера и разум",
-            "разум и вера",
-            "соотношение веры",
-            "знание и вера",
-            "разум помогает вере"
-          ]
-        },
-        {
-          "label": "Проблемы души и спасения",
-          "signals": [
-            "душ",
-            "спасен",
-            "грех",
-            "добро и зло",
-            "вечная жизнь",
-            "мораль"
-          ]
-        },
-        {
-          "label": "Патристика и схоластика",
-          "signals": [
-            "патрист",
-            "схоласт",
-            "университет",
-            "диспут",
-            "логические доказательства",
-            "работа с текстами"
-          ]
-        }
-      ]
-    },
-    "explanation": "Средневековая философия рассматривает мир через религиозную картину: Бог, вера, разум, душа, спасение, добро и зло.",
-    "recommendation": "Повторите характерные особенности средневековой философии.",
-    "hint": "Вспомните: Бог в центре, связь с христианской теологией, вера и разум, душа и спасение, патристика и схоластика.",
-    "hint_objects": [
-      {
-        "id": "scroll",
-        "label": "свиток",
-        "asset": "scroll.svg",
-        "x": 65,
-        "y": 16,
-        "size": 58,
-        "rotate": -13
-      },
-      {
-        "id": "key",
-        "label": "ключ",
-        "asset": "key.svg",
-        "x": 22,
-        "y": 18,
-        "size": 56,
-        "rotate": 18
-      },
-      {
-        "id": "seal",
-        "label": "печать",
-        "asset": "seal.svg",
-        "x": 82,
-        "y": 20,
-        "size": 50,
-        "rotate": -7
-      }
-    ]
-  },
-  {
-    "id": "route-2",
-    "order": 2,
-    "speaker": "Фома Аквинский",
-    "role": "Магистр систематической теологии",
-    "avatar_class": "aquinas",
-    "look": "Доминиканский мыслитель с книгой и строгим взглядом.",
-    "scene_class": "scene-library",
-    "greeting": "Привет, ученик. Сейчас мы обсудим начало мира и вопрос о творении.",
-    "building": "Монастырь",
-    "map_x": 25,
-    "map_y": 36,
-    "entry_x": 18,
-    "entry_y": 21,
-    "entry_target_x": 25,
-    "entry_target_y": 44,
-    "location": "Монастырский двор",
-    "topic": "Проблема креационизма в средневековой философии",
-    "question": "Как решалась проблема креационизма в средневековой философии?",
-    "model_answer": "Креационизм утверждает, что мир создан Богом из ничего. Мир не вечен и не равен Богу, а зависит от Творца.",
-    "semantic_rubric": {
-      "correct_min": 3,
-      "partial_min": 2,
-      "points": [
-        {
-          "label": "Мир создан Богом",
-          "signals": [
-            "бог создал мир",
-            "мир создан богом",
-            "творец",
-            "бог творит",
-            "бог сотворил"
-          ]
-        },
-        {
-          "label": "Творение из ничего",
-          "signals": [
-            "из ничего",
-            "ничего",
-            "ex nihilo",
-            "не из готовой материи"
-          ]
-        },
-        {
-          "label": "Мир имеет начало",
-          "signals": [
-            "мир не вечен",
-            "имеет начало",
-            "начало мира",
-            "не существовал вечно"
-          ]
-        },
-        {
-          "label": "Мир зависит от Бога",
-          "signals": [
-            "зависит от бога",
-            "зависимость от бога",
-            "тварный мир",
-            "не равен богу",
-            "подчинен богу"
-          ]
-        }
-      ]
-    },
-    "explanation": "Креационизм объясняет происхождение мира через творение Богом.",
-    "recommendation": "Повторите проблему креационизма.",
-    "hint": "Креационизм: Бог творит мир из ничего; мир имеет начало и зависит от Творца.",
-    "hint_objects": [
-      {
-        "id": "lantern",
-        "label": "фонарь",
-        "asset": "lantern.svg",
-        "x": 17,
-        "y": 18,
-        "size": 60,
-        "rotate": -3
-      },
-      {
-        "id": "book",
-        "label": "книга",
-        "asset": "book.svg",
-        "x": 50,
-        "y": 15,
-        "size": 58,
-        "rotate": 10
-      },
-      {
-        "id": "ring",
-        "label": "перстень",
-        "asset": "ring.svg",
-        "x": 77,
-        "y": 21,
-        "size": 48,
-        "rotate": -15
-      }
-    ]
-  },
-  {
-    "id": "route-3",
-    "order": 3,
-    "speaker": "Августин Блаженный",
-    "role": "Мыслитель о душе, воле и добре",
-    "avatar_class": "augustine-dark",
-    "look": "Августин стоит в монашеской мантии и держит раскрытую книгу.",
-    "scene_class": "scene-chapel",
-    "greeting": "Привет, ученик. Если Бог благ, почему существует зло? Это один из самых трудных вопросов Средневековья.",
-    "building": "Капелла",
-    "map_x": 42,
-    "map_y": 34,
-    "entry_x": 36,
-    "entry_y": 22,
-    "entry_target_x": 42,
-    "entry_target_y": 43,
-    "location": "Капелла размышлений",
-    "topic": "Проблема теодицеи в Средневековой философии",
-    "question": "Как решалась проблема теодицеи в средневековой философии?",
-    "model_answer": "Теодицея оправдывает благого Бога перед фактом зла. В средневековой философии зло часто понималось как недостаток добра, а его появление связывали со свободной волей человека.",
-    "semantic_rubric": {
-      "correct_min": 3,
-      "partial_min": 2,
-      "points": [
-        {
-          "label": "Вопрос о Боге и зле",
-          "signals": [
-            "если бог благ",
-            "почему есть зло",
-            "проблема зла",
-            "бог добрый",
-            "бог всемогущ"
-          ]
-        },
-        {
-          "label": "Оправдание Бога",
-          "signals": [
-            "оправдание бога",
-            "бог не виноват",
-            "бог остается благим",
-            "благой бог",
-            "справедливый бог"
-          ]
-        },
-        {
-          "label": "Зло как отсутствие добра",
-          "signals": [
-            "недостаток добра",
-            "отсутствие добра",
-            "лишенность добра",
-            "зло не самостоятель",
-            "искажение добра"
-          ]
-        },
-        {
-          "label": "Свободная воля человека",
-          "signals": [
-            "свободная воля",
-            "свобода воли",
-            "выбор человека",
-            "человек выбирает",
-            "неправильный выбор"
-          ]
-        }
-      ]
-    },
-    "explanation": "Теодицея объясняет, как возможно зло при благом Боге.",
-    "recommendation": "Повторите проблему теодицеи.",
-    "hint": "Важно: зло не равная Богу сила; оно объясняется как недостаток добра и связано со свободным выбором человека.",
-    "hint_objects": [
-      {
-        "id": "scroll",
-        "label": "свиток",
-        "asset": "scroll.svg",
-        "x": 72,
-        "y": 16,
-        "size": 58,
-        "rotate": -9
-      },
-      {
-        "id": "astrolabe",
-        "label": "астролябия",
-        "asset": "astrolabe.svg",
-        "x": 23,
-        "y": 19,
-        "size": 60,
-        "rotate": 8
-      },
-      {
-        "id": "key",
-        "label": "ключ",
-        "asset": "key.svg",
-        "x": 87,
-        "y": 22,
-        "size": 54,
-        "rotate": 28
-      }
-    ]
-  },
-  {
-    "id": "route-4",
-    "order": 4,
-    "speaker": "Уильям Оккам",
-    "role": "Мастер точных понятий",
-    "avatar_class": "ockham",
-    "look": "Философ в темной одежде спорит о природе общих понятий.",
-    "scene_class": "scene-scriptorium",
-    "greeting": "Привет, ученик. Сейчас мы разберем спор об универсалиях: существуют ли общие понятия сами по себе?",
-    "building": "Скрипторий",
-    "map_x": 55,
-    "map_y": 35,
-    "entry_x": 52,
-    "entry_y": 22,
-    "entry_target_x": 55,
-    "entry_target_y": 43,
-    "location": "Скрипторий точных понятий",
-    "topic": "Проблема универсалий в Средневековой философии",
-    "question": "Как решалась проблема универсалий в средневековой философии?",
-    "model_answer": "Проблема универсалий обсуждала статус общих понятий. Реалисты считали, что универсалии существуют реально, номиналисты понимали их как имена или знаки, а умеренные реалисты связывали их с вещами и мышлением.",
-    "semantic_rubric": {
-      "correct_min": 3,
-      "partial_min": 2,
-      "points": [
-        {
-          "label": "Универсалии как общие понятия",
-          "signals": [
-            "общие понятия",
-            "универсалии",
-            "общее",
-            "понятия",
-            "человек вообще",
-            "общие имена"
-          ]
-        },
-        {
-          "label": "Реализм",
-          "signals": [
-            "реалисты",
-            "реализм",
-            "существуют реально",
-            "до вещей",
-            "самостоятельно существуют"
-          ]
-        },
-        {
-          "label": "Номинализм",
-          "signals": [
-            "номиналисты",
-            "номинализм",
-            "имена",
-            "слова",
-            "только названия",
-            "знаки"
-          ]
-        },
-        {
-          "label": "Умеренная позиция",
-          "signals": [
-            "умеренный реализм",
-            "в вещах",
-            "после вещей",
-            "в уме",
-            "связаны с мышлением"
-          ]
-        }
-      ]
-    },
-    "explanation": "Спор об универсалиях касается того, что такое общие понятия и как они существуют.",
-    "recommendation": "Повторите проблему универсалий.",
-    "hint": "Универсалии — общие понятия. В споре были реализм, номинализм и умеренные варианты.",
-    "hint_objects": [
-      {
-        "id": "quill",
-        "label": "перо",
-        "asset": "quill.svg",
-        "x": 21,
-        "y": 18,
-        "size": 58,
-        "rotate": -27
-      },
-      {
-        "id": "book",
-        "label": "книга",
-        "asset": "book.svg",
-        "x": 79,
-        "y": 17,
-        "size": 54,
-        "rotate": 12
-      },
-      {
-        "id": "hourglass",
-        "label": "часы",
-        "asset": "hourglass.svg",
-        "x": 88,
-        "y": 22,
-        "size": 52,
-        "rotate": -4
-      }
-    ]
-  },
-  {
-    "id": "route-5",
-    "order": 5,
-    "speaker": "Фома Аквинский",
-    "role": "Учитель согласия веры и разума",
-    "avatar_class": "aquinas-light",
-    "look": "Фома в бело-черной мантии держит книгу и ведет диспут.",
-    "scene_class": "scene-debate",
-    "greeting": "Привет, ученик. Средневековая мысль не просто противопоставляет веру и разум, а ищет их связь.",
-    "building": "Зал диспутов",
-    "map_x": 72,
-    "map_y": 34,
-    "entry_x": 66,
-    "entry_y": 24,
-    "entry_target_x": 72,
-    "entry_target_y": 43,
-    "location": "Зал университетского диспута",
-    "topic": "Проблема веры и разума в Средневековой философии",
-    "question": "Как в средневековой философии понимали соотношение веры и разума?",
-    "model_answer": "Вера считалась основой и высшим источником истины, но разум помогал объяснять, защищать и систематизировать вероучение. У Фомы Аквинского вера и разум не должны противоречить, потому что обе ведут к истине.",
-    "semantic_rubric": {
-      "correct_min": 3,
-      "partial_min": 2,
-      "points": [
-        {
-          "label": "Вера имеет высокий статус",
-          "signals": [
-            "вера главнее",
-            "вера выше",
-            "вера основа",
-            "приоритет веры",
-            "истина откровения"
-          ]
-        },
-        {
-          "label": "Разум помогает вере",
-          "signals": [
-            "разум помогает",
-            "разум объясняет",
-            "доказывает",
-            "защищает веру",
-            "систематизирует"
-          ]
-        },
-        {
-          "label": "Вера и разум не враги",
-          "signals": [
-            "не противоречат",
-            "дополняют",
-            "связаны",
-            "согласие веры и разума",
-            "две дороги к истине"
-          ]
-        },
-        {
-          "label": "Схоластический диспут",
-          "signals": [
-            "схоласт",
-            "диспут",
-            "логика",
-            "аргумент",
-            "рациональное обоснование"
-          ]
-        }
-      ]
-    },
-    "explanation": "Средневековая философия стремилась связать веру и разум.",
-    "recommendation": "Повторите проблему веры и разума.",
-    "hint": "Вера задает основу, разум объясняет и защищает вероучение; у Фомы они не должны противоречить.",
-    "hint_objects": [
-      {
-        "id": "astrolabe",
-        "label": "астролябия",
-        "asset": "astrolabe.svg",
-        "x": 29,
-        "y": 20,
-        "size": 58,
-        "rotate": -10
-      },
-      {
-        "id": "book",
-        "label": "книга",
-        "asset": "book.svg",
-        "x": 58,
-        "y": 15,
-        "size": 54,
-        "rotate": 8
-      },
-      {
-        "id": "lantern",
-        "label": "фонарь",
-        "asset": "lantern.svg",
-        "x": 83,
-        "y": 19,
-        "size": 56,
-        "rotate": 4
-      }
-    ]
-  },
-  {
-    "id": "route-6",
-    "order": 6,
-    "speaker": "Ансельм Кентерберийский",
-    "role": "Мастер онтологического доказательства",
-    "avatar_class": "anselm",
-    "look": "Философ с книгой размышляет о бытии Бога.",
-    "scene_class": "scene-courtyard",
-    "greeting": "Привет, ученик. Сейчас мы обсудим онтологическое доказательство: попытку доказать бытие Бога из самого понятия Бога.",
-    "building": "Аудитория",
-    "map_x": 88,
-    "map_y": 35,
-    "entry_x": 88,
-    "entry_y": 22,
-    "entry_target_x": 88,
-    "entry_target_y": 43,
-    "location": "Аудитория доказательств",
-    "topic": "Онтологические доказательства бытия Бога в Средневековой философии",
-    "question": "Что такое онтологическое доказательство бытия Бога в средневековой философии?",
-    "model_answer": "Онтологическое доказательство связывают с Ансельмом. Оно выводит существование Бога из понятия Бога как наивысшего и совершеннейшего существа: если Бог мыслится как максимально совершенный, то существование входит в это совершенство.",
-    "semantic_rubric": {
-      "correct_min": 3,
-      "partial_min": 2,
-      "points": [
-        {
-          "label": "Доказательство из понятия Бога",
-          "signals": [
-            "из понятия бога",
-            "через понятие",
-            "в уме",
-            "мыслится",
-            "логическое доказательство"
-          ]
-        },
-        {
-          "label": "Бог как высшее совершенство",
-          "signals": [
-            "совершенное существо",
-            "наивысшее существо",
-            "самое совершенное",
-            "выше которого нельзя",
-            "максимально совершенный"
-          ]
-        },
-        {
-          "label": "Существование связано с совершенством",
-          "signals": [
-            "существование входит",
-            "должен существовать",
-            "существует в реальности",
-            "бытие",
-            "реальное существование"
-          ]
-        },
-        {
-          "label": "Ансельм",
-          "signals": [
-            "ансельм",
-            "кентерберий"
-          ]
-        }
-      ]
-    },
-    "explanation": "Онтологическое доказательство идет от понятия Бога к выводу о его бытии.",
-    "recommendation": "Повторите онтологическое доказательство бытия Бога.",
-    "hint": "Ансельм рассуждает от понятия Бога как максимально совершенного существа к выводу о его существовании.",
-    "hint_objects": [
-      {
-        "id": "quill",
-        "label": "перо",
-        "asset": "quill.svg",
-        "x": 68,
-        "y": 16,
-        "size": 56,
-        "rotate": 22
-      },
-      {
-        "id": "scroll",
-        "label": "свиток",
-        "asset": "scroll.svg",
-        "x": 27,
-        "y": 16,
-        "size": 58,
-        "rotate": -18
-      },
-      {
-        "id": "seal",
-        "label": "печать",
-        "asset": "seal.svg",
-        "x": 88,
-        "y": 22,
-        "size": 48,
-        "rotate": 10
-      }
-    ]
-  },
-  {
-    "id": "route-7",
-    "order": 7,
-    "speaker": "Августин Блаженный",
-    "role": "Автор «Исповеди»",
-    "avatar_class": "augustine-red",
-    "look": "Августин с раскрытой книгой вспоминает путь души к Богу.",
-    "scene_class": "scene-chapel",
-    "greeting": "Привет, ученик. «Исповедь» — не просто рассказ о жизни, а размышление о душе, памяти, грехе и обращении к Богу.",
-    "building": "Келья",
-    "map_x": 24,
-    "map_y": 68,
-    "entry_x": 20,
-    "entry_y": 86,
-    "entry_target_x": 24,
-    "entry_target_y": 76,
-    "location": "Келья Августина",
-    "topic": "Августин «Исповедь». Основные идеи",
-    "question": "Августин «Исповедь». Каковы основные идеи этого произведения?",
-    "model_answer": "В «Исповеди» Августин показывает внутренний путь человека к Богу, говорит о грехе, покаянии, благодати, памяти, самопознании и обращении души.",
-    "semantic_rubric": {
-      "correct_min": 3,
-      "partial_min": 2,
-      "points": [
-        {
-          "label": "Внутренний путь к Богу",
-          "signals": [
-            "путь к богу",
-            "обращение к богу",
-            "душа идет к богу",
-            "внутренний путь",
-            "поиск бога"
-          ]
-        },
-        {
-          "label": "Грех и покаяние",
-          "signals": [
-            "грех",
-            "покаяние",
-            "исповедь",
-            "раскаяние",
-            "ошибки жизни"
-          ]
-        },
-        {
-          "label": "Благодать",
-          "signals": [
-            "благодать",
-            "помощь бога",
-            "бог помогает",
-            "милость бога"
-          ]
-        },
-        {
-          "label": "Память и самопознание",
-          "signals": [
-            "память",
-            "самопозн",
-            "внутренний мир",
-            "размышление о себе",
-            "душа"
-          ]
-        }
-      ]
-    },
-    "explanation": "«Исповедь» показывает духовный путь человека и обращение души к Богу.",
-    "recommendation": "Повторите основные идеи «Исповеди» Августина.",
-    "hint": "Главное: путь души к Богу, грех и покаяние, благодать, память и самопознание.",
-    "hint_objects": [
-      {
-        "id": "book",
-        "label": "книга",
-        "asset": "book.svg",
-        "x": 24,
-        "y": 18,
-        "size": 58,
-        "rotate": -8
-      },
-      {
-        "id": "quill",
-        "label": "перо",
-        "asset": "quill.svg",
-        "x": 72,
-        "y": 19,
-        "size": 56,
-        "rotate": 20
-      },
-      {
-        "id": "lantern",
-        "label": "фонарь",
-        "asset": "lantern.svg",
-        "x": 86,
-        "y": 24,
-        "size": 50,
-        "rotate": -5
-      }
-    ]
-  },
-  {
-    "id": "route-8",
-    "order": 8,
-    "speaker": "Фома Аквинский",
-    "role": "Автор системы схоластики",
-    "avatar_class": "aquinas-gold",
-    "look": "Фома в университетской мантии объясняет систему христианской философии.",
-    "scene_class": "scene-library",
-    "greeting": "Привет, ученик. Мои идеи часто связывают с систематизацией схоластики и согласованием веры с разумом.",
-    "building": "Библиотека",
-    "map_x": 48,
-    "map_y": 72,
-    "entry_x": 48,
-    "entry_y": 88,
-    "entry_target_x": 48,
-    "entry_target_y": 80,
-    "location": "Библиотека Фомы",
-    "topic": "Фома Аквинский. Основные идеи",
-    "question": "Фома Аквинский. Каковы его основные идеи?",
-    "model_answer": "Фома Аквинский стремился согласовать веру и разум, систематизировал схоластику, развивал доказательства бытия Бога, опирался на Аристотеля и различал естественное знание и истины откровения.",
-    "semantic_rubric": {
-      "correct_min": 4,
-      "partial_min": 2,
-      "points": [
-        {
-          "label": "Согласование веры и разума",
-          "signals": [
-            "вера и разум",
-            "разум и вера",
-            "не противоречат",
-            "согласовать",
-            "дополняют"
-          ]
-        },
-        {
-          "label": "Схоластическая система",
-          "signals": [
-            "схоласт",
-            "система",
-            "систематизировал",
-            "богословие",
-            "теология"
-          ]
-        },
-        {
-          "label": "Доказательства бытия Бога",
-          "signals": [
-            "доказательства бога",
-            "доказательства бытия бога",
-            "пять путей",
-            "существование бога"
-          ]
-        },
-        {
-          "label": "Опора на Аристотеля",
-          "signals": [
-            "аристот",
-            "античная философия",
-            "причины",
-            "форма и материя"
-          ]
-        },
-        {
-          "label": "Различение знания и откровения",
-          "signals": [
-            "естественное знание",
-            "откровение",
-            "истины веры",
-            "то что можно познать разумом"
-          ]
-        }
-      ]
-    },
-    "explanation": "Фома Аквинский строит систематическую схоластику и связывает разум с верой.",
-    "recommendation": "Повторите основные идеи Фомы Аквинского.",
-    "hint": "Фома: вера и разум, схоластическая система, доказательства бытия Бога, Аристотель, естественное знание и откровение.",
-    "hint_objects": [
-      {
-        "id": "book",
-        "label": "книга",
-        "asset": "book.svg",
-        "x": 20,
-        "y": 17,
-        "size": 56,
-        "rotate": 6
-      },
-      {
-        "id": "astrolabe",
-        "label": "астролябия",
-        "asset": "astrolabe.svg",
-        "x": 52,
-        "y": 18,
-        "size": 56,
-        "rotate": -8
-      },
-      {
-        "id": "seal",
-        "label": "печать",
-        "asset": "seal.svg",
-        "x": 80,
-        "y": 21,
-        "size": 50,
-        "rotate": 12
-      }
-    ]
-  },
-  {
-    "id": "route-9",
-    "order": 9,
-    "speaker": "Боэций Аниций и Уильям Оккам",
-    "role": "Мастера логики и понятий",
-    "avatar_class": "boethius-ockham",
-    "look": "Два средневековых мыслителя у стола с рукописями и логическими схемами.",
-    "scene_class": "scene-scriptorium",
-    "greeting": "Привет, ученик. Здесь нужно вспомнить двух мыслителей: Боэция и Оккама. Один связан с передачей античной логики Средневековью, другой — с номинализмом и принципом простоты.",
-    "building": "Архив",
-    "map_x": 62,
-    "map_y": 66,
-    "entry_x": 78,
-    "entry_y": 88,
-    "entry_target_x": 76,
-    "entry_target_y": 79,
-    "location": "Архив логики",
-    "topic": "Боэций Аниций, Уильям Оккам. Основные идеи",
-    "question": "Боэций Аниций, Уильям Оккам. Каковы их основные идеи?",
-    "model_answer": "Боэций важен как посредник между античной философией и Средневековьем, переводчик и комментатор логики, автор идеи философского утешения. Оккам связан с номинализмом, критикой лишних сущностей и принципом простоты, известным как бритва Оккама.",
-    "semantic_rubric": {
-      "correct_min": 4,
-      "partial_min": 2,
-      "points": [
-        {
-          "label": "Боэций как посредник античности и Средневековья",
-          "signals": [
-            "боэций",
-            "античность и средневековье",
-            "передал античную",
-            "переводчик",
-            "комментатор"
-          ]
-        },
-        {
-          "label": "Логика у Боэция",
-          "signals": [
-            "логика",
-            "аристотел",
-            "категории",
-            "комментарии",
-            "логические труды"
-          ]
-        },
-        {
-          "label": "Философское утешение",
-          "signals": [
-            "утешение философией",
-            "философское утешение",
-            "судьба",
-            "фортуна"
-          ]
-        },
-        {
-          "label": "Оккам и номинализм",
-          "signals": [
-            "оккам",
-            "номинализм",
-            "универсалии как имена",
-            "общие понятия как слова",
-            "имена"
-          ]
-        },
-        {
-          "label": "Бритва Оккама",
-          "signals": [
-            "бритва оккама",
-            "не умножать сущности",
-            "простота",
-            "лишние сущности",
-            "экономия объяснения"
-          ]
-        }
-      ]
-    },
-    "explanation": "Боэций связан с логикой и передачей античной традиции, Оккам — с номинализмом и принципом простоты.",
-    "recommendation": "Повторите основные идеи Боэция и Оккама.",
-    "hint": "Боэций: античная логика и философское утешение. Оккам: номинализм и принцип простоты.",
-    "hint_objects": [
-      {
-        "id": "scroll",
-        "label": "свиток",
-        "asset": "scroll.svg",
-        "x": 34,
-        "y": 17,
-        "size": 58,
-        "rotate": -10
-      },
-      {
-        "id": "hourglass",
-        "label": "часы",
-        "asset": "hourglass.svg",
-        "x": 62,
-        "y": 20,
-        "size": 54,
-        "rotate": 6
-      },
-      {
-        "id": "ring",
-        "label": "перстень",
-        "asset": "ring.svg",
-        "x": 84,
-        "y": 20,
-        "size": 48,
-        "rotate": -12
-      }
-    ]
-  }
-];
+  <div class="modal hidden" id="modal"></div>
 
-const POINTS = 10;
-const POINTS_PARTIAL = 5;
+  <script id="encounters-data" type="application/json">[{"id": "route-1", "order": 1, "speaker": "Августин Блаженный", "role": "Учитель христианской философии", "avatar_class": "augustine", "look": "Философ в темной мантии с книгой у ворот университета.", "scene_class": "scene-gate", "greeting": "Привет, ученик. Перед входом в университет нужно понять, чем средневековая философия отличается от античной и новоевропейской мысли.", "building": "Ворота", "map_x": 13, "map_y": 55, "entry_x": 8, "entry_y": 74, "entry_target_x": 13, "entry_target_y": 63, "location": "Ворота средневекового университета", "topic": "Характерные особенности и проблемы Средневековой философии", "question": "Каковы характерные особенности философии Средневековья?", "model_answer": "Средневековая философия теоцентрична, связана с христианской теологией, обсуждает Бога, творение, душу, спасение, добро и зло, веру и разум. Для нее важны патристика, схоластика и университетский диспут.", "semantic_rubric": {"correct_min": 4, "partial_min": 2, "points": [{"label": "Бог в центре философии", "signals": ["теоцентр", "бог в центре", "в центре бог", "бог главный", "все объясняли через бога", "религиозная картина мира"]}, {"label": "Связь с христианством и теологией", "signals": ["христиан", "теолог", "богослов", "церковь", "религи", "учение церкви"]}, {"label": "Проблемы веры и разума", "signals": ["вера и разум", "разум и вера", "соотношение веры", "знание и вера", "разум помогает вере"]}, {"label": "Проблемы души и спасения", "signals": ["душ", "спасен", "грех", "добро и зло", "вечная жизнь", "мораль"]}, {"label": "Патристика и схоластика", "signals": ["патрист", "схоласт", "университет", "диспут", "логические доказательства", "работа с текстами"]}]}, "explanation": "Средневековая философия рассматривает мир через религиозную картину: Бог, вера, разум, душа, спасение, добро и зло.", "recommendation": "Повторите характерные особенности средневековой философии.", "hint": "Вспомните: Бог в центре, связь с христианской теологией, вера и разум, душа и спасение, патристика и схоластика.", "hint_objects": [{"id": "scroll", "label": "свиток", "asset": "scroll.svg", "x": 65, "y": 16, "size": 58, "rotate": -13}, {"id": "key", "label": "ключ", "asset": "key.svg", "x": 22, "y": 18, "size": 56, "rotate": 18}, {"id": "seal", "label": "печать", "asset": "seal.svg", "x": 82, "y": 20, "size": 50, "rotate": -7}]}, {"id": "route-2", "order": 2, "speaker": "Фома Аквинский", "role": "Магистр систематической теологии", "avatar_class": "aquinas", "look": "Доминиканский мыслитель с книгой и строгим взглядом.", "scene_class": "scene-library", "greeting": "Привет, ученик. Сейчас мы обсудим начало мира и вопрос о творении.", "building": "Монастырь", "map_x": 25, "map_y": 36, "entry_x": 18, "entry_y": 21, "entry_target_x": 25, "entry_target_y": 44, "location": "Монастырский двор", "topic": "Проблема креационизма в средневековой философии", "question": "Как решалась проблема креационизма в средневековой философии?", "model_answer": "Креационизм утверждает, что мир создан Богом из ничего. Мир не вечен и не равен Богу, а зависит от Творца.", "semantic_rubric": {"correct_min": 3, "partial_min": 2, "points": [{"label": "Мир создан Богом", "signals": ["бог создал мир", "мир создан богом", "творец", "бог творит", "бог сотворил"]}, {"label": "Творение из ничего", "signals": ["из ничего", "ничего", "ex nihilo", "не из готовой материи"]}, {"label": "Мир имеет начало", "signals": ["мир не вечен", "имеет начало", "начало мира", "не существовал вечно"]}, {"label": "Мир зависит от Бога", "signals": ["зависит от бога", "зависимость от бога", "тварный мир", "не равен богу", "подчинен богу"]}]}, "explanation": "Креационизм объясняет происхождение мира через творение Богом.", "recommendation": "Повторите проблему креационизма.", "hint": "Креационизм: Бог творит мир из ничего; мир имеет начало и зависит от Творца.", "hint_objects": [{"id": "lantern", "label": "фонарь", "asset": "lantern.svg", "x": 17, "y": 18, "size": 60, "rotate": -3}, {"id": "book", "label": "книга", "asset": "book.svg", "x": 50, "y": 15, "size": 58, "rotate": 10}, {"id": "ring", "label": "перстень", "asset": "ring.svg", "x": 77, "y": 21, "size": 48, "rotate": -15}]}, {"id": "route-3", "order": 3, "speaker": "Августин Блаженный", "role": "Мыслитель о душе, воле и добре", "avatar_class": "augustine-dark", "look": "Августин стоит в монашеской мантии и держит раскрытую книгу.", "scene_class": "scene-chapel", "greeting": "Привет, ученик. Если Бог благ, почему существует зло? Это один из самых трудных вопросов Средневековья.", "building": "Капелла", "map_x": 42, "map_y": 34, "entry_x": 36, "entry_y": 22, "entry_target_x": 42, "entry_target_y": 43, "location": "Капелла размышлений", "topic": "Проблема теодицеи в Средневековой философии", "question": "Как решалась проблема теодицеи в средневековой философии?", "model_answer": "Теодицея оправдывает благого Бога перед фактом зла. В средневековой философии зло часто понималось как недостаток добра, а его появление связывали со свободной волей человека.", "semantic_rubric": {"correct_min": 3, "partial_min": 2, "points": [{"label": "Вопрос о Боге и зле", "signals": ["если бог благ", "почему есть зло", "проблема зла", "бог добрый", "бог всемогущ"]}, {"label": "Оправдание Бога", "signals": ["оправдание бога", "бог не виноват", "бог остается благим", "благой бог", "справедливый бог"]}, {"label": "Зло как отсутствие добра", "signals": ["недостаток добра", "отсутствие добра", "лишенность добра", "зло не самостоятель", "искажение добра"]}, {"label": "Свободная воля человека", "signals": ["свободная воля", "свобода воли", "выбор человека", "человек выбирает", "неправильный выбор"]}]}, "explanation": "Теодицея объясняет, как возможно зло при благом Боге.", "recommendation": "Повторите проблему теодицеи.", "hint": "Важно: зло не равная Богу сила; оно объясняется как недостаток добра и связано со свободным выбором человека.", "hint_objects": [{"id": "scroll", "label": "свиток", "asset": "scroll.svg", "x": 72, "y": 16, "size": 58, "rotate": -9}, {"id": "astrolabe", "label": "астролябия", "asset": "astrolabe.svg", "x": 23, "y": 19, "size": 60, "rotate": 8}, {"id": "key", "label": "ключ", "asset": "key.svg", "x": 87, "y": 22, "size": 54, "rotate": 28}]}, {"id": "route-4", "order": 4, "speaker": "Уильям Оккам", "role": "Мастер точных понятий", "avatar_class": "ockham", "look": "Философ в темной одежде спорит о природе общих понятий.", "scene_class": "scene-scriptorium", "greeting": "Привет, ученик. Сейчас мы разберем спор об универсалиях: существуют ли общие понятия сами по себе?", "building": "Скрипторий", "map_x": 55, "map_y": 35, "entry_x": 52, "entry_y": 22, "entry_target_x": 55, "entry_target_y": 43, "location": "Скрипторий точных понятий", "topic": "Проблема универсалий в Средневековой философии", "question": "Как решалась проблема универсалий в средневековой философии?", "model_answer": "Проблема универсалий обсуждала статус общих понятий. Реалисты считали, что универсалии существуют реально, номиналисты понимали их как имена или знаки, а умеренные реалисты связывали их с вещами и мышлением.", "semantic_rubric": {"correct_min": 3, "partial_min": 2, "points": [{"label": "Универсалии как общие понятия", "signals": ["общие понятия", "универсалии", "общее", "понятия", "человек вообще", "общие имена", "понятие человек", "частные понятия", "спорили про универсалии"]}, {"label": "Реализм", "signals": ["реалисты", "реализм", "существуют реально", "до вещей", "самостоятельно существуют", "понятия существуют отдельно", "понятие существует отдельно", "в отдельном месте", "отдельно от вещей", "сами по себе"]}, {"label": "Номинализм", "signals": ["номиналисты", "номинализм", "имена", "слова", "только названия", "знаки", "только вася и петя", "существует только вася и петя", "понятия человек не существует", "понятие человек не существует", "самого понятия человек не существует", "общего человека нет", "есть только отдельные люди", "только конкретные люди"]}, {"label": "Умеренная позиция", "signals": ["умеренный реализм", "в вещах", "после вещей", "в уме", "связаны с мышлением", "люди придумали у себя в голове", "придумали в голове", "понятие в голове", "понятие человек в голове", "в мышлении человека", "люди придумали понятие человек"]}]}, "explanation": "Спор об универсалиях касается того, что такое общие понятия и как они существуют.", "recommendation": "Повторите проблему универсалий.", "hint": "Универсалии — общие понятия. В споре были реализм, номинализм и умеренные варианты.", "hint_objects": [{"id": "quill", "label": "перо", "asset": "quill.svg", "x": 21, "y": 18, "size": 58, "rotate": -27}, {"id": "book", "label": "книга", "asset": "book.svg", "x": 79, "y": 17, "size": 54, "rotate": 12}, {"id": "hourglass", "label": "часы", "asset": "hourglass.svg", "x": 88, "y": 22, "size": 52, "rotate": -4}]}, {"id": "route-5", "order": 5, "speaker": "Фома Аквинский", "role": "Учитель согласия веры и разума", "avatar_class": "aquinas-light", "look": "Фома в бело-черной мантии держит книгу и ведет диспут.", "scene_class": "scene-debate", "greeting": "Привет, ученик. Средневековая мысль не просто противопоставляет веру и разум, а ищет их связь.", "building": "Зал диспутов", "map_x": 72, "map_y": 34, "entry_x": 66, "entry_y": 24, "entry_target_x": 72, "entry_target_y": 43, "location": "Зал университетского диспута", "topic": "Проблема веры и разума в Средневековой философии", "question": "Как в средневековой философии понимали соотношение веры и разума?", "model_answer": "Вера считалась основой и высшим источником истины, но разум помогал объяснять, защищать и систематизировать вероучение. У Фомы Аквинского вера и разум не должны противоречить, потому что обе ведут к истине.", "semantic_rubric": {"correct_min": 3, "partial_min": 2, "points": [{"label": "Вера имеет высокий статус", "signals": ["вера главнее", "вера выше", "вера основа", "приоритет веры", "истина откровения"]}, {"label": "Разум помогает вере", "signals": ["разум помогает", "разум объясняет", "доказывает", "защищает веру", "систематизирует"]}, {"label": "Вера и разум не враги", "signals": ["не противоречат", "дополняют", "связаны", "согласие веры и разума", "две дороги к истине"]}, {"label": "Схоластический диспут", "signals": ["схоласт", "диспут", "логика", "аргумент", "рациональное обоснование"]}]}, "explanation": "Средневековая философия стремилась связать веру и разум.", "recommendation": "Повторите проблему веры и разума.", "hint": "Вера задает основу, разум объясняет и защищает вероучение; у Фомы они не должны противоречить.", "hint_objects": [{"id": "astrolabe", "label": "астролябия", "asset": "astrolabe.svg", "x": 29, "y": 20, "size": 58, "rotate": -10}, {"id": "book", "label": "книга", "asset": "book.svg", "x": 58, "y": 15, "size": 54, "rotate": 8}, {"id": "lantern", "label": "фонарь", "asset": "lantern.svg", "x": 83, "y": 19, "size": 56, "rotate": 4}]}, {"id": "route-6", "order": 6, "speaker": "Ансельм Кентерберийский", "role": "Мастер онтологического доказательства", "avatar_class": "anselm", "look": "Философ с книгой размышляет о бытии Бога.", "scene_class": "scene-courtyard", "greeting": "Привет, ученик. Сейчас мы обсудим онтологическое доказательство: попытку доказать бытие Бога из самого понятия Бога.", "building": "Аудитория", "map_x": 88, "map_y": 35, "entry_x": 88, "entry_y": 22, "entry_target_x": 88, "entry_target_y": 43, "location": "Аудитория доказательств", "topic": "Онтологические доказательства бытия Бога в Средневековой философии", "question": "Что такое онтологическое доказательство бытия Бога в средневековой философии?", "model_answer": "Онтологическое доказательство связывают с Ансельмом. Оно выводит существование Бога из понятия Бога как наивысшего и совершеннейшего существа: если Бог мыслится как максимально совершенный, то существование входит в это совершенство.", "semantic_rubric": {"correct_min": 3, "partial_min": 2, "points": [{"label": "Доказательство из понятия Бога", "signals": ["из понятия бога", "через понятие", "в уме", "мыслится", "логическое доказательство"]}, {"label": "Бог как высшее совершенство", "signals": ["совершенное существо", "наивысшее существо", "самое совершенное", "выше которого нельзя", "максимально совершенный"]}, {"label": "Существование связано с совершенством", "signals": ["существование входит", "должен существовать", "существует в реальности", "бытие", "реальное существование"]}, {"label": "Ансельм", "signals": ["ансельм", "кентерберий"]}]}, "explanation": "Онтологическое доказательство идет от понятия Бога к выводу о его бытии.", "recommendation": "Повторите онтологическое доказательство бытия Бога.", "hint": "Ансельм рассуждает от понятия Бога как максимально совершенного существа к выводу о его существовании.", "hint_objects": [{"id": "quill", "label": "перо", "asset": "quill.svg", "x": 68, "y": 16, "size": 56, "rotate": 22}, {"id": "scroll", "label": "свиток", "asset": "scroll.svg", "x": 27, "y": 16, "size": 58, "rotate": -18}, {"id": "seal", "label": "печать", "asset": "seal.svg", "x": 88, "y": 22, "size": 48, "rotate": 10}]}, {"id": "route-7", "order": 7, "speaker": "Августин Блаженный", "role": "Автор «Исповеди»", "avatar_class": "augustine-red", "look": "Августин с раскрытой книгой вспоминает путь души к Богу.", "scene_class": "scene-chapel", "greeting": "Привет, ученик. «Исповедь» — не просто рассказ о жизни, а размышление о душе, памяти, грехе и обращении к Богу.", "building": "Келья", "map_x": 24, "map_y": 68, "entry_x": 20, "entry_y": 86, "entry_target_x": 24, "entry_target_y": 76, "location": "Келья Августина", "topic": "Августин «Исповедь». Основные идеи", "question": "Августин «Исповедь». Каковы основные идеи этого произведения?", "model_answer": "В «Исповеди» Августин показывает внутренний путь человека к Богу, говорит о грехе, покаянии, благодати, памяти, самопознании и обращении души.", "semantic_rubric": {"correct_min": 3, "partial_min": 2, "points": [{"label": "Внутренний путь к Богу", "signals": ["путь к богу", "обращение к богу", "душа идет к богу", "внутренний путь", "поиск бога"]}, {"label": "Грех и покаяние", "signals": ["грех", "покаяние", "исповедь", "раскаяние", "ошибки жизни"]}, {"label": "Благодать", "signals": ["благодать", "помощь бога", "бог помогает", "милость бога"]}, {"label": "Память и самопознание", "signals": ["память", "самопозн", "внутренний мир", "размышление о себе", "душа"]}]}, "explanation": "«Исповедь» показывает духовный путь человека и обращение души к Богу.", "recommendation": "Повторите основные идеи «Исповеди» Августина.", "hint": "Главное: путь души к Богу, грех и покаяние, благодать, память и самопознание.", "hint_objects": [{"id": "book", "label": "книга", "asset": "book.svg", "x": 24, "y": 18, "size": 58, "rotate": -8}, {"id": "quill", "label": "перо", "asset": "quill.svg", "x": 72, "y": 19, "size": 56, "rotate": 20}, {"id": "lantern", "label": "фонарь", "asset": "lantern.svg", "x": 86, "y": 24, "size": 50, "rotate": -5}]}, {"id": "route-8", "order": 8, "speaker": "Фома Аквинский", "role": "Автор системы схоластики", "avatar_class": "aquinas-gold", "look": "Фома в университетской мантии объясняет систему христианской философии.", "scene_class": "scene-library", "greeting": "Привет, ученик. Мои идеи часто связывают с систематизацией схоластики и согласованием веры с разумом.", "building": "Библиотека", "map_x": 48, "map_y": 72, "entry_x": 48, "entry_y": 88, "entry_target_x": 48, "entry_target_y": 80, "location": "Библиотека Фомы", "topic": "Фома Аквинский. Основные идеи", "question": "Фома Аквинский. Каковы его основные идеи?", "model_answer": "Фома Аквинский стремился согласовать веру и разум, систематизировал схоластику, развивал доказательства бытия Бога, опирался на Аристотеля и различал естественное знание и истины откровения.", "semantic_rubric": {"correct_min": 4, "partial_min": 2, "points": [{"label": "Согласование веры и разума", "signals": ["вера и разум", "разум и вера", "не противоречат", "согласовать", "дополняют"]}, {"label": "Схоластическая система", "signals": ["схоласт", "система", "систематизировал", "богословие", "теология"]}, {"label": "Доказательства бытия Бога", "signals": ["доказательства бога", "доказательства бытия бога", "пять путей", "существование бога"]}, {"label": "Опора на Аристотеля", "signals": ["аристот", "античная философия", "причины", "форма и материя"]}, {"label": "Различение знания и откровения", "signals": ["естественное знание", "откровение", "истины веры", "то что можно познать разумом"]}]}, "explanation": "Фома Аквинский строит систематическую схоластику и связывает разум с верой.", "recommendation": "Повторите основные идеи Фомы Аквинского.", "hint": "Фома: вера и разум, схоластическая система, доказательства бытия Бога, Аристотель, естественное знание и откровение.", "hint_objects": [{"id": "book", "label": "книга", "asset": "book.svg", "x": 20, "y": 17, "size": 56, "rotate": 6}, {"id": "astrolabe", "label": "астролябия", "asset": "astrolabe.svg", "x": 52, "y": 18, "size": 56, "rotate": -8}, {"id": "seal", "label": "печать", "asset": "seal.svg", "x": 80, "y": 21, "size": 50, "rotate": 12}]}, {"id": "route-9", "order": 9, "speaker": "Боэций Аниций и Уильям Оккам", "role": "Мастера логики и понятий", "avatar_class": "boethius-ockham", "look": "Два средневековых мыслителя у стола с рукописями и логическими схемами.", "scene_class": "scene-scriptorium", "greeting": "Привет, ученик. Здесь нужно вспомнить двух мыслителей: Боэция и Оккама. Один связан с передачей античной логики Средневековью, другой — с номинализмом и принципом простоты.", "building": "Архив", "map_x": 62, "map_y": 66, "entry_x": 78, "entry_y": 88, "entry_target_x": 76, "entry_target_y": 79, "location": "Архив логики", "topic": "Боэций Аниций, Уильям Оккам. Основные идеи", "question": "Боэций Аниций, Уильям Оккам. Каковы их основные идеи?", "model_answer": "Боэций важен как посредник между античной философией и Средневековьем, переводчик и комментатор логики, автор идеи философского утешения. Оккам связан с номинализмом, критикой лишних сущностей и принципом простоты, известным как бритва Оккама.", "semantic_rubric": {"correct_min": 4, "partial_min": 2, "points": [{"label": "Боэций как посредник античности и Средневековья", "signals": ["боэций", "античность и средневековье", "передал античную", "переводчик", "комментатор"]}, {"label": "Логика у Боэция", "signals": ["логика", "аристотел", "категории", "комментарии", "логические труды"]}, {"label": "Философское утешение", "signals": ["утешение философией", "философское утешение", "судьба", "фортуна"]}, {"label": "Оккам и номинализм", "signals": ["оккам", "номинализм", "универсалии как имена", "общие понятия как слова", "имена"]}, {"label": "Бритва Оккама", "signals": ["бритва оккама", "не умножать сущности", "простота", "лишние сущности", "экономия объяснения"]}]}, "explanation": "Боэций связан с логикой и передачей античной традиции, Оккам — с номинализмом и принципом простоты.", "recommendation": "Повторите основные идеи Боэция и Оккама.", "hint": "Боэций: античная логика и философское утешение. Оккам: номинализм и принцип простоты.", "hint_objects": [{"id": "scroll", "label": "свиток", "asset": "scroll.svg", "x": 34, "y": 17, "size": 58, "rotate": -10}, {"id": "hourglass", "label": "часы", "asset": "hourglass.svg", "x": 62, "y": 20, "size": 54, "rotate": 6}, {"id": "ring", "label": "перстень", "asset": "ring.svg", "x": 84, "y": 20, "size": 48, "rotate": -12}]}]</script>
+  <script>
+    const ENCOUNTERS = JSON.parse(document.getElementById('encounters-data').textContent);
+    const MAP = { w: 2400, h: 1352 };
+    const POINTS_PER_CORRECT = 10;
+    const POINTS_PER_PARTIAL = 5;
+    const STORAGE_KEY = 'medieval-philosophy-static-v1';
 
-function fresh(){return{
-  score:0, answered:0, correct:0, partial:0, wrong:0,
-  completedIds:[], currentId:null, mode:'none',
-  metSpeaker:false, phase:'none',
-  mistakes:[], answerLog:[], hintIds:[], hintFound:{}, hintReturnPhase:null,
-  feedback:null, formError:null,
-  playerX:8, playerY:82, started:false
-};}
-let state = (function(){ try{ return JSON.parse(localStorage.getItem(SK)) || fresh(); }catch(e){ return fresh(); } })();
-function save(){ try{ localStorage.setItem(SK, JSON.stringify(state)); }catch(e){} }
+    const STOP_WORDS = new Set(['это','что','как','для','при','или','его','она','они','оно','был','была','были','есть','через','себя','свой','свои','между','поэтому','также']);
+    const COMMON_ENDINGS = ['иями','ями','ами','ого','ему','ыми','ими','ая','яя','ое','ее','ые','ие','ой','ей','ам','ям','ах','ях','ом','ем','ия','ий','ый','ать','ять','ться','ся','а','я','ы','и','е','у','ю'];
+    const BLOCKED = [
+      { x1: 5, y1: 4, x2: 27, y2: 28 },
+      { x1: 34, y1: 8, x2: 51, y2: 31 },
+      { x1: 61, y1: 12, x2: 74, y2: 32 },
+      { x1: 59, y1: 49, x2: 76, y2: 66 }
+    ];
 
-function encById(id){ return ENCOUNTERS.find(e=>e.id===id) || null; }
-function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+    const els = {
+      intro: document.getElementById('intro'),
+      game: document.getElementById('game'),
+      startBtn: document.getElementById('startBtn'),
+      resetBtn: document.getElementById('resetBtn'),
+      viewport: document.getElementById('viewport'),
+      world: document.getElementById('world'),
+      entities: document.getElementById('entities'),
+      player: document.getElementById('player'),
+      prompt: document.getElementById('prompt'),
+      modal: document.getElementById('modal'),
+      scoreHud: document.getElementById('scoreHud'),
+      progressHud: document.getElementById('progressHud'),
+      hintHud: document.getElementById('hintHud'),
+      minimap: document.getElementById('minimap'),
+      miniPlayer: document.getElementById('miniPlayer')
+    };
 
-/* ── оценка свободного ответа (порт evaluate_answer) ── */
-function normalizeText(t){
-  t = String(t).toLowerCase().replace(/ё/g,'е');
-  t = t.replace(/[^a-zа-я0-9\s-]/g,' ');
-  return t.replace(/\s+/g,' ').trim();
-}
-const STOP_WORDS = new Set(["это","что","как","для","при","или","его","она","они","оно","был","была","были","есть","через","себя","свой","свои","между","поэтому","также"]);
-const COMMON_ENDINGS = ["иями","ями","ами","ого","ему","ыми","ими","ать","ять","ться","ая","яя","ое","ее","ые","ие","ой","ей","ам","ям","ах","ях","ом","ем","ия","ий","ый","ся","а","я","ы","и","е","у","ю"];
-function meaningTerms(text){
-  const terms = new Set();
-  normalizeText(text).split(/\s+/).forEach(w => {
-    if (w.length < 3 || STOP_WORDS.has(w)) return;
-    let stem = w;
-    for (const end of COMMON_ENDINGS){ if (stem.endsWith(end) && stem.length - end.length >= 4){ stem = stem.slice(0, -end.length); break; } }
-    terms.add(stem);
-  });
-  return terms;
-}
-function termsOverlap(sig, ans){
-  let o = 0;
-  sig.forEach(st => { for (const at of ans){ if (at === st || at.startsWith(st) || st.startsWith(at)){ o++; break; } } });
-  return o;
-}
-function signalPresent(signal, na, ansTerms){
-  const ns = normalizeText(signal);
-  if (ns && na.indexOf(ns) !== -1) return true;
-  const sig = meaningTerms(signal);
-  if (!sig.size) return false;
-  const ov = termsOverlap(sig, ansTerms);
-  if (sig.size <= 2) return ov === sig.size;
-  return ov >= 3 || ov / sig.size >= 0.6;
-}
-function evaluateAnswer(text, enc){
-  const na = normalizeText(text);
-  const ansTerms = meaningTerms(text);
-  const rubric = enc.semantic_rubric || {};
-  const points = rubric.points || [];
-  const covered = [];
-  points.forEach(p => { if ((p.signals||[]).some(s => signalPresent(s, na, ansTerms))) covered.push(p.label); });
-  const correctMin = (rubric.correct_min != null) ? rubric.correct_min : Math.max(1, points.length - 1);
-  const partialMin = (rubric.partial_min != null) ? rubric.partial_min : 1;
-  const c = covered.length;
-  let status, label;
-  if (c >= correctMin) { status='correct'; label='Правильно'; }
-  else if (c >= partialMin) { status='partial'; label='Частично'; }
-  else { status='wrong'; label='Неправильно'; }
-  return { status, statusLabel:label, isCorrect:status==='correct', isPartial:status==='partial', covered, coveredCount:c, totalPoints:points.length };
-}
+    const game = {
+      started: false,
+      player: { x: pctX(8), y: pctY(82), moving: false },
+      cam: { x: 0, y: 0 },
+      keys: {},
+      target: null,
+      near: null,
+      entities: [],
+      state: loadState(),
+      lastTime: 0,
+      raf: null
+    };
 
-function calcPercent(score,a){ return a===0?0:Math.round(score/(a*POINTS)*100); }
-function calcTitle(p){ if(p<=40)return 'Начинающий ученик'; if(p<=70)return 'Студент средневекового университета'; if(p<=90)return 'Магистр философии'; return 'Мудрец схоластики'; }
-
-/* ── навигация по экранам ── */
-function show(name, keep){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('screen-'+name).classList.add('active');
-  if(!keep) window.scrollTo(0,0);
-}
-function renderFooter(){
-  document.querySelector('[data-footer]').innerHTML =
-    '<span>Очки: '+state.score+'</span>'+
-    '<span>Ответы: '+state.correct+' / '+state.answered+'</span>'+
-    '<span>Пройдено: '+state.completedIds.length+' / '+ENCOUNTERS.length+'</span>'+
-    '<span>Подсказки: '+state.hintIds.length+' / '+ENCOUNTERS.length+'</span>';
-}
-
-/* ── действия (порт маршрутов app.py) ── */
-function startGame(){ state = fresh(); state.started=true; save(); openGame(); }
-function resetGame(){ state = fresh(); save(); renderFooter(); renderIndex(); show('index'); }
-
-function approach(id){
-  const e = encById(id); if(!e) return;
-  state.currentId=e.id; state.mode='philosopher'; state.metSpeaker=true; state.phase='greeting';
-  state.playerX=e.entry_target_x; state.playerY=e.entry_target_y;
-  state.hintReturnPhase=null; state.feedback=null; state.formError=null;
-  save(); openGame(true);
-}
-function hintLocation(id){
-  const e = encById(id); if(!e) return;
-  if(state.completedIds.indexOf(e.id)!==-1){ state.currentId=e.id; state.mode='philosopher'; state.metSpeaker=true; state.phase='greeting'; save(); openGame(true); return; }
-  state.currentId=e.id; state.mode='hint'; state.metSpeaker=false;
-  state.playerX=e.entry_target_x; state.playerY=e.entry_target_y; state.feedback=null;
-  if(state.hintIds.indexOf(e.id)!==-1){ state.phase='hint_done'; }
-  else { if(!state.hintFound[e.id]) state.hintFound[e.id]=[]; state.hintReturnPhase='hint_location'; state.phase='hint'; }
-  save(); openGame(true);
-}
-function askQuestion(){ if(state.currentId){ state.phase='question'; state.formError=null; save(); openGame(true); } }
-function findObject(encId, objId){
-  if(state.currentId!==encId || state.phase!=='hint') return;
-  const e = encById(encId); if(!e) return;
-  const allowed = (e.hint_objects||[]).map(o=>o.id);
-  if(allowed.indexOf(objId)===-1) return;
-  if(state.hintIds.indexOf(encId)!==-1) return;
-  if(!state.hintFound[encId]) state.hintFound[encId]=[];
-  const found = state.hintFound[encId];
-  if(found.indexOf(objId)===-1) found.push(objId);
-  const completed = found.length>=allowed.length;
-  if(completed){
-    if(state.hintIds.indexOf(encId)===-1) state.hintIds.push(encId);
-    let rp = state.hintReturnPhase||'question'; state.hintReturnPhase=null;
-    if(rp==='hint_location'){ state.mode='hint'; state.metSpeaker=false; state.phase='hint_done'; }
-    else { if(rp!=='greeting'&&rp!=='question') rp='greeting'; state.mode='philosopher'; state.metSpeaker=true; state.phase=rp; }
-  }
-  save(); openGame(completed);   // прыжок к диалогу только когда найдены все 3; иначе остаёмся на месте
-}
-function submitAnswer(text){
-  const e = encById(state.currentId); if(!e) return;
-  if(state.phase!=='question') return;
-  if(state.completedIds.indexOf(e.id)!==-1) return;
-  const answer = (text||'').trim();
-  if(answer.length<3){ state.formError='Напишите ответ своими словами.'; save(); openGame(true); return; }
-  state.formError=null;
-  const ev = evaluateAnswer(answer, e);
-  if(ev.status==='correct'){ state.score+=POINTS; state.correct++; }
-  else if(ev.status==='partial'){ state.score+=POINTS_PARTIAL; state.partial=(state.partial||0)+1; state.mistakes.push(e.recommendation); }
-  else { state.wrong=(state.wrong||0)+1; state.mistakes.push(e.recommendation); }
-  state.answered++;
-  if(state.completedIds.indexOf(e.id)===-1) state.completedIds.push(e.id);
-  state.answerLog.push({encounter_id:e.id, speaker:e.speaker, topic:e.topic, answer:answer, status:ev.status, is_correct:ev.isCorrect});
-  state.feedback={encounter_id:e.id, status:ev.status, statusLabel:ev.statusLabel};
-  save(); openGame(true);
-}
-function closeDialogue(){
-  state.currentId=null; state.mode='none'; state.metSpeaker=false; state.phase='none';
-  state.hintReturnPhase=null; state.feedback=null; state.formError=null; save();
-  if(state.completedIds.length>=ENCOUNTERS.length){ renderFinal(); show('final'); }
-  else openGame();
-}
-
-/* ── экран: интро ── */
-function renderIndex(){
-  document.getElementById('screen-index').innerHTML =
-  '<section class="intro">'+
-    '<div class="intro-text">'+
-      '<p class="eyebrow">Учебная игра по философии</p>'+
-      '<h1>Бродилка по средневековому университету</h1>'+
-      '<p>Вы входите на карту средневекового университета. Можно ходить мышкой по карте и самому выбирать, в какую локацию зайти. Внутри каждой локации ждет философ, подсказка и открытый вопрос. Ответ нужно написать самому, без вариантов.</p>'+
-      '<button class="primary-button" data-start>Начать</button>'+
-    '</div>'+
-    '<aside class="rules-panel" aria-label="Правила игры">'+
-      '<h2>Как играть</h2>'+
-      '<ul>'+
-        '<li>Кликайте по карте, чтобы перемещать ученика.</li>'+
-        '<li>Нажимайте на названия локаций, например «Ворота».</li>'+
-        '<li>Ищите 3 предмета, чтобы открыть подсказку.</li>'+
-        '<li>В мини-диалоге пишите ответ своими словами.</li>'+
-        '<li>Игра ищет ключевые идеи в ответе и начисляет очки.</li>'+
-        '<li>После ответа показывается только короткая обратная связь.</li>'+
-      '</ul>'+
-    '</aside>'+
-  '</section>';
-}
-
-/* ── экран: карта + диалог ── */
-function openGame(anchorDialogue){
-  const sy = window.scrollY;
-  renderGame();
-  renderFooter();
-  show('game', true);                       // не сбрасывать прокрутку при перерисовке
-  if(anchorDialogue){ const d=document.getElementById('dialogue'); if(d) d.scrollIntoView({behavior:'smooth'}); }
-  else { window.scrollTo(0, sy); }          // остаться на месте (напр. при поиске предметов)
-}
-
-function markerHTML(e){
-  const done = state.completedIds.indexOf(e.id)!==-1;
-  const hasHint = state.hintIds.indexOf(e.id)!==-1;
-  const philActive = state.currentId===e.id && state.mode==='philosopher';
-  const hintActive = state.currentId===e.id && state.mode==='hint';
-  let h='';
-  h+='<div class="map-character-form free-choice'+(done?' done':'')+(philActive?' active':'')+'" style="--char-x:'+e.map_x+'%;--char-y:'+e.map_y+'%;">';
-  h+='<button class="map-character '+esc(e.avatar_class)+'" type="button" data-marker data-kind="philosopher" data-id="'+esc(e.id)+'" '+
-     'data-tx="'+e.map_x+'" data-ty="'+e.map_y+'" data-role="Философ" data-title="'+esc(e.speaker)+'" data-meta="'+esc(e.role)+'" data-topic="'+esc(e.topic)+'" data-label="Подойти к философу" aria-label="Подойти: '+esc(e.speaker)+'">';
-  h+='<span class="mini-head"></span><span class="mini-body"></span><span class="talk-hint">'+(done?'✓':'?')+'</span></button></div>';
-  h+='<button class="map-location-hotspot'+(hasHint?' done':'')+(hintActive?' active':'')+'" type="button" style="--entry-x:'+e.entry_x+'%;--entry-y:'+e.entry_y+'%;" '+
-     'data-marker data-kind="hint" data-id="'+esc(e.id)+'" data-tx="'+e.entry_target_x+'" data-ty="'+e.entry_target_y+'" data-role="Место подсказки" data-title="'+esc(e.building)+'" data-meta="Подсказка к вопросу: '+esc(e.speaker)+'" data-topic="'+esc(e.topic)+'" data-label="'+(hasHint?'Посмотреть подсказку':'Искать подсказку')+'" aria-label="Подсказка: '+esc(e.building)+'">';
-  h+='<span>'+esc(e.building)+'</span><small>'+(hasHint?'открыта':'подсказка')+'</small></button>';
-  return h;
-}
-
-function renderGame(){
-  const enc = state.currentId?encById(state.currentId):null;
-  let status='Кликните по земле, выберите философа или место подсказки.';
-  if(enc && state.mode==='philosopher') status='Ученик подошел к философу: '+enc.speaker+'.';
-  else if(enc && state.mode==='hint') status='Ученик вошел в место подсказки: «'+enc.building+'».';
-
-  let journal='';
-  for(const e of ENCOUNTERS){
-    const done = state.completedIds.indexOf(e.id)!==-1;
-    const h = state.hintIds.indexOf(e.id)!==-1;
-    journal+='<div class="journal-row'+(done?' done':'')+'"><span>'+esc(e.speaker)+'</span>'+
-      '<div class="journal-badges"><strong>'+(done?'завершено':'доступно')+'</strong><em>'+(h?'подсказка':'нет подсказки')+'</em></div></div>';
-  }
-
-  const html =
-  '<section class="section-heading">'+
-    '<p class="eyebrow">Свободная бродилка</p>'+
-    '<h1>Карта средневековой философии</h1>'+
-    '<p>Кликайте мышкой по карте, чтобы ходить. Нажмите на фигурку философа, чтобы начать диалог и получить вопрос. Нажмите на название локации, например «Ворота», чтобы попасть в комнату подсказки и найти 3 предмета.</p>'+
-  '</section>'+
-  '<section class="game-screen free-map-screen" aria-label="Свободная игровая карта">'+
-    '<div class="campus-map illustrated-map" data-campus-map style="--map-image: url(\'static/img/philosophy-map.png\');">'+
-      '<div class="student-token" data-student style="--student-x:'+state.playerX+'%;--student-y:'+state.playerY+'%;" aria-label="Игрок"><span class="student-head"></span><span class="student-body"></span></div>'+
-      ENCOUNTERS.map(markerHTML).join('')+
-      '<div class="map-status" data-map-status>'+esc(status)+'</div>'+
-      '<aside class="map-choice-card" data-choice-card hidden>'+
-        '<p class="eyebrow" data-choice-role>Выбор</p>'+
-        '<h2 data-choice-title>Точка карты</h2>'+
-        '<p data-choice-meta>Описание</p>'+
-        '<p class="small-note" data-choice-topic>Тема</p>'+
-        '<form data-travel-form><button class="primary-button" type="submit" data-choice-button>Перейти</button></form>'+
-      '</aside>'+
-    '</div>'+
-    '<aside class="quest-panel map-journal">'+
-      '<p class="eyebrow">Журнал путешествия</p>'+
-      '<h2>Пройдено: '+state.completedIds.length+' / '+ENCOUNTERS.length+'</h2>'+
-      '<p class="hint-counter">Подсказки: '+state.hintIds.length+' / '+ENCOUNTERS.length+'</p>'+
-      '<p>Философы задают вопросы. Локации на карте открывают отдельную комнату подсказок: в ней нужно найти 3 предмета.</p>'+
-      '<div class="journal-list">'+journal+'</div>'+
-    '</aside>'+
-  '</section>'+
-  '<section class="dialogue-card" id="dialogue">'+renderDialogue()+'</section>';
-
-  document.getElementById('screen-game').innerHTML = html;
-  wireGame();
-}
-
-function renderDialogue(){
-  const enc = state.currentId?encById(state.currentId):null;
-  if(!enc){
-    return '<div class="dialogue-closed"><h1>Выберите действие на карте</h1><p>Нажмите на философа, чтобы поговорить и ответить на вопрос. Нажмите на подпись локации, чтобы отдельно искать подсказку.</p></div>';
-  }
-  const hasHint = state.hintIds.indexOf(enc.id)!==-1;
-  const found = state.hintFound[enc.id]||[];
-  const objTotal = (enc.hint_objects||[]).length;
-  const fb = (state.feedback && state.feedback.encounter_id===enc.id)?state.feedback:null;
-  const isHintRoom = (state.phase==='hint'||state.phase==='hint_done');
-  const sceneClass = isHintRoom ? 'hint-room-card hint-mode' : enc.scene_class;
-
-  let inner='';
-
-  // слой мини-игры (только в фазе hint)
-  if(state.phase==='hint'){
-    let layer='';
-    for(const o of (enc.hint_objects||[])){
-      const f = found.indexOf(o.id)!==-1;
-      layer+='<form data-find data-enc="'+esc(enc.id)+'" data-obj="'+esc(o.id)+'" class="hidden-object object-'+esc(o.id)+(f?' found':'')+'" '+
-        'style="--item-x:'+o.x+'%;--item-y:'+o.y+'%;--item-size:'+o.size+';--item-rotate:'+o.rotate+'deg;">'+
-        '<button type="submit"'+(f?' disabled':'')+' aria-label="'+(f?'Найдено: ':'Найти ')+esc(o.label)+'">'+
-        '<img src="static/img/items/'+esc(o.asset)+'" alt=""><span class="sr-only">'+esc(o.label)+'</span></button></form>';
+    function defaultState() {
+      return { score: 0, correct: 0, partial: 0, wrong: 0, completed: {}, hints: {}, found: {}, answers: {} };
     }
-    inner+='<div class="hidden-object-layer" aria-label="Мини-игра: найдите 3 предмета">'+layer+'</div>';
-  }
-
-  let box='<div class="scene-dialogue-box">';
-  // мета
-  if(isHintRoom) box+='<div class="scene-meta"><span>'+esc(enc.building)+'</span><span>Комната подсказок</span></div>';
-  else box+='<div class="scene-meta"><span>'+esc(enc.building)+'</span><span>'+esc(enc.speaker)+'</span></div>';
-
-  if(state.formError) box+='<div class="form-error compact-error">'+esc(state.formError)+'</div>';
-
-  const completed = state.completedIds.indexOf(enc.id)!==-1;
-
-  if(completed && !fb){
-    const log = state.answerLog.filter(l=>l.encounter_id===enc.id).pop();
-    box+='<p class="dialogue-speaker">'+esc(enc.speaker)+' говорит:</p><h1>Встреча уже завершена</h1>';
-    box+= log?('<p class="dialogue-line">Ваш ответ: '+esc(log.answer)+'</p>'):'<p class="dialogue-line">Ответ уже был отправлен ранее.</p>';
-    if(hasHint) box+='<div class="hint-box"><strong>Найденная подсказка:</strong><p>'+esc(enc.hint)+'</p></div>';
-    box+='<div class="dialogue-actions"><button class="secondary-button" data-close>Вернуться к карте</button></div>';
-  } else if(state.phase==='greeting' && !fb){
-    box+='<p class="dialogue-speaker">'+esc(enc.speaker)+' говорит:</p><h1>Привет, ученик</h1><p class="dialogue-line">'+esc(enc.greeting)+'</p>';
-    if(hasHint) box+='<div class="hint-box"><strong>Подсказка открыта:</strong><p>'+esc(enc.hint)+'</p></div>';
-    box+='<div class="dialogue-actions"><button class="secondary-button" data-ask>Слушать вопрос</button>';
-    if(!hasHint) box+='<p class="small-note inline-note">Подсказку можно найти отдельно: вернитесь на карту и нажмите на подпись «'+esc(enc.building)+'».</p>';
-    box+='<button class="ghost-button" data-close>К карте</button></div>';
-  } else if(state.phase==='hint' && !fb){
-    box+='<p class="dialogue-speaker">Место подсказки: '+esc(enc.building)+'</p><h1>Найдите 3 предмета</h1>';
-    box+='<p class="dialogue-line">Осмотрите комнату и нажмите на спрятанные предметы. Когда найдете все три, откроется подсказка к вопросу философа.</p>';
-    let li='';
-    for(const o of (enc.hint_objects||[])){ const f=found.indexOf(o.id)!==-1; li+='<li class="'+(f?'found':'')+'"><img src="static/img/items/'+esc(o.asset)+'" alt=""><span>'+esc(o.label)+'</span></li>'; }
-    box+='<div class="hidden-targets" aria-label="Что нужно найти"><strong>Найти:</strong><ul>'+li+'</ul></div>';
-    box+='<p class="hidden-progress">Найдено: '+found.length+' / '+objTotal+'</p>';
-    box+='<div class="dialogue-actions"><button class="ghost-button" data-close>К карте</button></div>';
-  } else if(state.phase==='hint_done' && !fb){
-    box+='<p class="dialogue-speaker">Подсказка найдена</p><h1>'+esc(enc.building)+'</h1>';
-    box+='<div class="hint-box"><strong>Подсказка к вопросу: '+esc(enc.speaker)+'</strong><p>'+esc(enc.hint)+'</p></div>';
-    box+='<div class="dialogue-actions"><button class="secondary-button" data-approach="'+esc(enc.id)+'">Пойти к философу</button><button class="ghost-button" data-close>К карте</button></div>';
-  } else if(!fb){
-    box+='<p class="dialogue-speaker">'+esc(enc.speaker)+' задает вопрос:</p><h1>'+esc(enc.question)+'</h1>';
-    if(hasHint) box+='<div class="hint-box"><strong>Подсказка:</strong><p>'+esc(enc.hint)+'</p></div>';
-    else box+='<div class="hint-request"><p>Подсказка находится отдельно на карте, в точке «'+esc(enc.building)+'».</p><button class="ghost-button" data-close>К карте</button></div>';
-    box+='<form class="answer-form scene-answer-form" data-answer-form><label for="answer_text">Ваш ответ</label>'+
-      '<textarea id="answer_text" name="answer_text" rows="4" minlength="3" required placeholder="Напишите ответ своими словами."></textarea>'+
-      '<button class="primary-button" type="submit">Ответить</button></form>';
-  } else {
-    var seal = fb.status==='correct' ? '✓' : (fb.status==='partial' ? '~' : '!');
-    box+='<p class="dialogue-speaker">'+esc(enc.speaker)+' говорит:</p><h1>'+esc(fb.statusLabel)+'</h1>';
-    box+='<div class="verdict-card verdict-'+fb.status+'"><div class="verdict-seal" aria-hidden="true">'+seal+'</div><div>'+
-      '<p class="eyebrow">Ответ сохранён</p><p>'+esc(fb.statusLabel)+'.</p></div></div>';
-    if(hasHint) box+='<div class="hint-box"><strong>Использованная подсказка:</strong><p>'+esc(enc.hint)+'</p></div>';
-    box+='<div class="dialogue-actions"><button class="secondary-button" data-close>Вернуться к карте</button></div>';
-  }
-  box+='</div>';
-  return '<div class="scene-card '+esc(sceneClass)+'">'+inner+box+'</div>';
-}
-
-/* ── интерактив карты (порт game.js) ── */
-function moveStudent(x,y,msg){
-  const st = document.querySelector('[data-student]');
-  const status = document.querySelector('[data-map-status]');
-  if(st){ st.style.setProperty('--student-x',x+'%'); st.style.setProperty('--student-y',y+'%'); st.classList.add('walking');
-    setTimeout(()=>st.classList.remove('walking'),700); }
-  if(status && msg) status.textContent = msg;
-  state.playerX=x; state.playerY=y;
-}
-function wireGame(){
-  const map = document.querySelector('[data-campus-map]');
-  const markers = document.querySelectorAll('[data-marker]');
-  const choiceCard = document.querySelector('[data-choice-card]');
-  const travelForm = document.querySelector('[data-travel-form]');
-  let pending = null; // {kind,id}
-
-  function selectMarker(m){
-    markers.forEach(x=>x.classList.remove('selected'));
-    m.classList.add('selected');
-    if(choiceCard && travelForm){
-      choiceCard.hidden=false;
-      choiceCard.querySelector('[data-choice-role]').textContent=m.dataset.role;
-      choiceCard.querySelector('[data-choice-title]').textContent=m.dataset.title;
-      choiceCard.querySelector('[data-choice-meta]').textContent=m.dataset.meta;
-      choiceCard.querySelector('[data-choice-topic]').textContent=m.dataset.topic;
-      choiceCard.querySelector('[data-choice-button]').textContent=m.dataset.label;
-      pending={kind:m.dataset.kind, id:m.dataset.id, tx:Number(m.dataset.tx), ty:Number(m.dataset.ty)};
+    function loadState() {
+      try { return { ...defaultState(), ...JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') }; }
+      catch { return defaultState(); }
     }
-    const status=document.querySelector('[data-map-status]');
-    if(status) status.textContent = (m.dataset.kind==='hint'?'Выбрано место подсказки: ':'Выбран философ: ')+m.dataset.title+'.';
-  }
-  if(map){
-    map.addEventListener('click',ev=>{
-      if(ev.target.closest('.map-character-form, .map-location-hotspot, button, a, textarea, .map-choice-card')) return;
-      const r=map.getBoundingClientRect();
-      const x=((ev.clientX-r.left)/r.width)*100, y=((ev.clientY-r.top)/r.height)*100;
-      moveStudent(Math.max(3,Math.min(97,x)), Math.max(5,Math.min(95,y)), 'Ученик идет...');
-      save();
+    function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(game.state)); }
+    function pctX(value) { return MAP.w * value / 100; }
+    function pctY(value) { return MAP.h * value / 100; }
+
+    function normalizeText(text) {
+      return String(text || '').toLowerCase().replaceAll('ё','е')
+        .replace(/[^a-zа-я0-9\s-]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+    function meaningTerms(text) {
+      const terms = [];
+      for (const rawWord of normalizeText(text).split(' ')) {
+        if (rawWord.length < 3 || STOP_WORDS.has(rawWord)) continue;
+        let stem = rawWord;
+        for (const ending of COMMON_ENDINGS) {
+          if (stem.endsWith(ending) && stem.length - ending.length >= 4) {
+            stem = stem.slice(0, -ending.length);
+            break;
+          }
+        }
+        terms.push(stem);
+      }
+      return new Set(terms);
+    }
+    function termsOverlap(signalTerms, answerTerms) {
+      let overlap = 0;
+      for (const signalTerm of signalTerms) {
+        for (const answerTerm of answerTerms) {
+          if (answerTerm === signalTerm || answerTerm.startsWith(signalTerm) || signalTerm.startsWith(answerTerm)) {
+            overlap += 1;
+            break;
+          }
+        }
+      }
+      return overlap;
+    }
+    function signalPresent(signal, normalizedAnswer, answerTerms) {
+      const normalizedSignal = normalizeText(signal);
+      if (normalizedSignal && normalizedAnswer.includes(normalizedSignal)) return true;
+      const signalTerms = meaningTerms(signal);
+      if (!signalTerms.size) return false;
+      const overlap = termsOverlap(signalTerms, answerTerms);
+      if (signalTerms.size <= 2) return overlap === signalTerms.size;
+      return overlap >= 3 || overlap / signalTerms.size >= 0.6;
+    }
+    function evaluateAnswer(answer, encounter) {
+      const normalized = normalizeText(answer);
+      const terms = meaningTerms(answer);
+      const rubric = encounter.semantic_rubric || { correct_min: 1, partial_min: 1, points: [] };
+      const covered = [];
+      for (const point of rubric.points || []) {
+        if ((point.signals || []).some(signal => signalPresent(signal, normalized, terms))) {
+          covered.push(point.label);
+        }
+      }
+      const correctMin = rubric.correct_min || Math.max(1, (rubric.points || []).length - 1);
+      const partialMin = rubric.partial_min || 1;
+      if (covered.length >= correctMin) return { status: 'correct', label: 'Правильно', points: POINTS_PER_CORRECT };
+      if (covered.length >= partialMin) return { status: 'partial', label: 'Частично', points: POINTS_PER_PARTIAL };
+      return { status: 'wrong', label: 'Неправильно', points: 0 };
+    }
+
+    function isBlocked(x, y) {
+      const px = x / MAP.w * 100;
+      const py = y / MAP.h * 100;
+      if (px < 2 || px > 98 || py < 4 || py > 96) return true;
+      return BLOCKED.some(z => px >= z.x1 && px <= z.x2 && py >= z.y1 && py <= z.y2);
+    }
+    function tryMove(dx, dy) {
+      const nx = game.player.x + dx;
+      const ny = game.player.y + dy;
+      if (!isBlocked(nx, game.player.y)) game.player.x = nx;
+      if (!isBlocked(game.player.x, ny)) game.player.y = ny;
+    }
+    function overlayOpen() { return !els.modal.classList.contains('hidden'); }
+
+    function buildEntities() {
+      game.entities = [];
+      els.entities.innerHTML = '';
+      els.minimap.querySelectorAll('.mini-dot').forEach(dot => dot.remove());
+      for (const encounter of ENCOUNTERS) {
+        addEntity({
+          kind: 'philosopher',
+          id: 'ph-' + encounter.id,
+          encounter,
+          x: pctX(encounter.map_x),
+          y: pctY(encounter.map_y),
+          radius: 120
+        });
+        addEntity({
+          kind: 'hint',
+          id: 'hint-' + encounter.id,
+          encounter,
+          x: pctX(encounter.entry_x),
+          y: pctY(encounter.entry_y),
+          radius: 105
+        });
+      }
+    }
+
+    function addEntity(entity) {
+      const isPhilosopher = entity.kind === 'philosopher';
+      const done = isPhilosopher ? game.state.completed[entity.encounter.id] : game.state.hints[entity.encounter.id];
+      const node = document.createElement('div');
+      node.className = isPhilosopher ? 'entity' : 'hint-entity';
+      if (done) node.classList.add('done');
+      node.style.left = entity.x + 'px';
+      node.style.top = entity.y + 'px';
+      node.style.zIndex = String(Math.round(entity.y));
+      node.dataset.entityId = entity.id;
+      node.innerHTML = isPhilosopher
+        ? `<div class="npc-sprite ${entity.encounter.avatar_class}"><span class="npc-head"></span><span class="npc-body"></span></div>`
+        : `<div class="hint-marker"><span>${escapeHtml(entity.encounter.building)}</span><small>${done ? 'открыта' : 'подсказка'}</small></div>`;
+      els.entities.appendChild(node);
+      entity.node = node;
+      game.entities.push(entity);
+
+      const dot = document.createElement('div');
+      dot.className = 'mini-dot';
+      dot.style.left = (entity.x / MAP.w * 100) + '%';
+      dot.style.top = (entity.y / MAP.h * 100) + '%';
+      dot.style.background = isPhilosopher ? 'var(--gold)' : 'var(--green)';
+      els.minimap.appendChild(dot);
+    }
+
+    function escapeHtml(text) {
+      return String(text).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+    }
+
+    function updateHud() {
+      const answered = Object.keys(game.state.completed).length;
+      const hints = Object.keys(game.state.hints).length;
+      els.scoreHud.textContent = 'Очки: ' + game.state.score;
+      els.progressHud.textContent = `Ответы: ${answered} / ${ENCOUNTERS.length}`;
+      els.hintHud.textContent = `Подсказки: ${hints} / ${ENCOUNTERS.length}`;
+    }
+
+    function updateNear() {
+      let best = null;
+      let bestDist = Infinity;
+      for (const entity of game.entities) {
+        const dist = Math.hypot(entity.x - game.player.x, entity.y - game.player.y);
+        entity.node.classList.remove('near');
+        if (dist < entity.radius && dist < bestDist) {
+          best = entity;
+          bestDist = dist;
+        }
+      }
+      game.near = best;
+      if (best) {
+        best.node.classList.add('near');
+        if (best.kind === 'philosopher') {
+          els.prompt.innerHTML = `<b>${escapeHtml(best.encounter.speaker)}</b>: нажмите <b>E</b>, чтобы поговорить.`;
+        } else {
+          els.prompt.innerHTML = `<b>${escapeHtml(best.encounter.building)}</b>: нажмите <b>E</b>, чтобы войти за подсказкой.`;
+        }
+      } else {
+        els.prompt.textContent = 'Идите к философу или месту подсказки. Рядом появится подсказка: нажмите E.';
+      }
+    }
+
+    function updateCamera() {
+      const vw = els.viewport.clientWidth;
+      const vh = els.viewport.clientHeight;
+      game.cam.x = Math.max(0, Math.min(MAP.w - vw, game.player.x - vw / 2));
+      game.cam.y = Math.max(0, Math.min(MAP.h - vh, game.player.y - vh / 2));
+      els.world.style.transform = `translate(${-game.cam.x}px, ${-game.cam.y}px)`;
+      els.player.style.left = game.player.x + 'px';
+      els.player.style.top = game.player.y + 'px';
+      els.player.classList.toggle('walking', game.player.moving);
+      els.miniPlayer.style.left = (game.player.x / MAP.w * 100) + '%';
+      els.miniPlayer.style.top = (game.player.y / MAP.h * 100) + '%';
+    }
+
+    function loop(now) {
+      if (!game.started) return;
+      const dt = Math.min((now - (game.lastTime || now)) / 1000, 0.05);
+      game.lastTime = now;
+      let dx = 0;
+      let dy = 0;
+      if (!overlayOpen()) {
+        if (game.keys.KeyA || game.keys.ArrowLeft) dx -= 1;
+        if (game.keys.KeyD || game.keys.ArrowRight) dx += 1;
+        if (game.keys.KeyW || game.keys.ArrowUp) dy -= 1;
+        if (game.keys.KeyS || game.keys.ArrowDown) dy += 1;
+      }
+      const len = Math.hypot(dx, dy);
+      game.player.moving = false;
+      if (len > 0) {
+        game.target = null;
+        const speed = 285;
+        tryMove(dx / len * speed * dt, dy / len * speed * dt);
+        game.player.moving = true;
+      } else if (game.target && !overlayOpen()) {
+        const tx = game.target.x - game.player.x;
+        const ty = game.target.y - game.player.y;
+        const dist = Math.hypot(tx, ty);
+        if (dist < 8) {
+          game.target = null;
+        } else {
+          const speed = 255;
+          const step = Math.min(speed * dt, dist);
+          tryMove(tx / dist * step, ty / dist * step);
+          game.player.moving = true;
+        }
+      }
+      updateNear();
+      updateCamera();
+      game.raf = requestAnimationFrame(loop);
+    }
+
+    function startGame(reset = false) {
+      if (reset) {
+        game.state = defaultState();
+        saveState();
+      }
+      els.intro.classList.add('hidden');
+      els.game.classList.remove('hidden');
+      game.started = true;
+      buildEntities();
+      updateHud();
+      setTimeout(() => els.viewport.focus(), 0);
+      cancelAnimationFrame(game.raf);
+      game.lastTime = 0;
+      game.raf = requestAnimationFrame(loop);
+    }
+
+    function interact() {
+      if (!game.near || overlayOpen()) return;
+      if (game.near.kind === 'philosopher') openPhilosopher(game.near.encounter);
+      else openHintRoom(game.near.encounter);
+    }
+
+    function openPhilosopher(encounter) {
+      const hasHint = !!game.state.hints[encounter.id];
+      const completed = !!game.state.completed[encounter.id];
+      const saved = game.state.answers[encounter.id];
+      els.modal.innerHTML = `
+        <article class="modal-card">
+          <div class="scene ${encounter.scene_class || 'scene-library'}">
+            <div class="scene-box">
+              <p class="eyebrow">${escapeHtml(encounter.role)}</p>
+              <h2>${escapeHtml(encounter.speaker)}</h2>
+              <p>${escapeHtml(encounter.greeting)}</p>
+              ${hasHint ? `<div class="hint-box"><b>Подсказка:</b><br>${escapeHtml(encounter.hint)}</div>` : `<div class="hint-box">Подсказка находится отдельно на карте: <b>${escapeHtml(encounter.building)}</b>.</div>`}
+              <div class="hint-box"><b>Вопрос:</b><br>${escapeHtml(encounter.question)}</div>
+              ${completed ? `<div class="verdict ${saved?.status || 'partial'}"><b>Ответ уже сохранён:</b> ${escapeHtml(saved?.label || 'Сохранено')}</div>` : `
+                <label class="eyebrow" for="answerText">Ваш ответ</label>
+                <textarea id="answerText" placeholder="Напишите ответ своими словами."></textarea>
+                <div id="answerResult"></div>
+              `}
+              <div class="dialogue-actions">
+                ${completed ? '' : '<button class="primary-btn" id="answerBtn" type="button">Ответить</button>'}
+                <button class="secondary-btn" id="closeModalBtn" type="button">Вернуться к карте</button>
+              </div>
+            </div>
+          </div>
+        </article>`;
+      els.modal.classList.remove('hidden');
+      document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+      const answerBtn = document.getElementById('answerBtn');
+      if (answerBtn) {
+        answerBtn.addEventListener('click', () => {
+          const text = document.getElementById('answerText').value.trim();
+          const box = document.getElementById('answerResult');
+          if (text.length < 3) {
+            box.innerHTML = '<div class="verdict wrong">Напишите ответ хотя бы несколькими словами.</div>';
+            return;
+          }
+          const result = evaluateAnswer(text, encounter);
+          game.state.score += result.points;
+          if (result.status === 'correct') game.state.correct += 1;
+          else if (result.status === 'partial') game.state.partial += 1;
+          else game.state.wrong += 1;
+          game.state.completed[encounter.id] = true;
+          game.state.answers[encounter.id] = { text, status: result.status, label: result.label };
+          saveState();
+          updateHud();
+          buildEntities();
+          box.innerHTML = `<div class="verdict ${result.status}"><b>Ответ сохранён.</b><br>${result.label}.</div>`;
+          answerBtn.disabled = true;
+        });
+      }
+    }
+
+    function openHintRoom(encounter) {
+      const found = new Set(game.state.found[encounter.id] || []);
+      const objects = encounter.hint_objects || [];
+      els.modal.innerHTML = `
+        <article class="modal-card">
+          <div class="hint-room" id="hintRoom">
+            ${objects.map(obj => `
+              <button class="hidden-object object-${obj.id} ${found.has(obj.id) ? 'found' : ''}" data-object-id="${obj.id}" style="--x:${obj.x}%; --y:${obj.y}%; --size:${obj.size}; --rotate:${obj.rotate}deg;" aria-label="Найти ${escapeHtml(obj.label)}">
+                <img src="static/img/items/${escapeHtml(obj.asset)}" alt="">
+              </button>
+            `).join('')}
+            <div class="hint-panel">
+              <p class="eyebrow">Комната подсказки</p>
+              <h2>${escapeHtml(encounter.building)}</h2>
+              <p>Найдите три предмета. После этого откроется подсказка к вопросу философа.</p>
+              <div class="object-list" id="objectList">
+                ${objects.map(obj => `<span data-label-id="${obj.id}" class="${found.has(obj.id) ? 'found' : ''}">${escapeHtml(obj.label)}</span>`).join('')}
+              </div>
+              <div id="hintResult">${game.state.hints[encounter.id] ? `<div class="hint-box"><b>Подсказка:</b><br>${escapeHtml(encounter.hint)}</div>` : ''}</div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <span id="foundCount">Найдено: ${found.size} / ${objects.length}</span>
+            <button class="secondary-btn" id="closeModalBtn" type="button">Вернуться к карте</button>
+          </div>
+        </article>`;
+      els.modal.classList.remove('hidden');
+      document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+      els.modal.querySelectorAll('[data-object-id]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.objectId;
+          const current = new Set(game.state.found[encounter.id] || []);
+          current.add(id);
+          game.state.found[encounter.id] = Array.from(current);
+          btn.classList.add('found');
+          const label = els.modal.querySelector(`[data-label-id="${CSS.escape(id)}"]`);
+          if (label) label.classList.add('found');
+          document.getElementById('foundCount').textContent = `Найдено: ${current.size} / ${objects.length}`;
+          if (current.size >= objects.length) {
+            game.state.hints[encounter.id] = true;
+            saveState();
+            updateHud();
+            buildEntities();
+            document.getElementById('hintResult').innerHTML = `<div class="hint-box"><b>Подсказка открыта:</b><br>${escapeHtml(encounter.hint)}</div>`;
+          } else {
+            saveState();
+          }
+        });
+      });
+    }
+
+    function closeModal() {
+      els.modal.classList.add('hidden');
+      els.modal.innerHTML = '';
+      els.viewport.focus();
+    }
+
+    els.startBtn.addEventListener('click', () => startGame(false));
+    els.resetBtn.addEventListener('click', () => {
+      if (confirm('Начать игру заново?')) {
+        game.player.x = pctX(8);
+        game.player.y = pctY(82);
+        startGame(true);
+      }
     });
-  }
-  markers.forEach(m=>m.addEventListener('click',()=>selectMarker(m)));
-  if(travelForm){
-    travelForm.addEventListener('submit',ev=>{ ev.preventDefault(); if(!pending) return;
-      moveStudent(pending.tx, pending.ty, 'Ученик идет к выбранной точке...');
-      const p=pending; setTimeout(()=>{ if(p.kind==='hint') hintLocation(p.id); else approach(p.id); }, 720);
+    els.viewport.addEventListener('click', event => {
+      if (overlayOpen()) return;
+      const rect = els.viewport.getBoundingClientRect();
+      const x = event.clientX - rect.left + game.cam.x;
+      const y = event.clientY - rect.top + game.cam.y;
+      if (!isBlocked(x, y)) game.target = { x, y };
     });
-  }
-  // диалоговые кнопки
-  const sg=document.getElementById('screen-game');
-  sg.querySelectorAll('[data-ask]').forEach(b=>b.onclick=()=>askQuestion());
-  sg.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>closeDialogue());
-  sg.querySelectorAll('[data-approach]').forEach(b=>b.onclick=()=>approach(b.dataset.approach));
-  sg.querySelectorAll('[data-find]').forEach(f=>f.addEventListener('submit',ev=>{ev.preventDefault(); findObject(f.dataset.enc, f.dataset.obj);}));
-  const af=sg.querySelector('[data-answer-form]');
-  if(af) af.addEventListener('submit',ev=>{ev.preventDefault(); submitAnswer(af.querySelector('textarea').value);});
-}
-
-/* ── экран: финал ── */
-function renderFinal(){
-  const percent=calcPercent(state.score,state.answered);
-  let recs = state.mistakes.filter((v,i,a)=>a.indexOf(v)===i);
-  if(!recs.length && state.answered>0) recs=['Материал усвоен хорошо. Для закрепления попробуйте открыть карту заново и пройти философов в другом порядке.'];
-  else if(state.answered===0) recs=['Откройте карту и поговорите хотя бы с одним философом.'];
-  let recLi=''; recs.forEach(r=>recLi+='<li>'+esc(r)+'</li>');
-  let log='';
-  if(state.answerLog.length){
-    let items=''; state.answerLog.forEach(it=>{ const st=it.status==='correct'?'Правильно':(it.status==='partial'?'Частично':'Не засчитано'); items+='<article class="log-item"><strong>'+esc(it.speaker)+': '+esc(it.topic)+'</strong><p>'+st+'</p></article>'; });
-    log='<div class="answer-log"><h2>Ваш маршрут</h2>'+items+'</div>';
-  }
-  document.getElementById('screen-final').innerHTML=
-  '<section class="result-panel final-panel">'+
-    '<p class="eyebrow">Маршрут завершен</p>'+
-    '<h1>'+esc(calcTitle(percent))+'</h1>'+
-    '<div class="result-score">'+percent+'%</div>'+
-    '<p>Баллы: '+state.score+'. Засчитано ответов: '+state.correct+' из '+state.answered+'.</p>'+
-    '<p>Пройдено встреч: '+state.answered+' из '+ENCOUNTERS.length+'.</p>'+
-    '<div class="recommendations"><h2>Что повторить</h2><ul>'+recLi+'</ul></div>'+
-    log+
-    '<div class="actions-row centered"><button class="secondary-button" data-go="game">Вернуться к маршруту</button><button class="ghost-button" data-reset-final>Начать заново</button></div>'+
-  '</section>';
-  document.querySelectorAll('#screen-final [data-go="game"]').forEach(b=>b.onclick=()=>{openGame();});
-  document.querySelectorAll('#screen-final [data-reset-final]').forEach(b=>b.onclick=()=>resetGame());
-}
-
-/* ── глобальные обработчики навигации ── */
-document.addEventListener('click', ev=>{
-  const go = ev.target.closest('[data-go]');
-  if(go){ ev.preventDefault(); const t=go.dataset.go; if(t==='game'){ if(!state.started){startGame();} else openGame(); } else if(t==='final'){ renderFinal(); show('final'); } else { renderIndex(); show('index'); } return; }
-  const start = ev.target.closest('[data-start]');
-  if(start){ ev.preventDefault(); startGame(); return; }
-});
-document.addEventListener('submit', ev=>{
-  if(ev.target.matches('[data-reset]')){ ev.preventDefault(); resetGame(); }
-});
-
-/* ── старт ── */
-renderIndex(); renderFooter();
-if(state.started){ renderGame(); show('game'); } else { show('index'); }
-</script>
+    window.addEventListener('keydown', event => {
+      game.keys[event.code] = true;
+      if (['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(event.code)) event.preventDefault();
+      if ((event.code === 'KeyE' || event.code === 'Enter' || event.code === 'NumpadEnter') && !overlayOpen()) {
+        event.preventDefault();
+        interact();
+      }
+      if (event.code === 'Escape' && overlayOpen()) closeModal();
+    });
+    window.addEventListener('keyup', event => { game.keys[event.code] = false; });
+    window.addEventListener('resize', updateCamera);
+    window.__philosophyGame = { game, interact, updateNear, updateCamera, openPhilosopher, openHintRoom, closeModal };
+  </script>
 </body>
 </html>
