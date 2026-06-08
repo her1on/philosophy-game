@@ -130,7 +130,8 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 .phil-school{font-family:'Cinzel',serif;font-size:9px;color:var(--stone);letter-spacing:.5px;text-transform:uppercase;opacity:.8}
 
 /* Quote */
-.phil-quote{font-style:italic;font-size:12.5px;color:#6a2c18;padding:8px 12px 8px 14px;border-left:3px solid var(--gold);background:linear-gradient(to right,rgba(201,162,39,.1),rgba(201,162,39,.02));line-height:1.6}
+.phil-quote{position:relative;font-style:italic;font-size:12.5px;color:#6a2c18;padding:8px 12px 8px 14px;border-left:3px solid var(--gold);background:linear-gradient(to right,rgba(201,162,39,.1),rgba(201,162,39,.02));line-height:1.6;margin-top:16px}
+.phil-quote::before{content:'Случайная цитата философа';position:absolute;top:-14px;left:14px;font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-style:normal;opacity:.8}
 
 /* Tip */
 .phil-tip{font-size:11px;color:#5a3820;line-height:1.55;padding:7px 10px;background:rgba(90,21,8,.05);border-top:1px solid rgba(201,162,39,.2);border-bottom:1px solid rgba(201,162,39,.2)}
@@ -157,7 +158,8 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 .journal-ttl::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--gold),transparent)}
 .jrow{display:flex;justify-content:space-between;align-items:flex-start;padding:7px 4px;border-bottom:1px solid rgba(180,140,80,.18);font-size:13px;gap:6px;cursor:default;transition:background .15s,padding-left .15s;border-radius:1px}
 .jrow.avail{cursor:pointer}
-.jrow.avail:hover{background:rgba(201,162,39,.1);padding-left:8px}
+.jrow.avail:hover{background:rgba(201,162,39,.14);padding-left:10px;box-shadow:inset 3px 0 0 var(--gold)}
+.jrow.avail:hover .jrow-st::after{content:' →'}
 .jrow-name{color:var(--ink);flex:1;min-width:0;line-height:1.3;font-size:13px}
 .jrow-desc{display:block;font-size:11px;color:var(--stone);font-style:italic;margin-top:2px;opacity:.8}
 .jrow-st{font-family:'Cinzel',serif;font-size:10px;white-space:nowrap;flex-shrink:0;padding-top:1px}
@@ -208,13 +210,12 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 @keyframes spin-ring{to{transform:rotate(360deg)}}
 
 /* ── Question card reveal ── */
-@keyframes q-in{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:translateX(0)}}
-.q-reveal .phil-card{animation:q-in .3s ease-out both 0s}
-.q-reveal .phil-quote{animation:q-in .3s ease-out both .07s}
-.q-reveal .phil-tip{animation:q-in .3s ease-out both .12s}
-.q-reveal .q-section-lbl{animation:q-in .3s ease-out both .16s}
-.q-reveal .q-text{animation:q-in .3s ease-out both .2s}
-.q-reveal .opts{animation:q-in .3s ease-out both .25s}
+@keyframes q-in{from{opacity:0;transform:translateX(22px) scale(.97)}to{opacity:1;transform:translateX(0) scale(1)}}
+.q-reveal .phil-card{animation:q-in .35s cubic-bezier(.22,1,.36,1) both 0s}
+.q-reveal .phil-quote{animation:q-in .35s cubic-bezier(.22,1,.36,1) both .08s}
+.q-reveal .q-section-lbl{animation:q-in .35s cubic-bezier(.22,1,.36,1) both .15s}
+.q-reveal .q-text{animation:q-in .35s cubic-bezier(.22,1,.36,1) both .21s}
+.q-reveal .opts{animation:q-in .35s cubic-bezier(.22,1,.36,1) both .28s}
 
 /* ── Answer button effects ── */
 @keyframes opt-pop{0%{transform:translateX(3px)}40%{transform:scale(1.04)}100%{transform:scale(1)}}
@@ -358,11 +359,11 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 .char-card{flex:1;padding:10px 8px 10px;border:1.5px solid rgba(201,162,39,.28);background:rgba(0,0,0,.3);cursor:pointer;text-align:center;transition:.2s;border-radius:6px;user-select:none}
 .char-card:hover{border-color:rgba(201,162,39,.7);background:rgba(201,162,39,.09);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.4)}
 .char-card.selected{border-color:var(--gold);background:rgba(201,162,39,.14);box-shadow:0 0 22px rgba(201,162,39,.32),inset 0 0 14px rgba(201,162,39,.08)}
-.char-av-wrap{height:68px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:6px}
-.char-av{display:block;image-rendering:pixelated;image-rendering:crisp-edges;background-repeat:no-repeat;filter:drop-shadow(0 0 6px rgba(201,162,39,.35))}
-.char-nm{font-family:'Cinzel',serif;font-size:11px;color:#e8c547;letter-spacing:.6px;margin-bottom:4px;line-height:1.35}
-.char-cls{font-size:10px;color:#c9a227;opacity:.75;font-style:italic;margin-bottom:6px;line-height:1.4}
-.char-dsc{font-size:10px;color:#e8d4a0;opacity:.65;line-height:1.6}
+.char-av-wrap{height:90px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:6px}
+.char-av{display:block;image-rendering:pixelated;image-rendering:crisp-edges;background-repeat:no-repeat;filter:drop-shadow(0 0 6px rgba(201,162,39,.35));position:relative;overflow:hidden}
+.char-nm{font-family:'Cinzel',serif;font-size:13px;color:#e8c547;letter-spacing:.6px;margin-bottom:4px;line-height:1.35}
+.char-cls{font-size:12px;color:#c9a227;opacity:.75;font-style:italic;margin-bottom:6px;line-height:1.4}
+.char-dsc{font-size:11px;color:#e8d4a0;opacity:.65;line-height:1.6}
 .char-card.locked{opacity:.45;cursor:default;pointer-events:none;position:relative}
 .char-card.locked::after{content:'Скоро';position:absolute;top:5px;right:5px;font-family:'Cinzel',serif;font-size:8px;letter-spacing:1px;color:#c9a227;background:rgba(0,0,0,.55);padding:2px 6px;border:1px solid rgba(201,162,39,.35);border-radius:3px}
 #char-preview{display:flex;flex-direction:column;align-items:center;gap:8px;margin:0 0 22px}
@@ -391,21 +392,36 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 /* ── Location screen ── */
 #loc-screen{position:fixed;inset:0;z-index:800;display:none;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;will-change:opacity}
 #loc-screen.complete-mode{justify-content:center}
-#loc-screen.show{display:flex;animation:loc-screen-in .12s ease-out both}
-#loc-screen.hiding{animation:loc-screen-out .3s ease-in both}
-@keyframes loc-screen-in{from{opacity:0}to{opacity:1}}
-@keyframes loc-screen-out{from{opacity:1}to{opacity:0}}
+#loc-screen.show{display:flex;animation:loc-screen-in .65s cubic-bezier(.4,0,.2,1) both}
+#loc-screen.hiding{animation:loc-screen-out .45s cubic-bezier(.4,0,.8,1) both}
+@keyframes loc-screen-in{
+  0%{clip-path:circle(3% at 50% 44%);opacity:0;filter:brightness(5) blur(6px)}
+  22%{opacity:1;filter:brightness(2) blur(2px)}
+  60%{filter:brightness(1.05) blur(0px)}
+  100%{clip-path:circle(150% at 50% 44%);filter:brightness(1) blur(0)}
+}
+@keyframes loc-screen-out{
+  0%{clip-path:circle(150% at 50% 44%);opacity:1;filter:blur(0)}
+  65%{opacity:1;filter:blur(1px)}
+  100%{clip-path:circle(2% at 50% 44%);opacity:0;filter:blur(5px)}
+}
+#loc-screen.show::before{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(circle at 50% 44%,rgba(255,220,100,.7) 0%,rgba(201,162,39,.25) 30%,transparent 65%);animation:loc-gold-flash .7s cubic-bezier(.4,0,.2,1) both}
+@keyframes loc-gold-flash{0%{opacity:1}40%{opacity:.4}100%{opacity:0}}
 #loc-bg{position:absolute;inset:-10px;background-size:cover;background-position:center;background-repeat:no-repeat;z-index:0;animation:loc-zoom 14s ease-out forwards;will-change:transform,opacity;backface-visibility:hidden}
 @keyframes loc-zoom{from{transform:scale(1.1) translateZ(0);opacity:.4}to{transform:scale(1) translateZ(0);opacity:1}}
-#loc-screen-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(4,1,0,.97) 0%,rgba(8,3,1,.75) 38%,rgba(0,0,0,.38) 75%,rgba(0,0,0,.15) 100%);z-index:1}
+#loc-screen-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(4,1,0,.98) 0%,rgba(6,2,0,.7) 30%,rgba(0,0,0,.25) 65%,rgba(0,0,0,.1) 100%);z-index:1}
 #loc-content{position:relative;z-index:2;width:100%;max-width:620px;padding:32px 40px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;will-change:transform,opacity}
-#loc-screen.show #loc-content{animation:loc-up .18s .06s ease-out both}
+#loc-screen.show #loc-content{animation:loc-up .5s .3s cubic-bezier(.22,1,.36,1) both}
 #loc-era-big{display:none}
-@keyframes loc-up{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
-#loc-icon-big{font-size:54px;line-height:1;filter:drop-shadow(0 0 18px rgba(201,162,39,.75));margin-bottom:4px}
-#loc-title-big{font-family:'Cinzel',serif;font-size:30px;letter-spacing:4px;color:#e8c547;text-transform:uppercase;text-shadow:0 2px 24px rgba(201,162,39,.65)}
-#loc-phil-big{font-family:'Cinzel',serif;font-size:13px;letter-spacing:1.5px;color:#e8d4a0;opacity:.8}
-#loc-desc-big{font-size:13.5px;color:#e8d4a0;font-style:italic;line-height:1.8;max-width:460px;opacity:.75;margin-top:6px;padding:0 10px}
+@keyframes loc-up{
+  0%{opacity:0;transform:scale(.82) translateY(30px)}
+  55%{transform:scale(1.03) translateY(-6px)}
+  100%{opacity:1;transform:scale(1) translateY(0)}
+}
+#loc-icon-big{font-size:58px;line-height:1;filter:drop-shadow(0 0 20px rgba(201,162,39,.9));margin-bottom:4px}
+#loc-title-big{font-family:'Cinzel',serif;font-size:34px;letter-spacing:4px;color:#f8e060;text-transform:uppercase;text-shadow:2px 2px 0 rgba(0,0,0,.9),-1px -1px 0 rgba(0,0,0,.9),1px -1px 0 rgba(0,0,0,.9),-1px 1px 0 rgba(0,0,0,.9),0 0 24px rgba(201,162,39,.6)}
+#loc-phil-big{font-family:'Cinzel',serif;font-size:15px;letter-spacing:1.5px;color:#f5e8c0;text-shadow:1px 1px 0 rgba(0,0,0,.95),-1px -1px 0 rgba(0,0,0,.8),0 0 14px rgba(201,162,39,.25)}
+#loc-desc-big{font-size:14.5px;color:#f5e8c0;font-style:italic;line-height:1.8;max-width:460px;margin-top:6px;padding:0 10px;text-shadow:1px 1px 0 rgba(0,0,0,.95),-1px 0 0 rgba(0,0,0,.8),0 1px 0 rgba(0,0,0,.8)}
 #loc-trial-btn{margin-top:20px;font-family:'Cinzel',serif;font-size:13px;letter-spacing:2.5px;color:#1a0a02;background:linear-gradient(135deg,#e8c547,var(--gold));border:none;cursor:pointer;padding:16px 52px;text-transform:uppercase;transition:.25s;box-shadow:0 4px 28px rgba(201,162,39,.55);border-radius:2px}
 #loc-trial-btn:hover{transform:translateY(-2px);box-shadow:0 10px 40px rgba(201,162,39,.75)}
 #loc-back-btn{background:transparent;border:1px solid rgba(201,162,39,.28);color:rgba(201,162,39,.55);font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;cursor:pointer;padding:10px 28px;text-transform:uppercase;transition:.22s;margin-top:6px;border-radius:2px}
@@ -548,7 +564,7 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
             </div>
           </div>
           <div class="phil-quote" id="phil-quote">«Цитата»</div>
-          <div class="phil-tip" id="phil-tip">Справка</div>
+
           <div class="q-section-lbl" id="q-num-lbl">Вопрос</div>
           <p class="q-text" id="q-text">Вопрос</p>
           <div class="opts" id="opts"></div>
@@ -645,11 +661,13 @@ body{font-family:'Crimson Text',Georgia,serif;background:#1a0e06;color:var(--ink
 
 <script>
 const CHARACTERS=[
-  {id:'ariston', name:'Аристон из Коринфа', sub:'странник в поисках мудрости',  icon:'🎓', sprite:'animation.png',        cols:3, rows:4, mapSize:80, previewSize:96, cardH:56, unlocked:true,
+  {id:'ariston', name:'Аристон из Коринфа', sub:'странник в поисках мудрости',  icon:'🎓', sprite:'перс1/1.png', cols:1, rows:1, mapSize:80, previewSize:96, cardH:82, unlocked:true,
+   spritesDir:'перс1/', spriteFrames:4, dirBase:{down:0,up:4,right:12,left:8},
    desc:'Юный философ из Коринфа. Задаёт вопросы и убеждён, что незнание — начало мудрости.'},
-  {id:'kallia',  name:'Каллия Афинская',    sub:'хранительница знаний',         icon:'📜', sprite:'girl.png',             cols:4, rows:4, mapSize:95, previewSize:96, unlocked:true,
+  {id:'kallia',  name:'Каллия Афинская',    sub:'хранительница знаний',         icon:'📜', sprite:'girl.png',             cols:4, rows:4, mapSize:68, previewSize:96, cardH:82, unlocked:true,
    desc:'Учёная из Афин, знаток рукописей. Находит смысл в словах великих мыслителей.'},
-  {id:'pyrr',    name:'Пирр Эпирский',      sub:'воин, познавший тщету побед',  icon:'⚔️', sprite:'character3_sheet.png', cols:3, rows:4, mapSize:92, previewSize:96, dirMap:{down:3,left:1,right:2,up:0}, downRow:3, unlocked:true,
+  {id:'pyrr',    name:'Пирр Эпирский',      sub:'воин, познавший тщету побед',  icon:'⚔️', sprite:'перс3/1.png', cols:1, rows:1, mapSize:80, previewSize:96, cardH:96, unlocked:true,
+   spritesDir:'перс3/', spriteFrames:4, dirBase:{down:0,up:4,right:12,left:8},
    desc:'Вернулся с войны. Ищет у философов ответ: ради чего всё это было нужно?'}
 ];
 let selectedChar=CHARACTERS[0];
@@ -670,22 +688,44 @@ var _resetMode=false;
       +'<div class="char-cls">'+ch.sub+'</div>'
       +'<div class="char-dsc">'+ch.desc+'</div>';
     (function(charData){
-      var img=new Image();
-      img.onload=function(){
-        var fw=Math.floor(img.naturalWidth/charData.cols);
-        var fh=Math.floor(img.naturalHeight/charData.rows);
-        var th=charData.cardH||68,w=Math.round(th*fw/fh),h=th;
-        var downRow=charData.downRow||0;
-        var el=document.getElementById('char-av-'+charData.id);
-        if(!el)return;
-        el.style.backgroundImage='url('+charData.sprite+')';
-        el.style.backgroundSize=(w*charData.cols)+'px '+(h*charData.rows)+'px';
-        el.style.backgroundPosition='0px '+(-downRow*h)+'px';
-        el.style.width=w+'px';
-        el.style.height=h+'px';
-        _cardAnims.push({el:el,w:w,h:h,cols:charData.cols,downRow:downRow,frame:0,t:0});
-      };
-      img.src=charData.sprite;
+      if(charData.spritesDir){
+        var dir=charData.spritesDir,sf=charData.spriteFrames||4;
+        var base=(charData.dirBase&&charData.dirBase.down)||0;
+        var img0=new Image();
+        img0.onload=function(){
+          var el=document.getElementById('char-av-'+charData.id);
+          if(!el)return;
+          var th=charData.cardH||82,w=Math.round(th*img0.naturalWidth/img0.naturalHeight),h=th;
+          el.style.width=w+'px';el.style.height=h+'px';
+          var frs=[];
+          for(var i=0;i<sf;i++){
+            var fd=document.createElement('div');
+            fd.style.cssText='position:absolute;top:0;left:0;width:'+w+'px;height:'+h+'px;'
+              +'background-image:url('+dir+(base+i+1)+'.png);'
+              +'background-size:'+w+'px '+h+'px;background-repeat:no-repeat;'
+              +'image-rendering:pixelated;image-rendering:crisp-edges;opacity:'+(i===0?'1':'0')+';';
+            el.appendChild(fd);frs.push(fd);
+          }
+          _cardAnims.push({indiv:true,frames:frs,frame:0,lastT:0});
+        };
+        img0.src=dir+'1.png';
+      } else {
+        var img=new Image();
+        img.onload=function(){
+          var el=document.getElementById('char-av-'+charData.id);
+          if(!el)return;
+          var fw=Math.floor(img.naturalWidth/charData.cols);
+          var fh=Math.floor(img.naturalHeight/charData.rows);
+          var th=charData.cardH||82,w=Math.round(th*fw/fh),h=th;
+          var downRow=charData.downRow||0;
+          el.style.backgroundImage='url('+charData.sprite+')';
+          el.style.backgroundSize=(w*charData.cols)+'px '+(h*charData.rows)+'px';
+          el.style.backgroundPosition='0px '+(-downRow*h)+'px';
+          el.style.width=w+'px';el.style.height=h+'px';
+          _cardAnims.push({el:el,w:w,h:h,cols:charData.cols,downRow:downRow,frame:0,lastT:0});
+        };
+        img.src=charData.sprite;
+      }
     })(ch);
     if(ch.unlocked){
       card.addEventListener('click',function(){
@@ -703,8 +743,15 @@ var _resetMode=false;
       if(!s.lastT)s.lastT=now;
       if(now-s.lastT>140){
         s.lastT=now;
-        s.frame=(s.frame+1)%s.cols;
-        s.el.style.backgroundPosition=(-s.frame*s.w)+'px '+(-s.downRow*s.h)+'px';
+        if(s.indiv){
+          var prev=s.frame;
+          s.frame=(s.frame+1)%s.frames.length;
+          s.frames[prev].style.opacity='0';
+          s.frames[s.frame].style.opacity='1';
+        } else {
+          s.frame=(s.frame+1)%s.cols;
+          s.el.style.backgroundPosition=(-s.frame*s.w)+'px '+(-s.downRow*s.h)+'px';
+        }
       }
     });
     requestAnimationFrame(animCards);
@@ -765,9 +812,15 @@ var _resetMode=false;
 })();
 
 const LOCS=[
-  {id:'thaleus', nm:'Сад Первоначал', phil:'Фалес, Анаксимандр', era:'VII–VI вв. до н.э.', icon:'💧', o:0, desc:'Беседка с розами · поиск архэ — первоначала природы',
-   quote:'«Началом всего Фалес признал воду и утверждал, что мир одушевлён и полон демонов» — Диоген Лаэртский',
-   tip:'Аристотель: Фалес считал воду первоначалом, наблюдая, что всё питается влагой и тепло возникает из влажного',
+  {id:'thaleus', nm:'Сад Первоначал', phil:'Фалес Милетский', era:'VII–VI вв. до н.э.', icon:'💧', o:0, desc:'Беседка с розами · поиск архэ — первоначала природы',
+   quote:'«Что труднее всего? — Познать самого себя» — приписывается Фалесу',
+   tip:'Аристотель «Метафизика» кн. I — один из главных источников сведений о досократиках, написан около 350–330 гг. до н.э.',
+   phil2:'Фалес Милетский',
+   quote2:'«Что самое красивое? — Мир, ибо он — творение бога» — приписывается Фалесу',
+   tip2:'Диоген Лаэртский (III в. н.э.) — биограф античных философов, автор «Жизнеописаний» в 10 книгах',
+   phil3:'Анаксимандр Милетский', icon3:'🌊',
+   quote3:'«Время — мудрейшее из всего сущего, ибо оно раскрывает всё» — приписывается Фалесу',
+   tip3:'Симплиций (VI в. н.э.) — неоплатоник, сохранивший важнейшие фрагменты досократиков в комментариях к Аристотелю',
    q:'Что, по словам Аристотеля, Фалес считал первоначалом всего сущего?',
    opts:[{t:'Воздух',c:0},{t:'Вода',c:1},{t:'Огонь',c:0},{t:'Апейрон',c:0}],
    ok:'Верно! Аристотель: «Фалес… говорит, что это вода», наблюдая, что «всё питается влагой».',
@@ -784,9 +837,15 @@ const LOCS=[
    hint2:'Диоген рассказывает о живом мире, полном незримых сущностей. Каким Фалес видел весь мир вокруг?',
    hint3:'Анаксимандр: вещи «наказывают друг друга за несправедливость» — возвращаясь туда, откуда пришли.'},
 
-  {id:'apeiron', nm:'Грот Апейрона', phil:'Анаксимандр, Анаксимен', era:'VI в. до н.э.', icon:'🌊', o:1, desc:'Пещера в скале · беспредельное как начало сущего',
-   quote:'«Из чего все вещи рождаются, туда и возвращаются, следуя необходимости» — Анаксимандр',
-   tip:'Ипполит: Анаксимандр признал началом «природу беспредельного» (апейрон) — вечную и неизменную',
+  {id:'apeiron', nm:'Грот Апейрона', phil:'Анаксимандр Милетский', era:'VI в. до н.э.', icon:'🌊', o:1, desc:'Пещера в скале · беспредельное как начало сущего',
+   quote:'«Бессмертное и нетленное объемлет все миры и правит ими» — Анаксимандр (по Аэцию)',
+   tip:'Ипполит Римский (II–III вв. н.э.) — христианский богослов, сохранивший фрагменты досократиков в «Опровержении всех ересей»',
+   phil2:'Анаксимен Милетский', icon2:'💨',
+   quote2:'«Из одного начала рождается всё многообразие мира» — Анаксимен (по Феофрасту)',
+   tip2:'Феофраст — ученик Аристотеля, автор «Мнений физиков»: главного источника по учению Анаксимена',
+   phil3:'Анаксимен Милетский', icon3:'💨',
+   quote3:'«Единое дыхание пронизывает и держит весь космос» — из учения Анаксимена (по Аэцию)',
+   tip3:'Аэций (II в. н.э.) — составитель «Мнений философов», один из немногих источников о космологии Анаксимена',
    q:'Что Анаксимандр называл началом сущего, из которого возникают небеса и все миры?',
    opts:[{t:'Логос',c:0},{t:'Апейрон — беспредельная природа, вечная и неизменная',c:1},{t:'Атом',c:0},{t:'Огонь',c:0}],
    ok:'Верно! Ипполит: «Анаксимандр признал началом сущего некую природу беспредельного… вечна и неизменна».',
@@ -804,8 +863,14 @@ const LOCS=[
    hint3:'Если то, что скрепляет тебя изнутри, — то же, что объемлет всё мироздание, что это такое?'},
 
   {id:'heraclitus', nm:'Храм Вечного Огня', phil:'Гераклит Эфесский', era:'V в. до н.э.', icon:'🔥', o:2, desc:'Большой храм · космос как вечно живой огонь',
-   quote:'«Этот космос… всегда был, есть и будет вечно живым огнём, мерами разгорающимся и мерами потухающим» — Гераклит',
-   tip:'Климент: Гераклит говорил, что космос не создан никем — он вечно живой огонь',
+   quote:'«Многознание уму не научает» — Гераклит',
+   tip:'Климент Александрийский (II–III вв. н.э.) — христианский богослов и философ, широко цитировавший греческих мыслителей',
+   phil2:'Гераклит Эфесский',
+   quote2:'«Война — отец всего и царь всего» — Гераклит (по Ипполиту)',
+   tip2:'Гераклита называли «Тёмным» (Скотейносом) — он писал нарочито загадочным языком, избегая прямых объяснений',
+   phil3:'Гераклит Эфесский',
+   quote3:'«Характер человека — его судьба» — Гераклит',
+   tip3:'Стобей (V в. н.э.) — греческий антологист, сохранивший многие фрагменты Гераклита в своей «Антологии»',
    q:'Как Гераклит описывает космос (по Клименту)?',
    opts:[{t:'Космос создан богами из воды и земли',c:0},{t:'Никто не создавал — он всегда был вечно живым огнём, мерами разгорающимся и потухающим',c:1},{t:'Космос есть гармония чисел и сфер',c:0},{t:'Космос — неподвижное единое бытие',c:0}],
    ok:'Верно! Климент: космос «всегда был, есть и будет вечно живым огнем, мерами разгорающимся и мерами потухающим».',
@@ -823,8 +888,14 @@ const LOCS=[
    hint3:'Гераклит ценил не знание ради знания, а умение жить в согласии с тем, что правит всем.'},
 
   {id:'pythagoras', nm:'Площадь Числа', phil:'Пифагор Самосский', era:'VI–V вв. до н.э.', icon:'🔢', o:3, desc:'Навес с лавками · вся Вселенная — гармония и число',
-   quote:'«Всю Вселенную признали гармонией и числом» — Аристотель о пифагорейцах',
-   tip:'Пифагорейцы требовали строгого обета молчания и приписывали все открытия учителю',
+   quote:'«Молчи или говори что-нибудь лучше молчания» — приписывается Пифагору',
+   tip:'Аристотель «Метафизика» кн. XIII–XIV — систематически разбирает пифагорейские учения о числах',
+   phil2:'Пифагор Самосский',
+   quote2:'«Не гоняйся за счастьем: оно всегда находится в тебе самом» — приписывается Пифагору',
+   tip2:'Пифагорейская традиция не разделяла физику и математику — числовые отношения лежали в основе всего',
+   phil3:'Пифагор Самосский',
+   quote3:'«Дружба — это равенство» — приписывается Пифагору',
+   tip3:'Пифагорейский союз был одновременно философской школой и религиозным братством с особыми уставами и обрядами',
    q:'Чем пифагорейцы признавали всю Вселенную, согласно Аристотелю?',
    opts:[{t:'Атомами и пустотой',c:0},{t:'Гармонией и числом',c:1},{t:'Вечно живым огнём',c:0},{t:'Единым неподвижным бытием',c:0}],
    ok:'Верно! Аристотель: «Всю Вселенную признали гармонией и числом».',
@@ -842,8 +913,14 @@ const LOCS=[
    hint3:'Каждое открытие принадлежало учителю. Слова могли это нарушить. Отсюда — строгий обет.'},
 
   {id:'socrates', nm:'Агора Сократа', phil:'Сократ', era:'V в. до н.э.', icon:'🗣️', o:4, desc:'Площадь с компасной розой · диалог как путь к истине',
-   quote:'«Незнание самого себя и самозаблуждение — понятия, близкие к безумию» — Ксенофонт о Сократе',
-   tip:'В практике Сократа диалог сделался основным методом нахождения истины',
+   quote:'«Я знаю только то, что ничего не знаю» — Сократ (Платон, «Апология»)',
+   tip:'Ксенофонт «Воспоминания о Сократе» (Memorabilia) — написаны после казни Сократа как апология его памяти',
+   phil2:'Сократ',
+   quote2:'«Заговори, чтобы я тебя увидел» — приписывается Сократу',
+   tip2:'Сократ не оставил ни одного сочинения — все свидетельства о нём принадлежат ученикам: Платону, Ксенофонту, Аристофану',
+   phil3:'Сократ',
+   quote3:'«Единственное настоящее зло — это невежество» — приписывается Сократу',
+   tip3:'Гиппий Элидский — греческий софист, один из постоянных собеседников Сократа в диалогах Ксенофонта',
    q:'Что Сократ (по Ксенофонту) считал «очень близким к безумию»?',
    opts:[{t:'Незнание математики',c:0},{t:'Незнание самого себя и убеждённость, что знаешь то, чего не знаешь',c:1},{t:'Занятие натурфилософией',c:0},{t:'Неучастие в государственных делах',c:0}],
    ok:'Верно! Ксенофонт: «Незнание самого себя… и самозаблуждение он признавал понятиями очень близкими к безумию».',
@@ -861,8 +938,14 @@ const LOCS=[
    hint3:'Сократ говорит Гиппию: «Я расспрашиваю не чтобы победить». Зачем же тогда?'},
 
   {id:'platon', nm:'Академия Идей', phil:'Платон', era:'IV в. до н.э.', icon:'💎', o:5, desc:'Большой синий купол · мир идей как истинная реальность',
-   quote:'«Свет от огня уподобляется мощи Солнца, а идея Блага — владычица умопостигаемого» — Платон',
-   tip:'По Платону, Солнце в аллегории пещеры олицетворяет идею Блага — от неё зависят истина и разумение',
+   quote:'«Высшее благо — это то, что делает душу лучше» — Платон «Государство»',
+   tip:'Платон «Государство» (Πολιτεία) — диалог в 10 книгах, написанный около 380 г. до н.э., содержит знаменитую аллегорию пещеры',
+   phil2:'Платон',
+   quote2:'«Справедливость — это когда каждый занимается своим делом» — Платон «Государство»',
+   tip2:'Платон «Государство» (Πολιτεία) — диалог о справедливости, написанный примерно в 380 г. до н.э.',
+   phil3:'Платон',
+   quote3:'«Вечность пребывает в едином, а её образ движется по кругу» — Платон «Тимей»',
+   tip3:'Платон «Тимей» — диалог о происхождении Вселенной; изложен как рассказ Тимея из Локр об устройстве мира',
    q:'Что символизирует свет Солнца в аллегории пещеры Платона?',
    opts:[{t:'Мировую душу',c:0},{t:'Идею Блага — владычицу умопостигаемого, от которой зависят истина и разумение',c:1},{t:'Вечный огонь Гераклита',c:0},{t:'Единое Плотина',c:0}],
    ok:'Верно! Платон: «Свет от огня уподобляется мощи Солнца», а идея Блага — «владычица, от которой зависят истина и разумение».',
@@ -880,8 +963,14 @@ const LOCS=[
    hint3:'До неба не было дней и ночей. Значит, время появилось вместе с чем?'},
 
   {id:'aristoteles', nm:'Ликей Причин', phil:'Аристотель Стагирит', era:'IV в. до н.э.', icon:'📐', o:6, desc:'Малый храм · четыре причины и первая энтелехия',
-   quote:'«О причинах говорится в четырёх значениях… четвёртая — то, ради чего, или благо» — Аристотель',
-   tip:'Аристотель первым систематизировал учение о четырёх причинах: материальной, формальной, движущей и целевой',
+   quote:'«Мы исследуем не для того, чтобы знать добродетель, а чтобы стать хорошими людьми» — Аристотель «Никомахова этика»',
+   tip:'Аристотель «Метафизика» кн. I и V — систематическое исследование первых начал и причин бытия',
+   phil2:'Аристотель Стагирит',
+   quote2:'«Человек по природе своей есть существо политическое» — Аристотель «Политика»',
+   tip2:'Аристотель «О душе» (De Anima) — первый систематический трактат о природе психики в истории западной мысли',
+   phil3:'Аристотель Стагирит',
+   quote3:'«Счастье — деятельность души в соответствии с добродетелью» — Аристотель «Никомахова этика»',
+   tip3:'Аристотель «Политика» кн. I — трактат об устройстве государства, написанный на основе анализа 158 конституций',
    q:'Сколько причин выделяет Аристотель и как называется четвёртая?',
    opts:[{t:'Три; третья — «то, откуда начало движения»',c:0},{t:'Четыре; четвёртая — «то, ради чего», или благо',c:1},{t:'Две: форма и материя',c:0},{t:'Пять; пятая — судьба',c:0}],
    ok:'Верно! Аристотель: «О причинах говорится в четырех значениях… четвертой — "то, ради чего", или благо».',
@@ -898,9 +987,15 @@ const LOCS=[
    hint2:'Тело обладает возможностью жить. Душа — это первое, что эту возможность реализует.',
    hint3:'Аристотель: человек — политическое животное. Тот, кто им не является, либо ниже, либо выше человека.'},
 
-  {id:'stoics2', nm:'Портик Невозмутимых', phil:'Зенон, Сенека, Марк Аврелий', era:'III в. до н.э. — II в. н.э.', icon:'🏛️', o:7, desc:'Белый храм с колоннами · жизнь сообразно природе',
-   quote:'«Живи сообразно с природой вещей… в этом и заключается мудрость» — Сенека',
-   tip:'Диоген Лаэртский: стоики называли судьбой непрерывную цепь причин, управляющую мирозданием',
+  {id:'stoics2', nm:'Портик Невозмутимых', phil:'Зенон Китийский', era:'III в. до н.э. — II в. н.э.', icon:'🏛️', o:7, desc:'Белый храм с колоннами · жизнь сообразно природе',
+   quote:'«Мудрец — гражданин мира» — Зенон Китийский (по Диогену Лаэртскому)',
+   tip:'Диоген Лаэртский «Жизнеописания» кн. VII — основной источник по учению Зенона и раннего стоицизма',
+   phil2:'Луций Анней Сенека', icon2:'📜',
+   quote2:'«Береги время — это единственное, чего нельзя вернуть» — Сенека «Письма к Луцилию»',
+   tip2:'Сенека «О блаженной жизни» написан около 58 г. н.э. как ответ на обвинения в том, что он сам живёт не по стоически',
+   phil3:'Марк Аврелий', icon3:'🏺',
+   quote3:'«Потеря — это не что иное, как изменение, а изменение — радость природы» — Марк Аврелий «Размышления»',
+   tip3:'«Размышления» Марка Аврелия — личный дневник императора на греческом языке, не предназначавшийся для публикации',
    q:'Что, согласно Диогену Лаэртскому, стоики называли судьбой?',
    opts:[{t:'Волю богов, управляющих миром извне',c:0},{t:'Непрерывную цепь причин сущего, или разум, согласно которому управляется мироздание',c:1},{t:'Случайное столкновение атомов в пустоте',c:0},{t:'Беспредельное апейрон',c:0}],
    ok:'Верно! Диоген Лаэртский: «Судьба — это непрерывная цепь причин сущего или разум, согласно которому управляется мироздание».',
@@ -917,9 +1012,15 @@ const LOCS=[
    hint2:'Сенека: мудрость не в том, чтобы бежать от природы, а в том, чтобы следовать ей.',
    hint3:'Марк Аврелий перечисляет всё, что нас покидает. Что остаётся с тобой при любых потерях?'},
 
-  {id:'plotinus2', nm:'Чертог Истока', phil:'Плотин, Порфирий', era:'III в. н.э.', icon:'☀️', o:8, desc:'Купол с фиолетовой крышей · Красота и Благо как первоначало',
-   quote:'«В качестве первого начала надо полагать Красоту. Она тождественна с Благом» — Плотин',
-   tip:'От Красоты-Блага исходит Ум, через Ум нисходит Душа — такова иерархия бытия у Плотина',
+  {id:'plotinus2', nm:'Чертог Истока', phil:'Плотин', era:'III в. н.э.', icon:'☀️', o:8, desc:'Купол с фиолетовой крышей · Красота и Благо как первоначало',
+   quote:'«Душа — не только принцип жизни, но и принцип разума и созерцания» — Плотин «Эннеады»',
+   tip:'Плотин (204–270 н.э.) — основатель неоплатонизма; «Эннеады» изданы учеником Порфирием после смерти учителя',
+   phil2:'Плотин',
+   quote2:'«Ум не находится где-либо — он содержит в себе всё и сам содержится в высшем» — Плотин «Эннеады»',
+   tip2:'«Эннеады» изданы учеником Плотина Порфирием после смерти учителя — сам Плотин не готовил их к публикации',
+   phil3:'Плотин',
+   quote3:'«Убегание к Единому — это обращение к себе и поднятие выше всего» — Плотин «Эннеады»',
+   tip3:'Порфирий «Жизнь Плотина»: учитель достигал экстатического слияния с Единым, по свидетельству, четырежды за жизнь',
    q:'Что Плотин называет первым началом своей системы?',
    opts:[{t:'Мировую Душу',c:0},{t:'Красоту, тождественную Благу — от неё исходит Ум, через Ум нисходит Душа',c:1},{t:'Единое, лишённое каких-либо определений',c:0},{t:'Ум, содержащий идеи',c:0}],
    ok:'Верно! Плотин: «В качестве первого начала надо полагать Красоту. Она тождественна с Благом. От неё исходит Ум».',
@@ -936,9 +1037,15 @@ const LOCS=[
    hint2:'Единое у Плотина не заперто в одном месте. Найди то, что одновременно везде — и нигде.',
    hint3:'Загляни в себя. Если душа имеет высокую природу, через неё можно достичь чего-то ещё большего.'},
 
-  {id:'skeptics2', nm:'Круг Сомнений', phil:'Секст Эмпирик, Протагор', era:'IV в. до н.э. — II в. н.э.', icon:'⚖️', o:9, desc:'Круглый амфитеатр · эпохе и воздержание от суждений',
-   quote:'«Человек есть мера всех вещей: существующих, что они существуют» — Протагор',
-   tip:'Секст Эмпирик: воздержание от суждений достигается через противопоставление явлений явлениям и мыслимого мыслимому',
+  {id:'skeptics2', nm:'Круг Сомнений', phil:'Секст Эмпирик', era:'IV в. до н.э. — II в. н.э.', icon:'⚖️', o:9, desc:'Круглый амфитеатр · эпохе и воздержание от суждений',
+   quote:'«Скептик не утверждает и не отрицает — он взвешивает все стороны» — из учения Пиррона',
+   tip:'Секст Эмпирик «Пирроновы положения» — главный трактат античного скептицизма, написан около 200 г. н.э.',
+   phil2:'Протагор Абдерский', icon2:'🧭',
+   quote2:'«О богах я не могу знать ни того, что они есть, ни того, что их нет» — Протагор',
+   tip2:'Протагор Абдерский (490–420 до н.э.) — один из первых и самых известных греческих софистов, брал плату за обучение',
+   phil3:'Секст Эмпирик',
+   quote3:'«Всякое утверждение имеет равносильное возражение» — Секст Эмпирик «Пирроновы положения»',
+   tip3:'Секст Эмпирик (II–III вв. н.э.) — врач-эмпирик и философ-скептик, автор «Пирроновых положений» в 3 книгах',
    q:'Как Секст Эмпирик достигает воздержания от суждений (эпохе)?',
    opts:[{t:'Через молитву и созерцание Единого',c:0},{t:'Через противопоставление явлений явлениям и мыслимого мыслимому',c:1},{t:'Через строгое математическое доказательство',c:0},{t:'Через диалог по методу Сократа',c:0}],
    ok:'Верно! Секст: «Воздержание достаётся через противопоставление вещей: либо явление явлению, либо мыслимое мыслимому».',
@@ -1045,6 +1152,9 @@ function showLocScreen(idx){
   bgEl.style.backgroundImage=bg?'url("'+bg+'")'  :'none';
   _curLoc=loc;
 
+  var _ms=document.getElementById('map-scroll');
+  if(_ms){_ms.style.transition='opacity .1s ease';_ms.style.opacity='0';}
+
   bgEl.style.animation='none';
   requestAnimationFrame(()=>{bgEl.style.animation='loc-zoom 5s ease-out forwards';});
 
@@ -1085,7 +1195,9 @@ function hideLocScreen(){
     ls.classList.remove('hiding');
     ls.classList.remove('trial-mode');
     ls.classList.remove('complete-mode');
-  },280);
+    var _ms=document.getElementById('map-scroll');
+    if(_ms){_ms.style.transition='opacity .25s ease';_ms.style.opacity='1';}
+  },380);
 }
 
 document.getElementById('enter-yes').addEventListener('click',function(){
@@ -1120,6 +1232,8 @@ document.addEventListener('keydown',function(e){
 });
 
 function isAnyModalOpen(){
+  var intro=document.getElementById('s-intro');
+  if(intro&&intro.style.display!=='none')return true;
   return document.getElementById('side-panel').classList.contains('modal-open')
       || document.getElementById('loc-screen').classList.contains('show')
       || document.getElementById('enter-dialog').classList.contains('show')
@@ -1191,12 +1305,12 @@ function showQuestion(loc){
   document.getElementById('q-block').style.display='flex';
   openModal();
 
-  document.getElementById('phil-icon').textContent=loc.icon;
-  document.getElementById('phil-nm').textContent=loc.phil;
+  const _qn=(state.done.includes(loc.id)&&!_isReplay)?3:state.half.includes(loc.id)?3:state.q1.includes(loc.id)?2:1;
+  document.getElementById('phil-icon').textContent=_qn===3?(loc.icon3||loc.icon):_qn===2?(loc.icon2||loc.icon):loc.icon;
+  document.getElementById('phil-nm').textContent=_qn===3?(loc.phil3||loc.phil):_qn===2?(loc.phil2||loc.phil):loc.phil;
   document.getElementById('phil-era').textContent=loc.era;
   document.getElementById('phil-school').textContent=loc.nm;
-  document.getElementById('phil-quote').textContent=loc.quote;
-  document.getElementById('phil-tip').textContent=loc.tip;
+  document.getElementById('phil-quote').textContent=_qn===3?(loc.quote3||loc.quote):_qn===2?(loc.quote2||loc.quote):loc.quote;
 
   const opts=document.getElementById('opts');
   opts.innerHTML='';
@@ -1293,7 +1407,7 @@ function renderJournal(){
     const prog=state.done.includes(loc.id)?3:state.half.includes(loc.id)?2:state.q1.includes(loc.id)?1:0;
     const lab=st==='done'?'✓ пройдено':prog===2?'⅔ вопрос 3/3':prog===1?'⅓ вопрос 2/3':st==='active'?'→ открыто':'🔒 закрыто';
     r.innerHTML=`<span class="jrow-name">${loc.icon} ${loc.nm}<span class="jrow-desc">${loc.desc}</span></span><span class="jrow-st ${st}">${lab}</span>`;
-    if(st!=='locked')r.onclick=()=>{if(!isAnyModalOpen())onLocClick(i);};
+    if(st!=='locked')r.onclick=()=>{closeModal();setTimeout(()=>onLocClick(i),260);};
     j.appendChild(r);
   });
 }
@@ -1358,7 +1472,7 @@ function applyCharacter(ch){
   document.querySelector('.tb-av').textContent=ch.icon;
   document.querySelector('.tb-name').textContent=ch.name;
   document.querySelector('.tb-sub').textContent=ch.sub;
-  if(window._reloadSprite)window._reloadSprite(ch.sprite,ch.cols||3,ch.rows||4,ch.dirMode||'row',ch.mapSize,ch.dirMap||null,ch.walkCycle||null);
+  if(window._reloadSprite)window._reloadSprite(ch.sprite,ch.cols||3,ch.rows||4,ch.dirMode||'row',ch.mapSize,ch.dirMap||null,ch.walkCycle||null,ch.spritesDir||null,ch.spriteFrames||4,ch.dirBase||null);
   localStorage.setItem('char_id',ch.id);
 }
 function resetIntroControls(){
@@ -1618,6 +1732,7 @@ let mapT={ox:0,oy:0,s:1,iw:1400,ih:900};
   var DIR_ROW={down:0,right:2,left:1,up:3};
   var DIR_COL={up:0,left:1,right:2,down:3};
   var _fw=0,_fh=0,_dw=120,_dh=120,_heroFrames=3,_heroRows=4,_heroDirMode='row',_heroDirMap=null;
+  var _heroIndivDir=false,_heroSpritesDir='',_heroSpriteFrames=4,_heroDirBase=null;
 
   spr.onload=function(){
     _fw=Math.floor(spr.naturalWidth/_heroFrames);
@@ -1635,6 +1750,22 @@ let mapT={ox:0,oy:0,s:1,iw:1400,ih:900};
   var _lastBPCol=-1,_lastBPRow=-1;
   function drawHero(dt){
     if(!heroSprite||!_fw)return;
+    if(_heroIndivDir){
+      var wc=_heroWalkCycle;
+      var wcLen=wc?wc.length:_heroSpriteFrames;
+      if(isMoving){animT+=dt;if(animT>=5){animT=0;animF=(animF+1)%wcLen;}}
+      else{animF=0;animT=0;}
+      var db=_heroDirBase||{down:0,up:4,right:12,left:8};
+      var base=db[lastDir]!==undefined?db[lastDir]:0;
+      var idx=base+animF;
+      var frames=heroSprite._indivFrames;
+      if(frames&&heroSprite._lastIndivIdx!==idx){
+        if(frames[heroSprite._lastIndivIdx]!==undefined)frames[heroSprite._lastIndivIdx].style.opacity='0';
+        if(frames[idx]!==undefined)frames[idx].style.opacity='1';
+        heroSprite._lastIndivIdx=idx;
+      }
+      return;
+    }
     var col,row;
     var wc=_heroWalkCycle;
     var wcLen=wc?wc.length:_heroFrames;
@@ -1770,30 +1901,60 @@ let mapT={ox:0,oy:0,s:1,iw:1400,ih:900};
     lastDir='down'; animF=0; animT=0; isMoving=false;
     K={};
   };
-  window._reloadSprite=function(src,cols,rows,dirMode,mapSize,dirMap,walkCycle){
+  window._reloadSprite=function(src,cols,rows,dirMode,mapSize,dirMap,walkCycle,spritesDir,spriteFrames,dirBase){
     _heroFrames=cols||3;
     _heroRows=rows||4;
     _heroDirMode=dirMode||'row';
     _heroDirMap=dirMap||null;
     _heroWalkCycle=walkCycle||null;
+    _heroIndivDir=!!spritesDir;
+    _heroSpritesDir=spritesDir||'';
+    _heroSpriteFrames=spriteFrames||4;
+    _heroDirBase=dirBase||null;
     animF=0;animT=0;
     if(heroSprite)heroSprite.style.opacity='0';
     spr=new Image();
     spr.onload=function(){
-      _fw=Math.floor(spr.naturalWidth/_heroFrames);
-      _fh=spr.naturalHeight/_heroRows;
-      _dw=mapSize||96;
-      _dh=Math.floor(_dw*_fh/_fw);
       var el=heroSprite||document.getElementById('hero-sprite');
       if(!el)return;
       heroSprite=el;
-      el.style.backgroundImage='url('+src+')';
-      el.style.backgroundSize=(_dw*_heroFrames)+'px '+(_dh*_heroRows)+'px';
-      el.style.width=_dw+'px';
-      el.style.height=_dh+'px';
-      el.style.backgroundPosition='0 0';
+      el.innerHTML='';
+      el._indivFrames=[];
+      el._lastIndivIdx=undefined;
+      el.style.backgroundImage='none';
+      el.style.position='relative';
       el.style.clipPath='inset(0)';
       el.style.overflow='hidden';
+      if(_heroIndivDir){
+        _fw=spr.naturalWidth;
+        _fh=spr.naturalHeight;
+        _dw=mapSize||96;
+        _dh=Math.floor(_dw*_fh/_fw);
+        el.style.width=_dw+'px';
+        el.style.height=_dh+'px';
+        var total=_heroSpriteFrames*4;
+        for(var i=0;i<total;i++){
+          var fd=document.createElement('div');
+          fd.style.cssText='position:absolute;top:0;left:0;width:'+_dw+'px;height:'+_dh+'px;'
+            +'background-image:url('+_heroSpritesDir+(i+1)+'.png);'
+            +'background-size:'+_dw+'px '+_dh+'px;background-repeat:no-repeat;'
+            +'image-rendering:pixelated;image-rendering:crisp-edges;opacity:0;';
+          el.appendChild(fd);
+          el._indivFrames.push(fd);
+        }
+        el._indivFrames[0].style.opacity='1';
+        el._lastIndivIdx=0;
+      }else{
+        _fw=Math.floor(spr.naturalWidth/_heroFrames);
+        _fh=spr.naturalHeight/_heroRows;
+        _dw=mapSize||96;
+        _dh=Math.floor(_dw*_fh/_fw);
+        el.style.backgroundImage='url('+src+')';
+        el.style.backgroundSize=(_dw*_heroFrames)+'px '+(_dh*_heroRows)+'px';
+        el.style.width=_dw+'px';
+        el.style.height=_dh+'px';
+        el.style.backgroundPosition='0 0';
+      }
       el.style.opacity='1';
     };
     spr.src=src;
