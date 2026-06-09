@@ -1585,7 +1585,9 @@ document.getElementById('intro-cancel-btn').addEventListener('click',function(){
   document.getElementById('s-intro').style.display='none';
   resetIntroControls();
 });
-if(localStorage.getItem('intro_seen')){
+if(/[?&]intro=1(\b|$)/.test(location.search)){
+  document.getElementById('s-intro').style.display='flex';
+}else if(localStorage.getItem('intro_seen')){
   document.getElementById('s-intro').style.display='none';
 }
 
